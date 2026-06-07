@@ -151,7 +151,7 @@ function RailContent({ active, collapsed = false, onNavigate }: { active?: strin
             <Sparkles className="absolute -right-5 bottom-4 h-24 w-24 text-[#C4A09A]/40" />
             <h3 className="relative text-lg font-extrabold leading-tight text-[#0A0A0F]">Bring your ideas to life on SPRK*</h3>
             <p className="relative mt-2 text-xs font-light leading-relaxed text-[#4A5278]">Create, share, and connect with a community that inspires.</p>
-            <button type="button" onClick={() => window.open("/yoursprk.html", "_blank")} className="relative mt-4 inline-flex items-center gap-1.5 rounded-full bg-[#C4A09A] px-4 py-2 text-xs font-bold text-white hover:bg-[#8E7A8A]"><Plus className="h-3 w-3" /> Create</button>
+            <button type="button" onClick={() => window.open(`${import.meta.env.BASE_URL}yoursprk.html`, "_blank")} className="relative mt-4 inline-flex items-center gap-1.5 rounded-full bg-[#C4A09A] px-4 py-2 text-xs font-bold text-white hover:bg-[#8E7A8A]"><Plus className="h-3 w-3" /> Create</button>
           </div>
 
           <form
@@ -284,7 +284,7 @@ function Header({ onMenu, onToggleRail, railCollapsed }: { onMenu: () => void; o
         <button onClick={() => toast("Going back…")} className="hidden rounded-full border border-black/10 p-2 text-[#8E7A8A] hover:text-[#0A0A0F] md:block"><ChevronDown className="h-4 w-4 rotate-90" /></button>
         <button onClick={() => toast("Going forward…")} className="hidden rounded-full border border-black/10 p-2 text-[#8E7A8A] hover:text-[#0A0A0F] md:block"><ChevronDown className="h-4 w-4 -rotate-90" /></button>
         <Link href="/pavilion" className="hidden rounded-full border border-black/10 px-4 py-2 text-xs font-bold text-[#0A0A0F] hover:bg-[#F5F0EB] sm:inline-flex"><Store className="mr-1.5 h-3.5 w-3.5" /> Pavilion</Link>
-        <button onClick={() => window.open("/yoursprk.html", "_blank")} className="inline-flex items-center gap-1.5 rounded-full bg-[#C4A09A] px-4 py-2 text-xs font-bold text-white hover:bg-[#8E7A8A]"><Plus className="h-3 w-3" /> Create</button>
+        <button onClick={() => window.open(`${import.meta.env.BASE_URL}yoursprk.html`, "_blank")} className="inline-flex items-center gap-1.5 rounded-full bg-[#C4A09A] px-4 py-2 text-xs font-bold text-white hover:bg-[#8E7A8A]"><Plus className="h-3 w-3" /> Create</button>
         <button onClick={() => toast("Notification center opened.")} className="rounded-full p-2 text-[#4A5278] hover:bg-[#F5F0EB]"><Bell className="h-5 w-5" /></button>
         <button onClick={() => setLocation("/os")} className="hidden rounded-full bg-[#0A0A0F] px-4 py-2 text-xs font-bold text-white hover:bg-[#1E2235] sm:inline-flex"><Settings2 className="mr-1.5 h-3.5 w-3.5" /> SPRK*OS</button>
       </div>
