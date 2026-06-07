@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>yourSPRK — Join the Beta</title>
+  <meta name="description" content="The creator-first operating system built for true independence. Join the SPRK beta." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    :root {
+      --ink:     #0A0A0F;
+      --navy:    #1E2235;
+      --steel:   #4A5278;
+      --mauve:   #8E7A8A;
+      --blush:   #C4A09A;
+      --warm:    #F0E8E4;
+      --cream:   #F5F0EB;
+      --white:   #FFFFFF;
+      --ember:   #FF6B35;
+      --crimson: #CC0055;
+      --grad:    linear-gradient(135deg, #FF6B35 0%, #E8003D 55%, #CC0055 100%);
+      --font:    'Bricolage Grotesque', system-ui, sans-serif;
+      --ease:    cubic-bezier(0.16, 1, 0.3, 1);
+      --r:       12px;
+      --r-lg:    22px;
+      --r-pill:  100px;
+    }
+    body { font-family: var(--font); background: var(--white); color: var(--ink); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: var(--font); cursor: pointer; border: none; background: none; }
+
+    /* ── NAV ── */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 14px 40px; background: rgba(255,255,255,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(10,10,15,0.07); }
+    .nav-brand { display: flex; align-items: center; gap: 10px; }
+    .nav-icon { width: 32px; height: 32px; flex-shrink: 0; }
+    .nav-wordmark { font-size: 22px; font-weight: 800; letter-spacing: -0.03em; color: var(--ink); line-height: 1; }
+    .nav-wordmark em { color: var(--ember); font-style: normal; font-weight: 500; }
+    .nav-cta { display: inline-flex; align-items: center; gap: 6px; background: var(--ink); color: var(--white); padding: 9px 20px; border-radius: var(--r-pill); font-size: 13px; font-weight: 600; transition: background 0.2s, transform 0.2s var(--ease); }
+    .nav-cta:hover { background: var(--navy); transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    #hero { position: relative; min-height: 100svh; padding-top: 62px; display: grid; grid-template-columns: 1fr 1fr; align-items: center; overflow: hidden; }
+
+    /* Marquee — boosted opacity so images read clearly */
+    .marquee-bg { position: absolute; inset: 0; display: grid; grid-template-rows: repeat(3, 1fr); gap: 3px; overflow: hidden; opacity: 0.55; pointer-events: none; }
+    .marquee-row { display: flex; gap: 3px; animation: marquee-slide 28s linear infinite; will-change: transform; }
+    .marquee-row:nth-child(2) { animation-direction: reverse; animation-duration: 34s; }
+    .marquee-row:nth-child(3) { animation-duration: 22s; }
+    @keyframes marquee-slide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .marquee-cell { flex-shrink: 0; width: clamp(120px, 12vw, 180px); aspect-ratio: 4/5; border-radius: 8px; background-size: cover; background-position: center; }
+
+    /* Veil — lighter so images show through strongly */
+    .hero-veil { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 75% at 30% 50%, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0.78) 45%, rgba(255,255,255,0.18) 100%); pointer-events: none; }
+
+    /* Hero left */
+    .hero-text { position: relative; z-index: 2; padding: 52px 32px 52px 64px; }
+    .hero-pill { display: inline-flex; align-items: center; gap: 8px; background: var(--cream); border: 1px solid rgba(10,10,15,0.07); padding: 6px 16px; border-radius: var(--r-pill); font-size: 11px; font-weight: 600; color: var(--steel); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 22px; }
+    .hero-pill span { width: 6px; height: 6px; border-radius: 50%; background: var(--ember); }
+    .hero-headline { font-size: clamp(44px, 5.5vw, 82px); font-weight: 800; line-height: 0.93; letter-spacing: -0.03em; color: var(--ink); margin-bottom: 20px; }
+    .hero-headline .grad { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-sub { font-size: clamp(15px, 1.4vw, 18px); font-weight: 300; color: var(--steel); line-height: 1.65; margin-bottom: 6px; }
+    .hero-tagline { font-size: 13px; font-weight: 400; color: var(--mauve); margin-bottom: 32px; }
+    .hero-scroll-cta { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 500; color: var(--mauve); letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: color 0.2s; }
+    .hero-scroll-cta:hover { color: var(--ember); }
+
+    /* Mobile-only: sticky "Begin Application" CTA shown on hero */
+    .mobile-app-cta { display: none; }
+
+    /* ── WIZARD OUTER — doubles as mobile drawer ── */
+    .wizard-outer { position: relative; z-index: 2; padding: 52px 64px 52px 24px; display: flex; flex-direction: column; justify-content: center; min-height: calc(100svh - 62px); }
+    .wizard-disclaimer { font-size: 11px; color: var(--mauve); text-align: center; margin-top: 12px; line-height: 1.55; }
+
+    /* Drawer handle shown only on mobile */
+    .drawer-handle-bar { display: none; }
+
+    .wizard-card { background: var(--white); border: 1px solid rgba(10,10,15,0.09); border-radius: var(--r-lg); overflow: hidden; box-shadow: 0 8px 48px rgba(10,10,15,0.11), 0 2px 8px rgba(10,10,15,0.06); display: flex; flex-direction: column; height: calc(100svh - 116px); }
+    .wizard-progress-track { height: 3px; background: rgba(10,10,15,0.06); flex-shrink: 0; }
+    .wizard-progress-fill { height: 100%; background: var(--grad); transition: width 380ms var(--ease); }
+    .wizard-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 22px 12px; border-bottom: 1px solid rgba(10,10,15,0.05); flex-shrink: 0; }
+    .wizard-step-label { font-size: 10px; font-weight: 600; color: var(--mauve); letter-spacing: 0.14em; text-transform: uppercase; }
+    .wizard-step-count { font-size: 12px; font-weight: 700; color: var(--ember); }
+    .wizard-viewport { overflow: hidden; flex: 1; min-height: 0; }
+    .wizard-track { display: flex; height: 100%; transition: transform 400ms var(--ease); }
+    .wizard-slide { flex-shrink: 0; width: 100%; height: 100%; overflow-y: auto; padding: 22px 22px 18px; scrollbar-width: thin; scrollbar-color: rgba(10,10,15,0.1) transparent; }
+    .wizard-slide::-webkit-scrollbar { width: 3px; }
+    .wizard-slide::-webkit-scrollbar-thumb { background: rgba(10,10,15,0.12); border-radius: 2px; }
+    .step-number { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blush); margin-bottom: 7px; }
+    .step-question { font-size: clamp(15px, 1.8vw, 19px); font-weight: 700; color: var(--ink); line-height: 1.35; letter-spacing: -0.02em; margin-bottom: 18px; }
+    .mad-libs { font-size: clamp(15px, 1.7vw, 19px); font-weight: 500; line-height: 2.6; color: var(--ink); }
+    .ml-input { display: inline-block; border: none; border-bottom: 2px solid var(--ink); background: transparent; font-family: var(--font); font-size: inherit; font-weight: 700; color: var(--ink); padding: 2px 4px; outline: none; min-width: 88px; transition: border-color 0.2s; }
+    .ml-input::placeholder { color: var(--blush); font-weight: 400; }
+    .ml-input:focus { border-color: var(--ember); }
+    .ml-input.invalid { border-color: #E53E3E; }
+    .ml-select { display: inline-block; border: none; border-bottom: 2px solid var(--ink); background: transparent; font-family: var(--font); font-size: inherit; font-weight: 700; color: var(--ink); padding: 2px 4px; outline: none; cursor: pointer; transition: border-color 0.2s; -webkit-appearance: none; appearance: none; }
+    .ml-select:focus { border-color: var(--ember); }
+    .pill-group { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+    .pill-label { display: flex; align-items: center; gap: 5px; padding: 6px 13px; border: 1.5px solid rgba(10,10,15,0.13); border-radius: var(--r-pill); font-size: 12px; font-weight: 400; cursor: pointer; transition: all 0.18s; user-select: none; }
+    .pill-label:hover { border-color: var(--ink); }
+    .pill-label input { display: none; }
+    .pill-label.checked { background: var(--ink); color: var(--white); border-color: var(--ink); }
+    .field-group { display: flex; flex-direction: column; gap: 13px; }
+    .field-wrap { display: flex; flex-direction: column; gap: 5px; }
+    .field-wrap label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mauve); }
+    .std-input, .std-select { width: 100%; padding: 11px 14px; border: 1.5px solid rgba(10,10,15,0.12); border-radius: var(--r); font-family: var(--font); font-size: 14px; font-weight: 400; color: var(--ink); background: var(--cream); outline: none; transition: border-color 0.2s, background 0.2s; -webkit-appearance: none; appearance: none; }
+    .std-input:focus, .std-select:focus { border-color: var(--ink); background: var(--white); }
+    .std-input.invalid, .std-select.invalid { border-color: #E53E3E; }
+    .std-input::placeholder { color: var(--blush); }
+    .std-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238E7A8A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 13px center; padding-right: 34px; cursor: pointer; }
+    .slider-group { display: flex; flex-direction: column; gap: 14px; }
+    .slider-row { display: grid; grid-template-columns: 130px 1fr 32px; gap: 10px; align-items: center; }
+    .slider-label { font-size: 12px; font-weight: 400; color: var(--steel); }
+    input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 3px; border-radius: 2px; background: rgba(10,10,15,0.1); outline: none; cursor: pointer; }
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--ink); cursor: pointer; box-shadow: 0 1px 6px rgba(10,10,15,0.2); transition: transform 0.15s; }
+    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+    .slider-val { font-size: 17px; font-weight: 700; color: var(--ink); text-align: right; }
+    .slider-scale { grid-column: 2; display: flex; justify-content: space-between; font-size: 9px; color: var(--mauve); margin-top: -6px; }
+    .feature-part-title { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--steel); margin-bottom: 8px; margin-top: 18px; display: flex; align-items: center; gap: 8px; }
+    .feature-part-title::after { content: 'SELECT UP TO 3'; font-size: 9px; background: rgba(10,10,15,0.06); padding: 2px 8px; border-radius: var(--r-pill); color: var(--mauve); }
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 7px; }
+    .feature-item { display: flex; align-items: flex-start; gap: 8px; padding: 10px 12px; border: 1.5px solid rgba(10,10,15,0.09); border-radius: var(--r); cursor: pointer; transition: all 0.18s; user-select: none; font-size: 12px; font-weight: 400; color: var(--ink); line-height: 1.35; }
+    .feature-item:hover { border-color: rgba(10,10,15,0.22); }
+    .feature-item.selected { background: var(--ink); border-color: var(--ink); color: var(--white); }
+    .feature-item.disabled { opacity: 0.30; cursor: not-allowed; }
+    .feature-item input { display: none; }
+    .feature-checkmark { width: 15px; height: 15px; border: 1.5px solid currentColor; border-radius: 3px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+    .feature-item.selected .feature-checkmark::after { content: '✓'; font-size: 9px; color: var(--white); }
+    .err-msg { font-size: 11px; color: #E53E3E; margin-top: 5px; display: none; }
+    .err-msg.visible { display: block; }
+    .wizard-footer { display: flex; align-items: center; justify-content: space-between; padding: 12px 22px; border-top: 1px solid rgba(10,10,15,0.06); flex-shrink: 0; gap: 10px; }
+    .btn-nav { display: inline-flex; align-items: center; gap: 5px; padding: 9px 18px; border-radius: var(--r-pill); font-size: 12px; font-weight: 600; transition: all 0.18s var(--ease); }
+    .btn-nav-back { background: transparent; color: var(--mauve); border: 1.5px solid rgba(10,10,15,0.11); }
+    .btn-nav-back:hover { border-color: var(--ink); color: var(--ink); }
+    .btn-nav-back:disabled { opacity: 0.28; pointer-events: none; }
+    .btn-nav-next { background: var(--ink); color: var(--white); border: 1.5px solid var(--ink); position: relative; overflow: hidden; }
+    .btn-nav-next::before { content: ''; position: absolute; inset: 0; background: var(--grad); opacity: 0; transition: opacity 0.3s; }
+    .btn-nav-next:hover::before { opacity: 1; }
+    .btn-nav-next span { position: relative; z-index: 1; }
+    .step-dots { display: flex; gap: 5px; align-items: center; }
+    .step-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(10,10,15,0.12); transition: all 0.22s; }
+    .step-dot.active { background: var(--ember); width: 16px; border-radius: 3px; }
+    .step-dot.done { background: var(--ink); }
+
+    /* ── DRAWER BACKDROP ── */
+    .drawer-backdrop { display: none; }
+
+    /* ── STAT FOOTNOTE LINK ── */
+    .stat-footnote-link { font-size: 0.38em; vertical-align: super; color: var(--ember); font-weight: 700; text-decoration: none; cursor: pointer; transition: color 0.2s; line-height: 0; }
+    .stat-footnote-link:hover { color: var(--crimson); }
+
+    /* ── SPRK PROMISE SECTION ── */
+    #promise { padding: clamp(80px, 10vw, 130px) clamp(24px, 6vw, 80px); background: var(--white); border-top: 1px solid rgba(10,10,15,0.05); }
+    .promise-inner { max-width: 1100px; margin: 0 auto; }
+    .section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; display: block; margin-bottom: 14px; }
+    .stat-callout { font-size: clamp(56px, 11vw, 132px); font-weight: 800; letter-spacing: -0.04em; line-height: 0.9; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block; margin-bottom: 12px; }
+    .promise-headline { font-size: clamp(26px, 4vw, 50px); font-weight: 700; letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 8px; }
+    .promise-sub { font-size: clamp(16px, 2vw, 22px); font-weight: 300; color: var(--steel); margin-top: 8px; }
+
+    /* ── HUB DIAGRAM — sketch layout: icon top, tiles row below ── */
+    .hub-diagram-section { max-width: 860px; margin: 64px auto 0; }
+    .hub-icon-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 0; position: relative; z-index: 2; }
+    .hub-asterisk-svg { width: clamp(88px, 12vw, 120px); height: auto; filter: drop-shadow(0 8px 28px rgba(255,107,53,0.40)); cursor: default; transition: filter 0.3s; }
+    .hub-asterisk-svg:hover { filter: drop-shadow(0 12px 36px rgba(255,107,53,0.60)); }
+
+    /* Hub connector SVG: absolute, covers hub-section-wrap */
+    .hub-section-wrap { position: relative; padding-bottom: 16px; }
+    .hub-lines-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 1; }
+    .hub-line-dyn { stroke: var(--ember); stroke-width: 1.5; fill: none; opacity: 0.50; stroke-dasharray: 400; stroke-dashoffset: 400; }
+
+    /* Platform tiles row */
+    .hub-tiles-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 40px; position: relative; z-index: 2; }
+    .hub-spoke-tile { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .hub-spoke-icon { width: clamp(52px, 7vw, 68px); height: clamp(52px, 7vw, 68px); background: var(--cream); border: 1px solid rgba(10,10,15,0.08); border-radius: var(--r); display: flex; align-items: center; justify-content: center; font-size: clamp(22px, 3.5vw, 28px); transition: transform 0.22s var(--ease), box-shadow 0.22s; }
+    .hub-spoke-icon:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(10,10,15,0.12); }
+    .hub-spoke-name { font-size: 11px; font-weight: 500; color: var(--mauve); text-align: center; letter-spacing: 0.04em; white-space: nowrap; }
+    .hub-caption { text-align: center; margin-top: 28px; font-size: 14px; font-weight: 300; color: var(--mauve); }
+
+    /* ── COMPARE ── */
+    #compare { background: var(--navy); color: var(--white); padding: clamp(80px, 10vw, 130px) clamp(24px, 6vw, 80px); }
+    .compare-inner { max-width: 1100px; margin: 0 auto; }
+    .compare-header { max-width: 760px; margin-bottom: 56px; }
+    .compare-headline { font-size: clamp(28px, 4.5vw, 56px); font-weight: 700; letter-spacing: -0.025em; line-height: 1.1; color: var(--white); }
+    .compare-lead { font-size: clamp(13px, 1.3vw, 16px); font-weight: 300; color: rgba(255,255,255,0.5); margin-top: 18px; line-height: 1.6; }
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--r-lg); }
+    .comparison-table { width: 100%; border-collapse: collapse; font-size: clamp(12px, 1.1vw, 14px); }
+    .comparison-table thead th { background: rgba(255,255,255,0.04); padding: 12px 18px; text-align: left; font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.38); border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .comparison-table tbody td { padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.05); color: rgba(255,255,255,0.68); vertical-align: middle; }
+    .comparison-table tbody tr:hover td { background: rgba(255,255,255,0.02); }
+    .comparison-table tbody tr.sprk-row td { background: rgba(255,107,53,0.11); color: var(--white); border-bottom: 1px solid rgba(255,107,53,0.18); font-weight: 500; }
+    .comparison-table tbody tr.sprk-row td:first-child { border-left: 3px solid var(--ember); }
+    .pct-chip { display: inline-block; background: rgba(255,107,53,0.22); color: var(--ember); padding: 3px 10px; border-radius: var(--r-pill); font-size: 12px; font-weight: 700; }
+
+    /* ── PILLARS ── */
+    #pillars { padding: clamp(80px, 10vw, 130px) clamp(24px, 6vw, 80px); background: var(--cream); }
+    .pillars-inner { max-width: 1100px; margin: 0 auto; }
+    .pillars-header { text-align: center; margin-bottom: 56px; }
+    .section-headline { font-size: clamp(28px, 4.5vw, 56px); font-weight: 700; letter-spacing: -0.025em; line-height: 1.1; }
+    .pillars-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+    .pillar-card { background: var(--white); border: 1px solid rgba(10,10,15,0.07); border-radius: var(--r-lg); padding: clamp(24px, 3.5vw, 44px); transition: transform 0.28s var(--ease), box-shadow 0.28s var(--ease); }
+    .pillar-card:hover { transform: translateY(-5px); box-shadow: 0 18px 56px rgba(10,10,15,0.10); }
+    .pillar-icon { width: 50px; height: 50px; background: var(--ink); border-radius: 13px; display: flex; align-items: center; justify-content: center; font-size: 21px; margin-bottom: 22px; }
+    .pillar-number { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mauve); margin-bottom: 10px; }
+    .pillar-title { font-size: clamp(16px, 1.8vw, 22px); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 10px; line-height: 1.2; }
+    .pillar-body { font-size: 13px; font-weight: 300; color: var(--steel); line-height: 1.65; }
+    .pillar-footnote { font-size: 11px; font-weight: 300; color: var(--mauve); line-height: 1.65; margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(10,10,15,0.08); }
+    .pillar-footnote strong { color: var(--ember); font-weight: 600; }
+    .pillar-footnote.highlight { background: rgba(255,107,53,0.06); border-radius: 8px; padding: 12px; margin-top: 12px; border-top: none; transition: background 0.4s; }
+    .pillars-footer { text-align: center; margin-top: 52px; font-size: 14px; font-weight: 400; font-style: italic; color: var(--steel); max-width: 560px; margin-left: auto; margin-right: auto; }
+
+    /* ── PLATFORMS ── */
+    #platforms { padding: clamp(80px, 10vw, 130px) clamp(24px, 6vw, 80px); background: var(--white); border-top: 1px solid rgba(10,10,15,0.05); }
+    .platforms-inner { max-width: 1100px; margin: 0 auto; }
+    .platform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; margin-top: 48px; }
+    .platform-card { background: var(--cream); border: 1px solid rgba(10,10,15,0.07); border-radius: var(--r-lg); padding: 30px; display: flex; flex-direction: column; justify-content: space-between; min-height: 210px; transition: transform 0.24s var(--ease), box-shadow 0.24s var(--ease); }
+    .platform-card:hover { transform: translateY(-4px); box-shadow: 0 14px 44px rgba(10,10,15,0.09); }
+    .platform-card h3 { font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 9px; }
+    .platform-card p { font-size: 13px; font-weight: 300; color: var(--steel); line-height: 1.65; flex: 1; }
+    .platform-card-link { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 700; color: var(--ember); margin-top: 18px; transition: color 0.2s; }
+    .platform-card-link:hover { color: var(--crimson); }
+
+    /* ── FOOTER ── */
+    footer { background: var(--navy); color: rgba(255,255,255,0.38); padding: 30px clamp(24px, 6vw, 80px); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    footer p { font-size: 11px; font-weight: 300; letter-spacing: 0.05em; line-height: 1.8; }
+
+    /* ── THANK YOU OVERLAY ── */
+    #thankyou { display: none; position: fixed; inset: 0; z-index: 200; align-items: center; justify-content: center; }
+    #thankyou.visible { display: flex; animation: fade-in 0.5s var(--ease) both; }
+    @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+    .ty-overlay { position: absolute; inset: 0; background: rgba(10,10,15,0.82); backdrop-filter: blur(6px); }
+    .ty-panel { position: relative; z-index: 2; background: var(--white); border-radius: var(--r-lg); padding: clamp(36px, 5vw, 64px); max-width: 600px; width: calc(100% - 48px); text-align: center; box-shadow: 0 40px 120px rgba(0,0,0,0.36); animation: scale-in 0.45s var(--ease) 0.15s both; }
+    @keyframes scale-in { from { opacity: 0; transform: scale(0.93) translateY(18px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    .ty-sparkle { font-size: 44px; display: block; margin-bottom: 20px; }
+    .ty-wordmark { font-size: clamp(60px, 12vw, 110px); font-weight: 800; letter-spacing: -0.05em; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block; margin-bottom: 24px; }
+    .ty-quote { font-size: clamp(13px, 1.4vw, 16px); font-weight: 300; color: var(--steel); line-height: 1.7; margin-bottom: 24px; }
+    .ty-share { margin-bottom: 24px; }
+    .ty-share-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mauve); margin-bottom: 12px; display: block; }
+    .ty-share-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .ty-share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: var(--r-pill); font-size: 12px; font-weight: 600; border: 1.5px solid rgba(10,10,15,0.12); color: var(--ink); transition: all 0.2s; cursor: pointer; }
+    .ty-share-btn:hover { background: var(--ink); color: var(--white); border-color: var(--ink); }
+    .ty-redirect { font-size: 12px; color: var(--mauve); margin-bottom: 5px; }
+    .ty-countdown { font-size: 30px; font-weight: 700; color: var(--ink); margin-bottom: 14px; }
+    .ty-link { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 500; color: var(--ink); border-bottom: 1px solid var(--blush); padding-bottom: 2px; transition: color 0.2s; }
+    .ty-link:hover { color: var(--ember); border-color: var(--ember); }
+
+    /* ── STEP 0 WELCOME SLIDE ── */
+    .welcome-slide { display: flex; flex-direction: column; justify-content: center; height: 100%; padding: 28px 22px 22px; }
+    .welcome-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ember); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+    .welcome-eyebrow::before { content: '✦'; font-size: 10px; }
+    .welcome-headline { font-size: clamp(20px, 2.6vw, 26px); font-weight: 800; letter-spacing: -0.025em; line-height: 1.2; color: var(--ink); margin-bottom: 22px; }
+    .welcome-headline .grad { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .welcome-perks { list-style: none; display: flex; flex-direction: column; gap: 16px; margin-bottom: 22px; }
+    .welcome-perks li { display: flex; align-items: flex-start; gap: 12px; }
+    .welcome-perk-dot { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; background: var(--grad); margin-top: 3px; }
+    .welcome-perk-text { display: flex; flex-direction: column; gap: 3px; }
+    .welcome-perk-title { font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1.3; letter-spacing: -0.01em; }
+    .welcome-perk-body { font-size: 12px; font-weight: 300; color: var(--steel); line-height: 1.55; }
+    .welcome-closer { font-size: 12px; font-weight: 500; color: var(--mauve); margin-bottom: 26px; line-height: 1.5; }
+    .welcome-divider { width: 40px; height: 2px; background: var(--grad); border-radius: 1px; margin-bottom: 22px; }
+    .btn-welcome-begin { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 15px 24px; border-radius: var(--r-pill); background: var(--ink); color: var(--white); font-family: var(--font); font-size: 14px; font-weight: 700; letter-spacing: 0.01em; cursor: pointer; border: none; position: relative; overflow: hidden; transition: transform 0.2s var(--ease); }
+    .btn-welcome-begin::before { content: ''; position: absolute; inset: 0; background: var(--grad); opacity: 0; transition: opacity 0.3s; }
+    .btn-welcome-begin:hover { transform: translateY(-1px); }
+    .btn-welcome-begin:hover::before { opacity: 1; }
+    .btn-welcome-begin span { position: relative; z-index: 1; }
+    .welcome-footnote { font-size: 10px; color: var(--mauve); text-align: center; margin-top: 10px; line-height: 1.5; }
+    /* ── TOOLS GRID (Q1 Part B) ── */
+    .tools-section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--steel); margin: 14px 0 7px; }
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(152px, 1fr)); gap: 6px; margin-bottom: 4px; }
+    .tool-item { display: flex; align-items: center; gap: 8px; padding: 8px 11px; border: 1.5px solid rgba(10,10,15,0.09); border-radius: var(--r); cursor: pointer; transition: all 0.18s; user-select: none; font-size: 12px; font-weight: 400; color: var(--ink); line-height: 1.3; }
+    .tool-item:hover { border-color: rgba(10,10,15,0.22); }
+    .tool-item.selected { background: var(--ink); border-color: var(--ink); color: var(--white); }
+    .tool-item input { display: none; }
+    .tool-checkmark { width: 14px; height: 14px; flex-shrink: 0; border: 1.5px solid currentColor; border-radius: 3px; display: flex; align-items: center; justify-content: center; }
+    .tool-item.selected .tool-checkmark::after { content: '✓'; font-size: 9px; color: var(--white); }
+    .tool-other-wrap { margin-top: 8px; display: none; }
+    .tool-other-wrap.visible { display: block; }
+    .tool-other-input { width: 100%; padding: 9px 12px; border: 1.5px solid rgba(10,10,15,0.12); border-radius: var(--r); font-family: var(--font); font-size: 13px; color: var(--ink); background: var(--cream); outline: none; transition: border-color 0.2s; }
+    .tool-other-input:focus { border-color: var(--ink); background: var(--white); }
+    .tool-other-input::placeholder { color: var(--blush); }
+    /* ── Q5 PLATFORM PANEL ── */
+    .platform-panel { opacity: 0.42; pointer-events: none; transition: opacity 0.25s; }
+    .platform-panel.enabled { opacity: 1; pointer-events: all; }
+    /* ── PROFANITY WARNING ── */
+    .profanity-warning { display: none; background: rgba(255,107,53,0.07); border: 1.5px solid rgba(255,107,53,0.28); border-radius: var(--r); padding: 12px 16px; margin-top: 14px; font-size: 12px; font-weight: 400; color: var(--steel); line-height: 1.6; }
+    .profanity-warning.visible { display: block; }
+    .profanity-warning strong { color: var(--ember); font-weight: 600; }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.65s var(--ease), transform 0.65s var(--ease); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE: MOBILE DRAWER (Option B) ── */
+    @media (max-width: 899px) {
+      nav { padding: 12px 20px; }
+      #hero { grid-template-columns: 1fr; min-height: 100svh; }
+      .hero-text { padding: 28px 24px 130px; display: flex; flex-direction: column; justify-content: center; min-height: calc(100svh - 62px); }
+
+      /* Wizard outer becomes fixed bottom-sheet drawer */
+      .wizard-outer {
+        position: fixed !important;
+        bottom: 0; left: 0; right: 0;
+        z-index: 150;
+        padding: 0;
+        min-height: auto;
+        max-height: 93svh;
+        background: var(--white);
+        border-radius: 22px 22px 0 0;
+        box-shadow: 0 -8px 56px rgba(10,10,15,0.22);
+        transform: translateY(100%);
+        transition: transform 450ms var(--ease);
+        /* Flex column so header+footer are fixed, only viewport scrolls */
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      /* Mobile drawer internals: proper flex architecture
+         wizard-card fills the drawer, wizard-viewport scrolls in the middle */
+      .wizard-card {
+        flex: 1 !important;
+        min-height: 0 !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+        border-radius: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+      .wizard-progress-track { flex-shrink: 0 !important; position: static !important; }
+      .wizard-header { flex-shrink: 0 !important; position: static !important; }
+      .wizard-footer { flex-shrink: 0 !important; position: static !important; background: var(--white); border-top: 1px solid rgba(10,10,15,0.07); }
+      /* Viewport is the ONLY scroll surface — fills remaining height between header and footer */
+      .wizard-viewport {
+        flex: 1 !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        height: auto !important;
+      }
+      .wizard-track { height: auto !important; }
+      /* All slides hidden; JS sets display:block on active */
+      .wizard-slide { display: none; padding-bottom: 24px !important; }
+      .wizard-outer.open { transform: translateY(0); }
+
+      /* Drag handle visible on mobile */
+      .drawer-handle-bar {
+        display: block;
+        width: 40px; height: 4px;
+        background: rgba(10,10,15,0.16);
+        border-radius: 2px;
+        margin: 14px auto 6px;
+        flex-shrink: 0;
+      }
+
+      /* cosmetic overrides already handled by the flex block above */
+      .wizard-disclaimer { display: none; }
+
+      /* Backdrop */
+      .drawer-backdrop {
+        display: block;
+        position: fixed; inset: 0; z-index: 149;
+        background: rgba(10,10,15,0.5);
+        backdrop-filter: blur(4px);
+        opacity: 0; pointer-events: none;
+        transition: opacity 450ms;
+      }
+      .drawer-backdrop.visible { opacity: 1; pointer-events: all; }
+
+      /* Mobile CTA button */
+      .mobile-app-cta {
+        display: block;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        z-index: 140;
+        padding: 16px 24px calc(20px + env(safe-area-inset-bottom));
+        background: linear-gradient(to top, rgba(255,255,255,1) 55%, rgba(255,255,255,0));
+        text-align: center;
+        transition: opacity 0.3s;
+      }
+      .mobile-app-cta.hidden { opacity: 0; pointer-events: none; }
+      .btn-begin-app {
+        width: 100%;
+        max-width: 400px;
+        padding: 18px 32px;
+        border-radius: var(--r-pill);
+        background: var(--ink);
+        color: var(--white);
+        font-family: var(--font);
+        font-size: 16px; font-weight: 700;
+        letter-spacing: 0.02em;
+        position: relative; overflow: hidden;
+        transition: transform 0.2s;
+      }
+      .btn-begin-app::before { content: ''; position: absolute; inset: 0; background: var(--grad); opacity: 0; transition: opacity 0.3s; }
+      .btn-begin-app:hover::before { opacity: 1; }
+      .btn-begin-app span { position: relative; z-index: 1; }
+      .btn-begin-sub { font-size: 11px; color: var(--mauve); margin-top: 6px; display: block; }
+
+      /* Slider adjustments on mobile */
+      .slider-row { grid-template-columns: 1fr 2fr 32px; }
+      .feature-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .mad-libs { line-height: 3; }
+      .slider-row { grid-template-columns: 1fr; gap: 5px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="#hero" class="nav-brand" aria-label="SPRK Home">
+    <svg class="nav-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect width="32" height="32" rx="8" fill="url(#nav-g)"/>
+      <path d="M16 8C16 12.4183 19.5817 16 24 16C19.5817 16 16 19.5817 16 24C16 19.5817 12.4183 16 8 16C12.4183 16 16 12.4183 16 8Z" fill="white"/>
+      <defs><linearGradient id="nav-g" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#FF6B35"/><stop offset="60%" stop-color="#E8003D"/><stop offset="100%" stop-color="#CC0055"/></linearGradient></defs>
+    </svg>
+    <span class="nav-wordmark">SPRK<em>*</em></span>
+  </a>
+  <a class="nav-cta" href="#hero" id="nav-join-btn">Join the Beta →</a>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <!-- Marquee — final curated set: 5 keepers + 13 poly-cultural Pexels images -->
+  <div class="marquee-bg" aria-hidden="true">
+
+    <!-- Row 1: scrolls left (28s) -->
+    <div class="marquee-row">
+      <div class="marquee-cell" style="background:linear-gradient(160deg,#C4A09A,#8E7A8A)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(200deg,#4A5278,#1E2235)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/17471057/pexels-photo-17471057.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(130deg,#F0E8E4,#C4A09A)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/2820896/pexels-photo-2820896.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(170deg,#8E7A8A,#4A5278)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(220deg,#1E2235,#4A5278)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/9287491/pexels-photo-9287491.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(140deg,#C4A09A,#F0E8E4)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/6953877/pexels-photo-6953877.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <!-- duplicate for seamless loop -->
+      <div class="marquee-cell" style="background:linear-gradient(160deg,#C4A09A,#8E7A8A)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(200deg,#4A5278,#1E2235)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/17471057/pexels-photo-17471057.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(130deg,#F0E8E4,#C4A09A)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/2820896/pexels-photo-2820896.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(170deg,#8E7A8A,#4A5278)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(220deg,#1E2235,#4A5278)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/9287491/pexels-photo-9287491.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(140deg,#C4A09A,#F0E8E4)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/6953877/pexels-photo-6953877.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+    </div>
+
+    <!-- Row 2: scrolls right (34s) -->
+    <div class="marquee-row">
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/7869440/pexels-photo-7869440.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(200deg,#1E2235,#8E7A8A)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(150deg,#C4A09A,#4A5278)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/3952080/pexels-photo-3952080.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(180deg,#4A5278,#F0E8E4)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(220deg,#8E7A8A,#1E2235)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/7551762/pexels-photo-7551762.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(160deg,#F0E8E4,#C4A09A)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/8373506/pexels-photo-8373506.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(190deg,#C4A09A,#8E7A8A)"></div>
+      <!-- duplicate -->
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/7869440/pexels-photo-7869440.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(200deg,#1E2235,#8E7A8A)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(150deg,#C4A09A,#4A5278)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/3952080/pexels-photo-3952080.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(180deg,#4A5278,#F0E8E4)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(220deg,#8E7A8A,#1E2235)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/7551762/pexels-photo-7551762.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(160deg,#F0E8E4,#C4A09A)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/8373506/pexels-photo-8373506.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(190deg,#C4A09A,#8E7A8A)"></div>
+    </div>
+
+    <!-- Row 3: scrolls left (22s) -->
+    <div class="marquee-row">
+      <div class="marquee-cell" style="background:linear-gradient(160deg,#4A5278,#C4A09A)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/11627194/pexels-photo-11627194.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(200deg,#F0E8E4,#1E2235)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/29901444/pexels-photo-29901444.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(140deg,#8E7A8A,#4A5278)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(190deg,#C4A09A,#F0E8E4)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/33919361/pexels-photo-33919361.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(220deg,#1E2235,#C4A09A)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(170deg,#4A5278,#8E7A8A)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/29901249/pexels-photo-29901249.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <!-- duplicate -->
+      <div class="marquee-cell" style="background:linear-gradient(160deg,#4A5278,#C4A09A)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/11627194/pexels-photo-11627194.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(200deg,#F0E8E4,#1E2235)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/29901444/pexels-photo-29901444.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(140deg,#8E7A8A,#4A5278)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(190deg,#C4A09A,#F0E8E4)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/33919361/pexels-photo-33919361.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(220deg,#1E2235,#C4A09A)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+      <div class="marquee-cell" style="background:linear-gradient(170deg,#4A5278,#8E7A8A)"></div>
+      <div class="marquee-cell" style="background-image:url('https://images.pexels.com/photos/29901249/pexels-photo-29901249.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=300&h=400');background-size:cover;background-position:center"></div>
+    </div>
+
+  </div>
+
+  <div class="hero-veil" aria-hidden="true"></div>
+
+  <!-- Left: brand text -->
+  <div class="hero-text">
+    <div class="hero-pill"><span></span>Beta Access — Limited Seats</div>
+    <h1 class="hero-headline">Embrace your<br><span class="grad">SPRK</span></h1>
+    <p class="hero-sub">The creator-first operating system built for true independence.</p>
+    <p class="hero-tagline">Tell us about yourself. We'll take it from there.</p>
+    <button class="hero-scroll-cta" onclick="document.getElementById('promise').scrollIntoView({behavior:'smooth'})">See the promise ↓</button>
+  </div>
+
+  <!-- Right: wizard (becomes mobile drawer) -->
+  <div class="wizard-outer" id="wizard-outer">
+    <div class="drawer-handle-bar" id="drawer-handle"></div>
+    <div class="wizard-card" id="wizard-card">
+      <div class="wizard-progress-track"><div class="wizard-progress-fill" id="wizard-progress" style="width:0%"></div></div>
+      <div class="wizard-header">
+        <span class="wizard-step-label" id="wizard-step-label">Early Access</span>
+        <span class="wizard-step-count" id="wizard-step-count"></span>
+      </div>
+      <div class="wizard-viewport" id="wizard-viewport">
+        <div class="wizard-track" id="wizard-track">
+
+          <!-- S0: Welcome / Value Prop -->
+          <div class="wizard-slide" id="slide-0">
+            <div class="welcome-slide">
+              <div class="welcome-eyebrow">Founding Creator Cohort — Limited Access</div>
+              <h2 class="welcome-headline">Be among the first to<br>build on <span class="grad">SPRK</span>.</h2>
+              <ul class="welcome-perks">
+                <li>
+                  <div class="welcome-perk-dot"></div>
+                  <div class="welcome-perk-text">
+                    <span class="welcome-perk-title">Early SPRK*OS Access</span>
+                    <span class="welcome-perk-body">Post exclusive content using our all-in-one AI tool suite and receive up to 95% revenue share — the highest split in the creator economy.</span>
+                  </div>
+                </li>
+                <li>
+                  <div class="welcome-perk-dot"></div>
+                  <div class="welcome-perk-text">
+                    <span class="welcome-perk-title">Make Deals Directly</span>
+                    <span class="welcome-perk-body">Link up with trailblazing SPRK partner brands and agencies via SPRK*Pavilion, where credibility and culture creates commerce.</span>
+                  </div>
+                </li>
+                <li>
+                  <div class="welcome-perk-dot"></div>
+                  <div class="welcome-perk-text">
+                    <span class="welcome-perk-title">Receive Perks &amp; Exclusives</span>
+                    <span class="welcome-perk-body">In addition to updates and beta access, receive SPRK merch, special drops, and early-access event invitations reserved for founding cohort creators.</span>
+                  </div>
+                </li>
+              </ul>
+              <div class="welcome-closer">All for sharing yourSPRK with us today.</div>
+              <div class="welcome-divider"></div>
+              <button class="btn-welcome-begin" id="btn-welcome-begin">
+                <span>Sound Good? Let's Begin →</span>
+              </button>
+              <div class="welcome-footnote">6 questions · takes about 3 minutes · no commitment required</div>
+            </div>
+          </div>
+
+          <!-- S1: Q1 Part A -->
+          <div class="wizard-slide" id="slide-1">
+            <div class="step-number">Question 01 — Part A</div>
+            <div class="step-question">Fill in the blanks — tell us who you are.</div>
+            <div class="mad-libs">My name is&nbsp;<input class="ml-input" id="firstName" name="firstName" type="text" placeholder="First" maxlength="40" style="width:96px" autocomplete="given-name">&nbsp;<input class="ml-input" id="lastName" name="lastName" type="text" placeholder="Last" maxlength="40" style="width:96px" autocomplete="family-name">&nbsp;and I am a&nbsp;<select class="ml-select" id="creatorStatus"><option value="" disabled selected>type</option><option>New</option><option>Casual</option><option>Seasoned</option><option>Established</option></select>&nbsp;creator specializing in:</div>
+            <div class="pill-group">
+              <label class="pill-label"><input type="checkbox" name="specialty" value="Short form vid"> Short form vid</label>
+              <label class="pill-label"><input type="checkbox" name="specialty" value="Long form vid"> Long form vid</label>
+              <label class="pill-label"><input type="checkbox" name="specialty" value="Podcast"> Podcast</label>
+              <label class="pill-label"><input type="checkbox" name="specialty" value="Vodcast"> Vodcast</label>
+              <label class="pill-label"><input type="checkbox" name="specialty" value="Influencer"> Influencer</label>
+              <label class="pill-label"><input type="checkbox" name="specialty" value="Live streamer"> Live streamer</label>
+              <label class="pill-label"><input type="checkbox" name="specialty" value="Blogger / writer"> Blogger / writer</label>
+            </div>
+            <div class="err-msg" id="s1-err">Please complete all fields and select at least one specialty.</div>
+          </div>
+
+          <!-- S2: Q1 Part B — Creator Tools -->
+          <div class="wizard-slide" id="slide-2">
+            <div class="step-number">Question 01 — Part B</div>
+            <div class="step-question">I use the following tools and software to produce my content.</div>
+            <p style="font-size:11px;color:var(--mauve);margin-bottom:4px;font-weight:300">Select all that apply.</p>
+
+            <div class="tools-section-label">Video Editing</div>
+            <div class="tools-grid" id="tools-grid">
+              <label class="tool-item"><input type="checkbox" name="tools" value="CapCut"><span class="tool-checkmark"></span>CapCut</label>
+              <label class="tool-item"><input type="checkbox" name="tools" value="Adobe Premiere Pro"><span class="tool-checkmark"></span>Adobe Premiere Pro</label>
+              <label class="tool-item"><input type="checkbox" name="tools" value="DaVinci Resolve"><span class="tool-checkmark"></span>DaVinci Resolve</label>
+              <label class="tool-item"><input type="checkbox" name="tools" value="Final Cut Pro"><span class="tool-checkmark"></span>Final Cut Pro</label>
+              <label class="tool-item"><input type="checkbox" name="tools" value="iMovie"><span class="tool-checkmark"></span>iMovie</label>
+
+              <div class="tools-section-label" style="grid-column:1/-1">Audio &amp; Podcasting</div>
+              <label class="tool-item"><input type="checkbox" name="tools" value="GarageBand / Logic Pro"><span class="tool-checkmark"></span>GarageBand / Logic Pro</label>
+              <label class="tool-item"><input type="checkbox" name="tools" value="Audacity / Adobe Audition"><span class="tool-checkmark"></span>Audacity / Adobe Audition</label>
+              <label class="tool-item"><input type="checkbox" name="tools" value="Descript"><span class="tool-checkmark"></span>Descript</label>
+
+              <div class="tools-section-label" style="grid-column:1/-1">Design &amp; Graphics</div>
+              <label class="tool-item"><input type="checkbox" name="tools" value="Canva"><span class="tool-checkmark"></span>Canva</label>
+              <label class="tool-item"><input type="checkbox" name="tools" value="Adobe Photoshop / Illustrator"><span class="tool-checkmark"></span>Adobe Photoshop / Illustrator</label>
+              <label class="tool-item"><input type="checkbox" name="tools" value="Adobe Express / Firefly"><span class="tool-checkmark"></span>Adobe Express / Firefly</label>
+
+              <div class="tools-section-label" style="grid-column:1/-1">AI &amp; Automation</div>
+              <label class="tool-item"><input type="checkbox" name="tools" value="ChatGPT / OpenAI"><span class="tool-checkmark"></span>ChatGPT / OpenAI</label>
+              <label class="tool-item"><input type="checkbox" name="tools" value="Midjourney / DALL-E"><span class="tool-checkmark"></span>Midjourney / DALL-E</label>
+              <label class="tool-item"><input type="checkbox" name="tools" value="ElevenLabs / AI Voice"><span class="tool-checkmark"></span>ElevenLabs / AI Voice</label>
+              <label class="tool-item"><input type="checkbox" name="tools" value="Captions.ai / Kapwing"><span class="tool-checkmark"></span>Captions.ai / Kapwing</label>
+
+              <div class="tools-section-label" style="grid-column:1/-1">Writing &amp; Planning</div>
+              <label class="tool-item"><input type="checkbox" name="tools" value="Notion"><span class="tool-checkmark"></span>Notion</label>
+              <label class="tool-item"><input type="checkbox" name="tools" value="Google Docs / Workspace"><span class="tool-checkmark"></span>Google Docs / Workspace</label>
+
+              <div class="tools-section-label" style="grid-column:1/-1">Scheduling &amp; Publishing</div>
+              <label class="tool-item"><input type="checkbox" name="tools" value="Buffer / Hootsuite"><span class="tool-checkmark"></span>Buffer / Hootsuite</label>
+              <label class="tool-item"><input type="checkbox" name="tools" value="Later / Planoly"><span class="tool-checkmark"></span>Later / Planoly</label>
+              <label class="tool-item"><input type="checkbox" name="tools" value="TikTok Studio"><span class="tool-checkmark"></span>TikTok Studio</label>
+
+              <div class="tools-section-label" style="grid-column:1/-1">Analytics &amp; Insights</div>
+              <label class="tool-item"><input type="checkbox" name="tools" value="YouTube Studio"><span class="tool-checkmark"></span>YouTube Studio</label>
+              <label class="tool-item"><input type="checkbox" name="tools" value="Meta / Instagram Insights"><span class="tool-checkmark"></span>Meta / Instagram Insights</label>
+
+              <div class="tools-section-label" style="grid-column:1/-1">Live &amp; Streaming</div>
+              <label class="tool-item"><input type="checkbox" name="tools" value="OBS Studio"><span class="tool-checkmark"></span>OBS Studio</label>
+              <label class="tool-item"><input type="checkbox" name="tools" value="StreamYard / Restream"><span class="tool-checkmark"></span>StreamYard / Restream</label>
+              <label class="tool-item"><input type="checkbox" name="tools" value="Loom"><span class="tool-checkmark"></span>Loom</label>
+
+              <div class="tools-section-label" style="grid-column:1/-1">Other</div>
+              <label class="tool-item" id="tool-other-label"><input type="checkbox" name="tools" value="Other" id="tool-other-cb"><span class="tool-checkmark"></span>Other</label>
+            </div>
+            <div class="tool-other-wrap" id="tool-other-wrap">
+              <input class="tool-other-input" id="toolOtherText" type="text" placeholder="Name your tool(s) — up to 100 characters" maxlength="100">
+            </div>
+            <div class="err-msg" id="s2-err">Please select at least one tool.</div>
+          </div>
+
+          <!-- S3: Q2 -->
+          <div class="wizard-slide" id="slide-3">
+            <div class="step-number">Question 02</div>
+            <div class="step-question">Where can we find your work?</div>
+            <div class="field-group">
+              <div class="field-wrap"><label for="email">Email Address</label><input class="std-input" id="email" type="email" placeholder="you@example.com" autocomplete="email"><span class="err-msg" id="emailErr">Please enter a valid email address.</span></div>
+              <div class="field-wrap"><label for="socialHandle">Primary Social Handle or URL</label><input class="std-input" id="socialHandle" type="text" placeholder="@handle or profile URL"><span class="err-msg" id="handleErr">Please enter your primary social handle or URL.</span></div>
+            </div>
+          </div>
+
+          <!-- S4: Q3 -->
+          <div class="wizard-slide" id="slide-4">
+            <div class="step-number">Question 03</div>
+            <div class="step-question">What is the total size of your community across all networks?</div>
+            <div class="field-wrap" style="max-width:300px"><label for="communitySize">Combined Audience Size</label><select class="std-select" id="communitySize"><option value="" disabled selected>Select a range</option><option>Under 5k</option><option>5k–25k</option><option>25k–100k</option><option>100k–500k</option><option>500k+</option></select><span class="err-msg" id="communityErr">Please select your audience size.</span></div>
+          </div>
+
+          <!-- S5: Q4 -->
+          <div class="wizard-slide" id="slide-5">
+            <div class="step-number">Question 04</div>
+            <div class="step-question">Rate your biggest content creation bottlenecks.</div>
+            <p style="font-size:11px;color:var(--mauve);margin-bottom:16px">1 = No problem · 5 = Major blocker</p>
+            <div class="slider-group">
+              <div class="slider-row"><div class="slider-label">Editing time</div><div><input type="range" name="bottleneck_editing" min="1" max="5" value="3" class="rating-slider"><div class="slider-scale"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div></div><div class="slider-val">3</div></div>
+              <div class="slider-row"><div class="slider-label">Scripting / ideation</div><div><input type="range" name="bottleneck_scripting" min="1" max="5" value="3" class="rating-slider"><div class="slider-scale"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div></div><div class="slider-val">3</div></div>
+              <div class="slider-row"><div class="slider-label">Graphic design</div><div><input type="range" name="bottleneck_design" min="1" max="5" value="3" class="rating-slider"><div class="slider-scale"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div></div><div class="slider-val">3</div></div>
+              <div class="slider-row"><div class="slider-label">Audience engagement</div><div><input type="range" name="bottleneck_engagement" min="1" max="5" value="3" class="rating-slider"><div class="slider-scale"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div></div><div class="slider-val">3</div></div>
+              <div class="slider-row"><div class="slider-label">Burnout</div><div><input type="range" name="bottleneck_burnout" min="1" max="5" value="3" class="rating-slider"><div class="slider-scale"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div></div><div class="slider-val">3</div></div>
+            </div>
+          </div>
+
+          <!-- S6: Q5 -->
+          <div class="wizard-slide" id="slide-6">
+            <div class="step-number">Question 05 — Part A</div>
+            <div class="step-question">How do you currently earn money from your content?</div>
+            <p style="font-size:11px;color:var(--mauve);margin-bottom:10px;font-weight:300">Select all that apply. Choosing "Not yet monetized" will clear other selections.</p>
+            <div class="pill-group">
+              <label class="pill-label"><input type="checkbox" name="revenue" value="Ad revenue"> Ad revenue</label>
+              <label class="pill-label"><input type="checkbox" name="revenue" value="Brand deals"> Brand deals</label>
+              <label class="pill-label"><input type="checkbox" name="revenue" value="Affiliate links"> Affiliate links</label>
+              <label class="pill-label"><input type="checkbox" name="revenue" value="Subscriptions"> Subscriptions</label>
+              <label class="pill-label"><input type="checkbox" name="revenue" value="Merchandise"> Merchandise</label>
+              <label class="pill-label"><input type="checkbox" name="revenue" value="Not yet monetized"> Not yet monetized</label>
+            </div>
+
+            <div style="margin-top:22px">
+              <div class="step-number" style="margin-bottom:6px">Question 05 — Part B</div>
+              <div style="font-size:14px;font-weight:700;color:var(--ink);letter-spacing:-0.02em;margin-bottom:6px;line-height:1.35">Your Current Platforms</div>
+              <p style="font-size:11px;color:var(--mauve);margin-bottom:12px;font-weight:300">Which platforms are you currently generating revenue from? (Choose all that apply)</p>
+              <div class="pill-group platform-panel" id="platform-panel">
+                <label class="pill-label"><input type="checkbox" name="revenuePlatform" value="YouTube"> YouTube</label>
+                <label class="pill-label"><input type="checkbox" name="revenuePlatform" value="TikTok"> TikTok</label>
+                <label class="pill-label"><input type="checkbox" name="revenuePlatform" value="Instagram"> Instagram</label>
+                <label class="pill-label"><input type="checkbox" name="revenuePlatform" value="Facebook"> Facebook</label>
+                <label class="pill-label"><input type="checkbox" name="revenuePlatform" value="X / Twitter"> X / Twitter</label>
+                <label class="pill-label"><input type="checkbox" name="revenuePlatform" value="LinkedIn"> LinkedIn</label>
+                <label class="pill-label"><input type="checkbox" name="revenuePlatform" value="Substack"> Substack</label>
+                <label class="pill-label"><input type="checkbox" name="revenuePlatform" value="Patreon"> Patreon</label>
+                <label class="pill-label"><input type="checkbox" name="revenuePlatform" value="Twitch"> Twitch</label>
+                <label class="pill-label"><input type="checkbox" name="revenuePlatform" value="Kick"> Kick</label>
+                <label class="pill-label"><input type="checkbox" name="revenuePlatform" value="Spotify / Podcasts"> Spotify / Podcasts</label>
+                <label class="pill-label"><input type="checkbox" name="revenuePlatform" value="Apple Podcasts"> Apple Podcasts</label>
+                <label class="pill-label"><input type="checkbox" name="revenuePlatform" value="Pinterest"> Pinterest</label>
+                <label class="pill-label"><input type="checkbox" name="revenuePlatform" value="Snapchat"> Snapchat</label>
+                <label class="pill-label"><input type="checkbox" name="revenuePlatform" value="Reddit"> Reddit</label>
+                <label class="pill-label"><input type="checkbox" name="revenuePlatform" value="Amazon / Influencer Program"> Amazon / Influencer</label>
+                <label class="pill-label"><input type="checkbox" name="revenuePlatform" value="LTK / ShopMy"> LTK / ShopMy</label>
+                <label class="pill-label"><input type="checkbox" name="revenuePlatform" value="Etsy / Shopify"> Etsy / Shopify</label>
+                <label class="pill-label"><input type="checkbox" name="revenuePlatform" value="Ko-fi / Buy Me a Coffee"> Ko-fi / Buy Me a Coffee</label>
+                <label class="pill-label"><input type="checkbox" name="revenuePlatform" value="Personal website / blog"> Personal website / blog</label>
+              </div>
+              <p style="font-size:10px;color:var(--mauve);margin-top:8px;font-style:italic">Enabled once you select a revenue source above.</p>
+            </div>
+          </div>
+
+          <!-- S7: Q6 -->
+          <div class="wizard-slide" id="slide-7">
+            <div class="step-number">Question 06</div>
+            <div class="step-question">What features would make SPRK*OS a must-have?</div>
+            <p style="font-size:12px;color:var(--mauve);margin-bottom:4px;font-weight:300">Select <strong style="color:var(--ink);font-weight:600">at least one</strong> from each section. Select all that apply.</p>
+            <div class="feature-part-title">Part A — Ideation &amp; Production</div>
+            <div class="feature-grid" data-group="partA" data-max="3">
+              <label class="feature-item"><input type="checkbox" name="partA" value="Trend & Keyword Discovery"><span class="feature-checkmark"></span>Trend &amp; Keyword Discovery</label>
+              <label class="feature-item"><input type="checkbox" name="partA" value="AI Scripting & Outlining"><span class="feature-checkmark"></span>AI Scripting &amp; Outlining</label>
+              <label class="feature-item"><input type="checkbox" name="partA" value="Content Calendar & PM"><span class="feature-checkmark"></span>Content Calendar &amp; PM</label>
+              <label class="feature-item"><input type="checkbox" name="partA" value="High-Fidelity Video Editing"><span class="feature-checkmark"></span>High-Fidelity Video Editing</label>
+              <label class="feature-item"><input type="checkbox" name="partA" value="Graphic Design & Thumbnails"><span class="feature-checkmark"></span>Graphic Design &amp; Thumbnails</label>
+              <label class="feature-item"><input type="checkbox" name="partA" value="Audio Enhancement"><span class="feature-checkmark"></span>Audio Enhancement</label>
+              <label class="feature-item"><input type="checkbox" name="partA" value="Short-Form Clipping"><span class="feature-checkmark"></span>Short-Form Clipping &amp; Captions</label>
+              <label class="feature-item"><input type="checkbox" name="partA" value="Screen Recording"><span class="feature-checkmark"></span>Screen Recording &amp; Capture</label>
+            </div>
+            <div class="err-msg" id="partAErr">Please select at least 1 from Part A.</div>
+            <div class="feature-part-title">Part B — Growth &amp; Distribution</div>
+            <div class="feature-grid" data-group="partB" data-max="3">
+              <label class="feature-item"><input type="checkbox" name="partB" value="Multi-Platform Scheduling"><span class="feature-checkmark"></span>Multi-Platform Scheduling</label>
+              <label class="feature-item"><input type="checkbox" name="partB" value="Link-in-Bio & Landing Pages"><span class="feature-checkmark"></span>Link-in-Bio &amp; Landing Pages</label>
+              <label class="feature-item"><input type="checkbox" name="partB" value="Cross-Platform Analytics"><span class="feature-checkmark"></span>Cross-Platform Analytics</label>
+              <label class="feature-item"><input type="checkbox" name="partB" value="SEO & Title Scoring"><span class="feature-checkmark"></span>SEO &amp; Title Scoring</label>
+              <label class="feature-item"><input type="checkbox" name="partB" value="Convert Followers to Email"><span class="feature-checkmark"></span>Convert Followers to Email</label>
+              <label class="feature-item"><input type="checkbox" name="partB" value="Story Arc Linking"><span class="feature-checkmark"></span>Story Arc Linking</label>
+            </div>
+            <div class="err-msg" id="partBErr">Please select at least 1 from Part B.</div>
+            <div class="feature-part-title">Part C — Business &amp; Community</div>
+            <div class="feature-grid" data-group="partC" data-max="3">
+              <label class="feature-item"><input type="checkbox" name="partC" value="Unified Comment & DM Inbox"><span class="feature-checkmark"></span>Unified Comment &amp; DM Inbox</label>
+              <label class="feature-item"><input type="checkbox" name="partC" value="Sponsorship & Deal CRM"><span class="feature-checkmark"></span>Sponsorship &amp; Deal CRM</label>
+              <label class="feature-item"><input type="checkbox" name="partC" value="Direct Monetization"><span class="feature-checkmark"></span>Direct Monetization</label>
+              <label class="feature-item"><input type="checkbox" name="partC" value="Brand Collab Inbox"><span class="feature-checkmark"></span>Brand Collab Inbox</label>
+              <label class="feature-item"><input type="checkbox" name="partC" value="Anti-Burnout Workflows"><span class="feature-checkmark"></span>Anti-Burnout Workflows</label>
+              <label class="feature-item"><input type="checkbox" name="partC" value="Direct Sales Analytics"><span class="feature-checkmark"></span>Direct Sales Analytics</label>
+              <label class="feature-item"><input type="checkbox" name="partC" value="AI Voice Matching"><span class="feature-checkmark"></span>AI Voice &amp; Tone Matching</label>
+            </div>
+            <div class="err-msg" id="partCErr">Please select at least 1 from Part C.</div>
+          </div>
+
+        </div>
+      </div>
+      <div class="wizard-footer">
+        <button class="btn-nav btn-nav-back" id="btn-back" disabled>← Back</button>
+        <div class="step-dots" id="step-dots">
+          <div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div>
+          <div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div>
+          <div class="step-dot"></div><div class="step-dot"></div>
+        </div>
+        <button class="btn-nav btn-nav-next" id="btn-next"><span>Next →</span></button>
+      </div>
+    </div>
+    <p class="wizard-disclaimer">By submitting you agree to receive occasional updates from SPRK Unlimited, LLC. Your information is never sold or shared.</p>
+  </div>
+</section>
+
+<!-- Drawer backdrop (mobile only) -->
+<div class="drawer-backdrop" id="drawer-backdrop"></div>
+
+<!-- Mobile CTA (shown below hero text on mobile) -->
+<div class="mobile-app-cta" id="mobile-app-cta">
+  <button class="btn-begin-app" id="open-drawer-btn">
+    <span>Begin Application →</span>
+  </button>
+  <span class="btn-begin-sub">6 questions · takes about 3 minutes</span>
+</div>
+
+<!-- ── SPRK PROMISE ── -->
+<section id="promise">
+  <div class="promise-inner">
+    <div class="reveal" style="text-align:center">
+      <span class="section-label" style="color:var(--ember)">The SPRK Promise</span>
+      <span class="stat-callout">75–95%<a class="stat-footnote-link" id="stat-footnote-link" href="#revenue-footnote" title="See revenue share conditions">*</a></span>
+      <h2 class="promise-headline">Creators retain 75–95% of their revenue.</h2>
+      <p class="promise-sub">Your content. Your credit. Your community.</p>
+    </div>
+
+    <!-- Hub diagram: icon top, lines fan down to tile row -->
+    <div class="hub-diagram-section reveal" id="hub-diagram-section">
+      <div class="hub-section-wrap" id="hub-section-wrap">
+        <svg class="hub-lines-svg" id="hub-lines-svg" aria-hidden="true"></svg>
+
+        <!-- Center icon -->
+        <div class="hub-icon-wrap" id="hub-icon-center">
+          <svg class="hub-asterisk-svg" viewBox="0 0 110 118" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="SPRK*OS — Your Hub">
+            <rect width="110" height="118" rx="26" fill="url(#hub-g)"/>
+            <!-- Four-pointed star, white -->
+            <path d="M55 16C55 33 66 44 83 46C66 46 55 57 55 74C55 57 44 46 27 46C44 46 55 33 55 16Z" fill="white"/>
+            <!-- SPRK*OS label inside, white -->
+            <text x="55" y="92" text-anchor="middle" font-family="'Bricolage Grotesque',system-ui,sans-serif" font-size="11" font-weight="700" fill="white" letter-spacing="1.2">SPRK*OS</text>
+            <text x="55" y="108" text-anchor="middle" font-family="'Bricolage Grotesque',system-ui,sans-serif" font-size="8" font-weight="400" fill="rgba(255,255,255,0.65)" letter-spacing="0.8">YOUR HUB</text>
+            <defs>
+              <linearGradient id="hub-g" x1="0" y1="0" x2="110" y2="118" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FF6B35"/>
+                <stop offset="40%" stop-color="#E8003D"/>
+                <stop offset="100%" stop-color="#CC0055"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- Platform tiles row — flex-wrap, JS draws lines to each -->
+        <div class="hub-tiles-row" id="hub-tiles-row">
+          <div class="hub-spoke-tile"><div class="hub-spoke-icon">▶️</div><div class="hub-spoke-name">YouTube</div></div>
+          <div class="hub-spoke-tile"><div class="hub-spoke-icon">🎵</div><div class="hub-spoke-name">TikTok</div></div>
+          <div class="hub-spoke-tile"><div class="hub-spoke-icon">🔗</div><div class="hub-spoke-name">LinkedIn</div></div>
+          <div class="hub-spoke-tile"><div class="hub-spoke-icon">🎮</div><div class="hub-spoke-name">Twitch</div></div>
+          <div class="hub-spoke-tile"><div class="hub-spoke-icon">📸</div><div class="hub-spoke-name">Instagram</div></div>
+          <div class="hub-spoke-tile"><div class="hub-spoke-icon">💬</div><div class="hub-spoke-name">Substack</div></div>
+          <div class="hub-spoke-tile"><div class="hub-spoke-icon">🎙️</div><div class="hub-spoke-name">Podcast</div></div>
+        </div>
+      </div>
+      <p class="hub-caption">Create once in SPRK*OS — deploy everywhere, simultaneously.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── THE LANDSCAPE ── -->
+<section id="compare">
+  <div class="compare-inner">
+    <div class="compare-header reveal">
+      <span class="section-label" style="color:rgba(255,255,255,0.32)">The Landscape</span>
+      <h2 class="compare-headline">The current models win by monopolizing channels, gating audiences, commoditizing culture, and extracting creator value rather than enabling it.</h2>
+      <p class="compare-lead">SPRK inverts this model. Creators keep control, ownership, and the economics of their own work.</p>
+    </div>
+    <div class="table-scroll reveal">
+      <table class="comparison-table">
+        <thead><tr><th>Platform</th><th>Revenue Split</th><th>Audience Ownership</th><th>Basis</th><th>Key Mechanic</th></tr></thead>
+        <tbody>
+          <tr class="sprk-row"><td><strong>SPRK</strong></td><td><span class="pct-chip">75–95%</span></td><td>✅ Creator-owned</td><td>Creator-first OS</td><td>Direct monetization + multi-platform publishing</td></tr>
+          <tr><td>TikTok</td><td>~54% (Creator Fund)</td><td>❌ Platform-owned</td><td>Algorithm dependency</td><td>Viral reach, ad revenue share</td></tr>
+          <tr><td>YouTube</td><td>55% (AdSense)</td><td>❌ Platform-owned</td><td>Views &amp; subscribers</td><td>Ad revenue, channel memberships</td></tr>
+          <tr><td>Spotify</td><td>~15–20%</td><td>❌ Platform-owned</td><td>Stream-based royalties</td><td>Per-stream payments</td></tr>
+          <tr><td>Substack</td><td>90% (10% fee)</td><td>⚠️ Partial</td><td>Newsletter subscribers</td><td>Paid subscriptions</td></tr>
+          <tr><td>Reddit</td><td>~0%</td><td>❌ Platform-owned</td><td>Community karma</td><td>Ad revenue (minimal creator share)</td></tr>
+          <tr><td>Patreon</td><td>88–95% (fees vary)</td><td>⚠️ Partial</td><td>Fan support tiers</td><td>Subscription tiers</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOUR PILLARS ── -->
+<section id="pillars">
+  <div class="pillars-inner">
+    <div class="pillars-header reveal">
+      <span class="section-label" style="color:var(--mauve)">Why Creators Win</span>
+      <h2 class="section-headline">Four pillars.<br>One operating system.</h2>
+    </div>
+    <div class="pillars-grid">
+      <div class="pillar-card reveal"><div class="pillar-icon">⚡</div><div class="pillar-number">Pillar 01</div><h3 class="pillar-title">Creator-First Operating System</h3><p class="pillar-body">Build audiences and monetize on your own terms. SPRK*OS is infrastructure designed from the ground up for creators, not advertisers.</p></div>
+      <div class="pillar-card reveal"><div class="pillar-icon" style="background:var(--steel)">🔁</div><div class="pillar-number">Pillar 02</div><h3 class="pillar-title">Multi-Home Publishing Hub</h3><p class="pillar-body">Create once, publish everywhere. TikTok, YouTube, Instagram, Reddit, Substack — deployed simultaneously from a single dashboard.</p></div>
+      <div class="pillar-card reveal"><div class="pillar-icon" style="background:var(--mauve)">🤝</div><div class="pillar-number">Pillar 03</div><h3 class="pillar-title">Integrated Marketplace</h3><p class="pillar-body">Brands discover creators and negotiate partnerships directly — fewer middlemen, more revenue, better-fit collaborations.</p></div>
+      <div class="pillar-card reveal" id="pillar-04">
+        <div class="pillar-icon" style="background:var(--blush)">💰</div>
+        <div class="pillar-number">Pillar 04</div>
+        <h3 class="pillar-title">Creator-Owned Monetization</h3>
+        <p class="pillar-body">Keep 75–95% of marketplace and ad revenue. Massive financial incentives for SPRK-exclusive content and creators who go all in.</p>
+        <p class="pillar-footnote" id="revenue-footnote"><strong>*</strong> Revenue share of 75–95% applies to qualifying content distributed via SPRK*OS and SPRK*Pavilion. Exact split is determined by content type, distribution channel selection, and creator partnership tier. Standard platform fees apply to third-party channel integrations. Details confirmed at onboarding.</p>
+      </div>
+    </div>
+    <p class="pillars-footer reveal">"SPRK positions creators as entrepreneurs, not content factories. We succeed when you succeed."</p>
+  </div>
+</section>
+
+<!-- ── SPRK FAMILY ── -->
+<section id="platforms">
+  <div class="platforms-inner">
+    <span class="section-label reveal" style="color:var(--ember)">The SPRK Family</span>
+    <h2 class="section-headline reveal">Four Platforms,<br>One Connected Culture</h2>
+    <div class="platform-grid">
+      <div class="platform-card reveal"><div><h3>the-SPRK.com</h3><p>UGC and AI-assisted community content layer where creators build audiences and people discover work across culture categories.</p></div><a class="platform-card-link" href="sprk-coming-soon.html">Browse Feed →</a></div>
+      <div class="platform-card reveal"><div><h3>SPRK*OS</h3><p>AI-powered editing workspace and content suite. Generate hooks, manage overlays, schedule across platforms, and run your studio.</p></div><a class="platform-card-link" href="sprk-coming-soon.html">Enter Studio →</a></div>
+      <div class="platform-card reveal"><div><h3>SPRK*Pavilion</h3><p>Marketplace connecting creators with brands directly. Manage your deals, collabs, and business with smart-contract escrow sponsorships, tax support, and low transaction fees. Direct. Equitable. Yours.</p></div><a class="platform-card-link" href="sprk-coming-soon.html">Open Pavilion →</a></div>
+      <div class="platform-card reveal"><div><h3>yourSPRK.com</h3><p>Official beta access gateway and profile registration. Built for true independence — every SPRK belongs here.</p></div><a class="platform-card-link" href="#hero">Secure Beta Access →</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p>2026 © SPRK™ &nbsp;·&nbsp; yourSPRK.com &nbsp;·&nbsp; the-sprk.com</p>
+  <p>SPRK*OS, SPRK*AI, and SPRK*Pavilion are owned by SPRK Unlimited, LLC</p>
+</footer>
+
+<!-- ── THANK YOU OVERLAY ── -->
+<div id="thankyou" role="dialog" aria-modal="true" aria-label="Application submitted">
+  <div class="ty-overlay"></div>
+  <div class="ty-panel">
+    <span class="ty-sparkle">✦</span>
+    <p class="ty-quote">"SPRK is founded on the notion that by giving, we get. By sharing our creativity, opinions, gifts, and light, we receive connection, community, camaraderie and commerce. Each of us has a SPRK, and this is the home for yourSPRK."</p>
+    <span class="ty-wordmark">SPRK</span>
+    <div class="ty-share">
+      <span class="ty-share-label">Bring your people. Every SPRK belongs here.</span>
+      <div class="ty-share-btns">
+        <button class="ty-share-btn" onclick="shareToX()">𝕏 Share on X</button>
+        <button class="ty-share-btn" onclick="shareToIG()">📸 Share Story</button>
+        <button class="ty-share-btn" onclick="copyLink()">🔗 Copy Link</button>
+      </div>
+    </div>
+    <p class="ty-redirect">Redirecting you to the-sprk.com in</p>
+    <div class="ty-countdown" id="countdown">10</div>
+    <a class="ty-link" href="https://the-sprk.com" target="_blank">Go now → the-sprk.com</a>
+  </div>
+</div>
+
+<script>
+  // ── CONFIG ──
+  const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwd_SHUS76IVz7hqBfkyE1woCncEFv5pnOEyD0-fDAVH13-Pi8YhXSbuW9xNB23PKRr/exec';
+  const SITE_URL = 'https://yoursprk.com';
+  const TOTAL_SLIDES = 8;   // 0 = welcome, 1–7 = questions (Q1 split into 1a+1b)
+  const Q_STEPS = 7;        // number of actual question steps
+  let currentStep = 0;      // start on welcome screen
+
+  const track      = document.getElementById('wizard-track');
+  const progress   = document.getElementById('wizard-progress');
+  const stepCount  = document.getElementById('wizard-step-count');
+  const stepLabel  = document.getElementById('wizard-step-label');
+  const btnBack    = document.getElementById('btn-back');
+  const btnNext    = document.getElementById('btn-next');
+  const dots       = document.querySelectorAll('.step-dot');
+
+  // ── WIZARD NAV ──
+  const allSlides = document.querySelectorAll('.wizard-slide');
+
+  function applySlideLayout(n) {
+    if (isMobile()) {
+      // Show/hide: translateX incompatible with drawer-level scroll
+      // Slides are indexed slide-0 through slide-7; n maps directly
+      allSlides.forEach((s, i) => { s.style.display = (i === n) ? 'block' : 'none'; });
+      track.style.transform = '';
+      const outer = document.getElementById('wizard-outer');
+      if (outer) outer.scrollTop = 0;
+    } else {
+      // Desktop: translateX, clear any mobile inline display overrides
+      allSlides.forEach(s => { s.style.removeProperty('display'); });
+      track.style.transform = `translateX(-${n * 100}%)`;
+      const slide = document.getElementById(`slide-${n}`);
+      if (slide) slide.scrollTop = 0;
+    }
+  }
+
+  function goToStep(n) {
+    if (n < 0 || n >= TOTAL_SLIDES) return;
+    currentStep = n;
+    applySlideLayout(n);
+    if (n === 0) {
+      // Welcome screen
+      progress.style.width  = '0%';
+      stepLabel.textContent = 'Early Access';
+      stepCount.textContent = '';
+      btnBack.disabled      = true;
+      btnNext.style.display = 'none'; // welcome has its own CTA button
+    } else {
+      // Question steps 1–6
+      progress.style.width  = `${(n / Q_STEPS) * 100}%`;
+      stepLabel.textContent = 'Beta Application';
+      stepCount.textContent = `Step ${n} of ${Q_STEPS}`;
+      btnBack.disabled      = false;
+      btnNext.style.display = '';
+      btnNext.querySelector('span').textContent = n === Q_STEPS ? 'Submit Application ✦' : 'Next →';
+    }
+    dots.forEach((dot, i) => {
+      dot.classList.remove('active','done');
+      if (i < n)  dot.classList.add('done');
+      if (i === n) dot.classList.add('active');
+    });
+  }
+
+  // ── WELCOME BEGIN BUTTON ──
+  document.getElementById('btn-welcome-begin').addEventListener('click', () => goToStep(1));
+
+  // Init layout for current viewport on page load
+  goToStep(0);
+
+  // Re-apply layout on resize (e.g. rotating phone or resizing browser)
+  window.addEventListener('resize', () => applySlideLayout(currentStep));
+
+  document.addEventListener('keydown', e => {
+    const isDrawerOpen = window.innerWidth <= 899 ? document.getElementById('wizard-outer').classList.contains('open') : true;
+    if (!isDrawerOpen) return;
+    if (e.key === 'ArrowRight') btnNext.click();
+    if (e.key === 'ArrowLeft' && currentStep > 1) btnBack.click();
+  });
+
+  // Touch swipe within wizard viewport
+  const vp = document.getElementById('wizard-viewport');
+  let tStartX = 0;
+  vp.addEventListener('touchstart', e => { tStartX = e.touches[0].clientX; }, { passive: true });
+  vp.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tStartX;
+    if (Math.abs(dx) > 52) { dx < 0 ? btnNext.click() : (currentStep > 1 && btnBack.click()); }
+  }, { passive: true });
+
+  btnBack.addEventListener('click', () => goToStep(currentStep - 1));
+  btnNext.addEventListener('click', () => {
+    if (!validateStep(currentStep)) return;
+    currentStep < Q_STEPS ? goToStep(currentStep + 1) : submitForm();
+  });
+
+  // ── MOBILE DRAWER ──
+  const wizardOuter    = document.getElementById('wizard-outer');
+  const drawerBackdrop = document.getElementById('drawer-backdrop');
+  const mobileAppCta   = document.getElementById('mobile-app-cta');
+  const openDrawerBtn  = document.getElementById('open-drawer-btn');
+  const navJoinBtn     = document.getElementById('nav-join-btn');
+
+  function isMobile() { return window.innerWidth <= 899; }
+
+  function openDrawer() {
+    if (!isMobile()) return;
+    wizardOuter.classList.add('open');
+    drawerBackdrop.classList.add('visible');
+    document.body.style.overflow = 'hidden';
+    mobileAppCta.classList.add('hidden');
+    // Show the current step — without this, all slides stay hidden
+    goToStep(currentStep);
+    // Scroll the drawer to top each time it opens
+    wizardOuter.scrollTop = 0;
+  }
+
+  function closeDrawer() {
+    if (!isMobile()) return;
+    wizardOuter.classList.remove('open');
+    drawerBackdrop.classList.remove('visible');
+    document.body.style.overflow = '';
+    mobileAppCta.classList.remove('hidden');
+  }
+
+  openDrawerBtn.addEventListener('click', openDrawer);
+  drawerBackdrop.addEventListener('click', closeDrawer);
+  navJoinBtn.addEventListener('click', e => { if (isMobile()) { e.preventDefault(); openDrawer(); } });
+
+  // Drawer: drag-to-dismiss
+  let drawerTouchY = 0;
+  wizardOuter.addEventListener('touchstart', e => { drawerTouchY = e.touches[0].clientY; }, { passive: true });
+  wizardOuter.addEventListener('touchend', e => {
+    // Only dismiss if user is at the TOP of the drawer (no conflict with Step 6 scroll)
+    if (wizardOuter.scrollTop < 4 && e.changedTouches[0].clientY - drawerTouchY > 80) closeDrawer();
+  }, { passive: true });
+
+  // ── PILL TOGGLE ──
+  document.querySelectorAll('.pill-label').forEach(label => {
+    label.addEventListener('click', () => { const cb = label.querySelector('input'); setTimeout(() => label.classList.toggle('checked', cb.checked), 0); });
+  });
+
+  // ── TOOL CHECKBOXES (Q1 Part B) ──
+  document.querySelectorAll('.tool-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const cb = item.querySelector('input');
+      cb.checked = !cb.checked;
+      item.classList.toggle('selected', cb.checked);
+      // Show/hide Other text field
+      if (cb.value === 'Other') {
+        document.getElementById('tool-other-wrap').classList.toggle('visible', cb.checked);
+        if (!cb.checked) document.getElementById('toolOtherText').value = '';
+      }
+    });
+  });
+
+  // ── Q5 MONETIZATION LOGIC ──
+  // "Not yet monetized" deselects all others; selecting any other deselects it
+  const notMonetizedLabel = document.querySelector('.pill-label input[value="Not yet monetized"]');
+  if (notMonetizedLabel) {
+    const allRevenue = () => document.querySelectorAll('.pill-label input[name="revenue"]');
+    notMonetizedLabel.closest('.pill-label').addEventListener('click', () => {
+      setTimeout(() => {
+        if (notMonetizedLabel.checked) {
+          // Deselect all other revenue options
+          allRevenue().forEach(cb => {
+            if (cb.value !== 'Not yet monetized') {
+              cb.checked = false;
+              cb.closest('.pill-label').classList.remove('checked');
+            }
+          });
+          // Disable and clear platform panel
+          const panel = document.getElementById('platform-panel');
+          if (panel) { panel.classList.remove('enabled'); panel.querySelectorAll('input[type=checkbox]').forEach(c => { c.checked = false; c.closest('.pill-label').classList.remove('checked'); }); }
+        }
+        updatePlatformPanel();
+      }, 0);
+    });
+    // Any other revenue pill: deselect "Not yet monetized"
+    allRevenue().forEach(cb => {
+      if (cb.value !== 'Not yet monetized') {
+        cb.closest('.pill-label').addEventListener('click', () => {
+          setTimeout(() => {
+            if (cb.checked) {
+              notMonetizedLabel.checked = false;
+              notMonetizedLabel.closest('.pill-label').classList.remove('checked');
+            }
+            updatePlatformPanel();
+          }, 0);
+        });
+      }
+    });
+  }
+
+  function updatePlatformPanel() {
+    const panel = document.getElementById('platform-panel');
+    if (!panel) return;
+    const anyOther = [...document.querySelectorAll('.pill-label input[name="revenue"]')]
+      .some(cb => cb.checked && cb.value !== 'Not yet monetized');
+    panel.classList.toggle('enabled', anyOther);
+    if (!anyOther) {
+      panel.querySelectorAll('input[type=checkbox]').forEach(c => {
+        c.checked = false;
+        const lbl = c.closest('.pill-label');
+        if (lbl) lbl.classList.remove('checked');
+      });
+    }
+  }
+
+  // ── SLIDERS ──
+  document.querySelectorAll('.rating-slider').forEach(slider => {
+    const row   = slider.closest('.slider-row');
+    const valEl = row.querySelector('.slider-val');
+    const upd   = () => { const p = (slider.value-1)/4*100; slider.style.background = `linear-gradient(to right,#0A0A0F ${p}%,rgba(10,10,15,0.1) ${p}%)`; valEl.textContent = slider.value; };
+    slider.addEventListener('input', upd); upd();
+  });
+
+  // ── FEATURE GRIDS ──
+  document.querySelectorAll('.feature-grid').forEach(grid => {
+    const max = parseInt(grid.dataset.max) || 3;
+    const upd = () => {
+      const items = grid.querySelectorAll('.feature-item');
+      const ckd   = [...items].filter(i => i.querySelector('input').checked);
+      items.forEach(item => {
+        const cb = item.querySelector('input');
+        item.classList.toggle('selected', cb.checked);
+        const dis = !cb.checked && ckd.length >= max;
+        item.classList.toggle('disabled', dis); cb.disabled = dis;
+      });
+    };
+    grid.querySelectorAll('.feature-item').forEach(item => {
+      item.addEventListener('click', e => { if (item.classList.contains('disabled')) { e.preventDefault(); return; } const cb = item.querySelector('input'); cb.checked = !cb.checked; upd(); });
+    });
+  });
+
+  // ── VALIDATION ──
+  function getChecked(name) { return [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(cb => cb.value); }
+
+  function clearErrors(step) {
+    document.getElementById(`slide-${step}`).querySelectorAll('.invalid').forEach(el => el.classList.remove('invalid'));
+    document.getElementById(`slide-${step}`).querySelectorAll('.err-msg.visible').forEach(el => el.classList.remove('visible'));
+  }
+
+  // ── PROFANITY DETECTION ──
+  const PROFANITY_LIST = ['fuck','shit','bitch','asshole','cunt','dick','pussy','bastard','damn','hell','ass','nigger','nigga','faggot','fag','whore','slut','cock','piss','crap'];
+  function containsProfanity(text) {
+    const lower = text.toLowerCase().replace(/[^a-z0-9\s]/g, ' ');
+    return PROFANITY_LIST.some(w => lower.split(/\s+/).includes(w));
+  }
+  function checkAllFieldsForProfanity() {
+    const fields = ['firstName','lastName','socialHandle','toolOtherText'];
+    return fields.some(id => { const el = document.getElementById(id); return el && containsProfanity(el.value); });
+  }
+
+  function validateStep(step) {
+    if (step === 0) return true; // welcome screen — no validation
+    clearErrors(step); let ok = true;
+    if (step === 1) {
+      const fn = document.getElementById('firstName'), ln = document.getElementById('lastName'), st = document.getElementById('creatorStatus');
+      if (!fn.value.trim()) { fn.classList.add('invalid'); ok = false; }
+      if (!ln.value.trim()) { ln.classList.add('invalid'); ok = false; }
+      if (!st.value)         { st.classList.add('invalid'); ok = false; }
+      if (getChecked('specialty').length === 0) { document.getElementById('s1-err').classList.add('visible'); ok = false; }
+    }
+    if (step === 2) {
+      // Q1 Part B: at least 1 tool required
+      const toolsSelected = getChecked('tools').length;
+      const otherChecked  = document.getElementById('tool-other-cb') && document.getElementById('tool-other-cb').checked;
+      if (toolsSelected === 0) { document.getElementById('s2-err').classList.add('visible'); ok = false; }
+    }
+    if (step === 3) {
+      const em = document.getElementById('email'), hnd = document.getElementById('socialHandle');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em.value)) { em.classList.add('invalid'); document.getElementById('emailErr').classList.add('visible'); ok = false; }
+      if (!hnd.value.trim()) { hnd.classList.add('invalid'); document.getElementById('handleErr').classList.add('visible'); ok = false; }
+    }
+    if (step === 4) { const cs = document.getElementById('communitySize'); if (!cs.value) { cs.classList.add('invalid'); document.getElementById('communityErr').classList.add('visible'); ok = false; } }
+    if (step === 7) { ['partA','partB','partC'].forEach(p => { if (getChecked(p).length < 1) { document.getElementById(`${p}Err`).classList.add('visible'); ok = false; } }); }
+    return ok;
+  }
+
+  // ── SUBMIT ──
+  async function submitForm() {
+    // Profanity check — show warning, don't block
+    const hasProfanity = checkAllFieldsForProfanity();
+    if (hasProfanity) {
+      let warn = document.getElementById('profanity-warning-el');
+      if (!warn) {
+        warn = document.createElement('div');
+        warn.id = 'profanity-warning-el';
+        warn.className = 'profanity-warning';
+        warn.innerHTML = '<strong>Heads up:</strong> Please keep it professional — review your responses before submitting. We review all submissions and hold anything that may not meet our community standards.';
+        const footer = document.querySelector('.wizard-footer');
+        footer.parentNode.insertBefore(warn, footer);
+      }
+      warn.classList.add('visible');
+      // Give them a moment to read — if they click Submit again, proceed
+      if (!submitForm._profanityAcknowledged) {
+        submitForm._profanityAcknowledged = true;
+        btnNext.querySelector('span').textContent = 'Submit Anyway →';
+        return;
+      }
+    }
+    btnNext.disabled = true; btnNext.querySelector('span').textContent = 'Submitting…';
+    const toolOtherEl = document.getElementById('toolOtherText');
+    const platformsChecked = [...document.querySelectorAll('input[name="revenuePlatform"]:checked')].map(c => c.value);
+    const payload = {
+      submittedAt: new Date().toISOString(),
+      firstName: document.getElementById('firstName').value.trim(),
+      lastName: document.getElementById('lastName').value.trim(),
+      creatorStatus: document.getElementById('creatorStatus').value,
+      specialty: getChecked('specialty').join(', '),
+      tools: getChecked('tools').filter(v => v !== 'Other').join(', '),
+      toolsOther: (document.getElementById('tool-other-cb') && document.getElementById('tool-other-cb').checked && toolOtherEl) ? toolOtherEl.value.trim() : '',
+      email: document.getElementById('email').value.trim(),
+      socialHandle: document.getElementById('socialHandle').value.trim(),
+      communitySize: document.getElementById('communitySize').value,
+      bottleneck_editing: document.querySelector('[name="bottleneck_editing"]').value,
+      bottleneck_scripting: document.querySelector('[name="bottleneck_scripting"]').value,
+      bottleneck_design: document.querySelector('[name="bottleneck_design"]').value,
+      bottleneck_engagement: document.querySelector('[name="bottleneck_engagement"]').value,
+      bottleneck_burnout: document.querySelector('[name="bottleneck_burnout"]').value,
+      revenue: getChecked('revenue').join(', '),
+      revenuePlatforms: platformsChecked.join(', '),
+      partA: getChecked('partA').join(', '),
+      partB: getChecked('partB').join(', '),
+      partC: getChecked('partC').join(', '),
+      profanityFlag: hasProfanity,
+      source: 'yoursprk-v4'
+    };
+    if (GOOGLE_SHEETS_URL) {
+      try { await fetch(GOOGLE_SHEETS_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) }); } catch(_){}
+    }
+    if (isMobile()) closeDrawer();
+    showThankYou(payload.firstName);
+    btnNext.disabled = false;
+  }
+
+  function showThankYou(name) {
+    document.getElementById('thankyou').classList.add('visible');
+    document.body.style.overflow = 'hidden';
+    let c = 10;
+    const el = document.getElementById('countdown');
+    const t = setInterval(() => { c--; el.textContent = c; if (c <= 0) { clearInterval(t); window.location.href = 'https://the-sprk.com'; } }, 1000);
+  }
+
+  // ── SHARE FUNCTIONS ──
+  function shareToX() { const txt = encodeURIComponent("I just joined the SPRK beta. The creator-first OS that actually pays creators. Come claim your SPRK."); window.open(`https://twitter.com/intent/tweet?text=${txt}&url=${encodeURIComponent(SITE_URL)}`, '_blank'); }
+  function shareToIG() { copyLink(); alert('Link copied! Paste it into your Instagram Story or bio.'); }
+  function copyLink() { navigator.clipboard.writeText(SITE_URL).then(() => { const btn = event.currentTarget; const orig = btn.textContent; btn.textContent = '✓ Copied!'; setTimeout(() => btn.textContent = orig, 2000); }); }
+
+  // ── FOOTNOTE SCROLL ──
+  document.getElementById('stat-footnote-link').addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.getElementById('revenue-footnote');
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    target.classList.add('highlight');
+    setTimeout(() => target.classList.remove('highlight'), 2800);
+  });
+
+  // ── SCROLL REVEAL ──
+  const revObs = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); } }); }, { threshold: 0.08, rootMargin:'0px 0px -24px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+  // ── HUB CONNECTOR LINES (JS-drawn, sketch layout) ──
+  function drawHubLines(animate) {
+    const svg  = document.getElementById('hub-lines-svg');
+    const wrap = document.getElementById('hub-section-wrap');
+    const icon = document.getElementById('hub-icon-center');
+    if (!svg || !wrap || !icon) return;
+
+    svg.innerHTML = '';
+    const wRect  = wrap.getBoundingClientRect();
+    const iRect  = icon.getBoundingClientRect();
+    const hubX   = iRect.left - wRect.left + iRect.width  / 2;
+    const hubY   = iRect.top  - wRect.top  + iRect.height;
+
+    // Update SVG viewBox to match wrapper
+    svg.setAttribute('viewBox', `0 0 ${wrap.offsetWidth} ${wrap.offsetHeight}`);
+
+    const spokes = document.querySelectorAll('.hub-spoke-tile');
+    spokes.forEach((spoke, i) => {
+      const sRect  = spoke.getBoundingClientRect();
+      const spokeX = sRect.left - wRect.left + sRect.width  / 2;
+      const spokeY = sRect.top  - wRect.top;
+
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', hubX); line.setAttribute('y1', hubY);
+      line.setAttribute('x2', spokeX); line.setAttribute('y2', spokeY);
+      line.setAttribute('stroke', '#FF6B35');
+      line.setAttribute('stroke-width', '1.5');
+      line.setAttribute('opacity', '0.52');
+
+      if (animate) {
+        const len = Math.hypot(spokeX - hubX, spokeY - hubY) + 10;
+        line.setAttribute('stroke-dasharray', len);
+        line.setAttribute('stroke-dashoffset', len);
+        svg.appendChild(line);
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            line.style.transition = `stroke-dashoffset 700ms cubic-bezier(0.16,1,0.3,1) ${i * 70}ms`;
+            line.setAttribute('stroke-dashoffset', '0');
+          }, 80);
+        });
+      } else {
+        svg.appendChild(line);
+      }
+    });
+  }
+
+  // Observe hub section to trigger animation
+  const hubObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        setTimeout(() => drawHubLines(true), 200);
+        hubObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  const hubSection = document.getElementById('hub-diagram-section');
+  if (hubSection) hubObs.observe(hubSection);
+
+  // Redraw on resize (no animation)
+  let resizeTimer;
+  window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => drawHubLines(false), 120); });
+</script>
+</body>
+</html>
