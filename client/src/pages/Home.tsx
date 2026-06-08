@@ -99,11 +99,9 @@ export default function Home() {
       const [netlifyResult] = await Promise.allSettled([netlifyCapture, serverCapture, webhookCapture]);
 
       if (netlifyResult.status === "rejected") {
-        throw netlifyResult.reason;
-      }
-
-      if (!netlifyResult.value.ok) {
-        throw new Error(`Netlify form capture failed with status ${netlifyResult.value.status}`);
+        console.warn("Netlify form capture was unavailable during prototype access.", netlifyResult.reason);
+      } else if (!netlifyResult.value.ok) {
+        console.warn(`Netlify form capture returned status ${netlifyResult.value.status}; continuing prototype access for review.`);
       }
 
       savePrototypeAccess(payload);
@@ -140,7 +138,7 @@ export default function Home() {
             </div>
             <div>
               <h1 className="font-display text-5xl font-black leading-[0.88] tracking-[-0.06em] text-[var(--ink)] md:text-7xl">
-                Welcome to [SPRK]. Introduce yourself and come on in.
+                Welcome to <span className="bg-gradient-to-r from-[#FF6B35] via-[#E8003D] to-[#CC0055] bg-clip-text text-transparent">SPRK</span>. Introduce yourself and come on in.
               </h1>
               <p className="mt-[var(--space-lg)] max-w-xl text-lg leading-8 text-[var(--steel)]">
                 Please enter your name and email before viewing the prototype. This helps us ensure that the SPRK signal is transmitted through the noise and finding the select few we’ve identified to share early access with.
