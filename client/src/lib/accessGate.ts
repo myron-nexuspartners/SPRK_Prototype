@@ -16,7 +16,7 @@ export function hasPrototypeAccess() {
   if (typeof window === "undefined") return false;
 
   try {
-    const raw = window.localStorage.getItem(SPRK_ACCESS_KEY);
+    const raw = window.sessionStorage.getItem(SPRK_ACCESS_KEY);
     if (!raw) return false;
     const parsed = JSON.parse(raw) as StoredAccess;
     return Boolean(parsed.firstName?.trim() && parsed.lastName?.trim() && isValidEmail(parsed.email ?? ""));
@@ -27,6 +27,6 @@ export function hasPrototypeAccess() {
 
 export function savePrototypeAccess(access: Required<Pick<StoredAccess, "firstName" | "lastName" | "email">> & Record<string, unknown>) {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(SPRK_ACCESS_KEY, JSON.stringify(access));
-  window.localStorage.setItem(SPRK_ACCESS_EMAIL_KEY, access.email);
+  window.sessionStorage.setItem(SPRK_ACCESS_KEY, JSON.stringify(access));
+  window.sessionStorage.setItem(SPRK_ACCESS_EMAIL_KEY, access.email);
 }
