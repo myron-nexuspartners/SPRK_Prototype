@@ -2,15 +2,17 @@ import React, { useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Heart, MessageCircle, Play, Share2, X } from "lucide-react";
 import { toast } from "sonner";
 
+const wireframeAsset = (filename: string) => `${import.meta.env.BASE_URL}assets/wireframe/${filename}`;
+
 const clips = [
-  { title: "Drop-day fit check", channel: "↑ /FashionDrops · 34m ago", stat: "8.7K", image: "/SPRK_Prototype/assets/wireframe/clip_fashiondrops_distinct.png", note: "Streetwear creator styling a high-contrast drop look." },
-  { title: "Skate line after work", channel: "↑ /CityMotion · 1h ago", stat: "5.2K", image: "/SPRK_Prototype/assets/wireframe/clip_citymotion_distinct.png", note: "A creator turns a neighborhood curb into a daily practice ritual." },
-  { title: "Soft-glam shade match", channel: "↑ /BeautyLab · 2h ago", stat: "9.4K", image: "/SPRK_Prototype/assets/wireframe/clip_beautylab_distinct.png", note: "Make-up artist explains undertones, lighting, and trust." },
-  { title: "Pickup run, full joy", channel: "↑ /HoopCulture · 3h ago", stat: "4.8K", image: "/SPRK_Prototype/assets/wireframe/clip_hoopculture_distinct.png", note: "Everyday athlete, public court, real celebration." },
-  { title: "Mascot dance break", channel: "↑ /CityMotion · 5h ago", stat: "3.1K", image: "/SPRK_Prototype/assets/wireframe/bring_in_the_katz_line_dance_preview.png", note: "A bright, funny street clip where a creator and mascot turn the sidewalk into a tiny parade." },
-  { title: "New hook from the booth", channel: "↑ /NewMusicRoom · 6h ago", stat: "6.6K", image: "/SPRK_Prototype/assets/wireframe/clip_musician_human.png", note: "Up-and-coming musician in process, not just a microphone." },
-  { title: "Cosplay reveal with repair kit", channel: "↑ /OpenNorm · 7h ago", stat: "7.9K", image: "/SPRK_Prototype/assets/wireframe/home_black_woman_cosplay.png", note: "A Black woman cosplayer foregrounds costume labor, repair, and expression." },
-  { title: "Waterfall reset walk", channel: "↑ /OutsideTime · 9h ago", stat: "2.8K", image: "/SPRK_Prototype/assets/wireframe/clip_waterfall.png", note: "A nature clip that keeps the feed's lifestyle range open." },
+  { title: "Drop-day fit check", channel: "↑ /FashionDrops · 34m ago", stat: "8.7K", image: wireframeAsset("clip_fashiondrops_distinct.png"), note: "Streetwear creator styling a high-contrast drop look." },
+  { title: "Skate line after work", channel: "↑ /CityMotion · 1h ago", stat: "5.2K", image: wireframeAsset("clip_citymotion_distinct.png"), note: "A creator turns a neighborhood curb into a daily practice ritual." },
+  { title: "Soft-glam shade match", channel: "↑ /BeautyLab · 2h ago", stat: "9.4K", image: wireframeAsset("clip_beautylab_distinct.png"), note: "Make-up artist explains undertones, lighting, and trust." },
+  { title: "Pickup run, full joy", channel: "↑ /HoopCulture · 3h ago", stat: "4.8K", image: wireframeAsset("clip_hoopculture_distinct.png"), note: "Everyday athlete, public court, real celebration." },
+  { title: "Mascot dance break", channel: "↑ /CityMotion · 5h ago", stat: "3.1K", image: wireframeAsset("bring_in_the_katz_line_dance_preview.png"), note: "A bright, funny street clip where a creator and mascot turn the sidewalk into a tiny parade." },
+  { title: "New hook from the booth", channel: "↑ /NewMusicRoom · 6h ago", stat: "6.6K", image: wireframeAsset("clip_musician_human.png"), note: "Up-and-coming musician in process, not just a microphone." },
+  { title: "Cosplay reveal with repair kit", channel: "↑ /OpenNorm · 7h ago", stat: "7.9K", image: wireframeAsset("home_black_woman_cosplay.png"), note: "A Black woman cosplayer foregrounds costume labor, repair, and expression." },
+  { title: "Waterfall reset walk", channel: "↑ /OutsideTime · 9h ago", stat: "2.8K", image: wireframeAsset("clip_waterfall.png"), note: "A nature clip that keeps the feed's lifestyle range open." },
 ];
 
 export default function ClipsCarousel() {

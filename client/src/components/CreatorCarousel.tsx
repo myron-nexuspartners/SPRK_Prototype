@@ -2,16 +2,18 @@ import React, { useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import { toast } from "sonner";
 
+const wireframeAsset = (filename: string) => `${import.meta.env.BASE_URL}assets/wireframe/${filename}`;
+
 const creators = [
-  { handle: "@aria_valk", name: "Aria Valk", category: "Techwear styling · SPRK 0025 fit checks", image: "/SPRK_Prototype/assets/wireframe/ProtoSPRK0025.png", metric: "1.4M reach", pronouns: "she/her" },
-  { handle: "@kingmyron", name: "Myron Sterling", category: "Gaming analysis · live boss clears", image: "/SPRK_Prototype/assets/wireframe/home_crimson_dawn_game_stream.png", metric: "1.2M reach", pronouns: "he/him" },
-  { handle: "@lunadreams", name: "Luna Dreams", category: "Beauty storytelling · soft glam", image: "/SPRK_Prototype/assets/wireframe/home_makeup_artist_live.png", metric: "980K reach", pronouns: "she/they" },
-  { handle: "@itsdylan.exe", name: "Dylan Park", category: "Open-norm fashion · studio design", image: "/SPRK_Prototype/assets/wireframe/home_trans_fashion_designer.png", metric: "760K reach", pronouns: "they/he" },
-  { handle: "@mel.notes", name: "Mel Reyes", category: "Film essays · community watchlists", image: "/SPRK_Prototype/assets/wireframe/home_michael_movie_review.png", metric: "540K reach", pronouns: "she/her" },
-  { handle: "@shotbykai", name: "Kai Baptiste", category: "Street portraiture · fashion drops", image: "/SPRK_Prototype/assets/wireframe/home_balenciaga_hoodie_drop.png", metric: "430K reach", pronouns: "he/they" },
-  { handle: "@glowbyimani", name: "Imani Bello", category: "Make-up artistry · inclusive complexion", image: "/SPRK_Prototype/assets/wireframe/clip_makeup_artist.png", metric: "390K reach", pronouns: "she/her" },
-  { handle: "@solsundays", name: "Sol Alvarez", category: "Indie soul · first EP rollout", image: "/SPRK_Prototype/assets/wireframe/clip_musician_human.png", metric: "118K reach", pronouns: "they/them" },
-  { handle: "@momo_makes", name: "Yuki Tanaka", category: "Cosplay fabrication · convention care", image: "/SPRK_Prototype/assets/wireframe/home_black_woman_cosplay.png", metric: "680K reach", pronouns: "she/her" },
+  { handle: "@aria_valk", name: "Aria Valk", category: "Techwear styling · SPRK 0025 fit checks", image: wireframeAsset("ProtoSPRK0025.png"), metric: "1.4M reach", pronouns: "she/her" },
+  { handle: "@kingmyron", name: "Myron Sterling", category: "Gaming analysis · live boss clears", image: wireframeAsset("home_crimson_dawn_game_stream.png"), metric: "1.2M reach", pronouns: "he/him" },
+  { handle: "@lunadreams", name: "Luna Dreams", category: "Beauty storytelling · soft glam", image: wireframeAsset("home_makeup_artist_live.png"), metric: "980K reach", pronouns: "she/they" },
+  { handle: "@itsdylan.exe", name: "Dylan Park", category: "Open-norm fashion · studio design", image: wireframeAsset("home_trans_fashion_designer.png"), metric: "760K reach", pronouns: "they/he" },
+  { handle: "@mel.notes", name: "Mel Reyes", category: "Film essays · community watchlists", image: wireframeAsset("home_michael_movie_review.png"), metric: "540K reach", pronouns: "she/her" },
+  { handle: "@shotbykai", name: "Kai Baptiste", category: "Street portraiture · fashion drops", image: wireframeAsset("home_balenciaga_hoodie_drop.png"), metric: "430K reach", pronouns: "he/they" },
+  { handle: "@glowbyimani", name: "Imani Bello", category: "Make-up artistry · inclusive complexion", image: wireframeAsset("clip_makeup_artist.png"), metric: "390K reach", pronouns: "she/her" },
+  { handle: "@solsundays", name: "Sol Alvarez", category: "Indie soul · first EP rollout", image: wireframeAsset("clip_musician_human.png"), metric: "118K reach", pronouns: "they/them" },
+  { handle: "@momo_makes", name: "Yuki Tanaka", category: "Cosplay fabrication · convention care", image: wireframeAsset("home_black_woman_cosplay.png"), metric: "680K reach", pronouns: "she/her" },
 ];
 
 export default function CreatorCarousel() {

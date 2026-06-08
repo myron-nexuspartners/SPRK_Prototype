@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import type { ReactNode } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,13 +7,12 @@ import { Route, Router as WouterRouter, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
-import Discover from "./pages/Discover";
 import Os from "./pages/Os";
 import Pavilion from "./pages/Pavilion";
 import Yoursprk from "./pages/Yoursprk";
 import HomeFeed from "./pages/HomeFeed";
 import ArticleDetail from "./pages/ArticleDetail";
-import { hasPrototypeAccess } from "./lib/accessGate";
+import { clearPrototypeAccess, hasPrototypeAccess } from "./lib/accessGate";
 
 function RequireAccess({ children }: { children: ReactNode }) {
   const [, setLocation] = useLocation();
@@ -33,8 +33,39 @@ function RequireAccess({ children }: { children: ReactNode }) {
   return children;
 }
 
-function ProtectedDiscover() {
-  return <RequireAccess><Discover /></RequireAccess>;
+
+const INACTIVITY_LIMIT_MS = 30 * 60 * 1000;
+const protectedPathPrefixes = ["/home", "/article", "/os", "/pavilion", "/yoursprk"];
+const activityEvents = ["mousedown", "mousemove", "keydown", "scroll", "touchstart", "click", "wheel"] as const;
+
+function InactivityRedirect() {
+  const [location, setLocation] = useLocation();
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const isProtectedPage = protectedPathPrefixes.some((path) => location === path || location.startsWith(`${path}/`));
+    if (!isProtectedPage || !hasPrototypeAccess()) return;
+
+    let timeoutId: number;
+    const resetTimer = () => {
+      window.clearTimeout(timeoutId);
+      timeoutId = window.setTimeout(() => {
+        clearPrototypeAccess();
+        setLocation("/");
+      }, INACTIVITY_LIMIT_MS);
+    };
+
+    resetTimer();
+    activityEvents.forEach((eventName) => window.addEventListener(eventName, resetTimer, { passive: true }));
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      activityEvents.forEach((eventName) => window.removeEventListener(eventName, resetTimer));
+    };
+  }, [location, setLocation]);
+
+  return null;
 }
 
 function ProtectedHomeFeed() {
@@ -62,10 +93,10 @@ function Router() {
 
   return (
     <WouterRouter base={base}>
+      <InactivityRedirect />
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/landing" component={Home} />
-        <Route path="/discover" component={ProtectedDiscover} />
         <Route path="/home" component={ProtectedHomeFeed} />
         <Route path="/article/:id" component={ProtectedArticleDetail} />
         <Route path="/os" component={ProtectedOs} />

@@ -10,6 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import SharedLayout from "@/components/SharedLayout";
 
+const wireframeAsset = (filename: string) => `${import.meta.env.BASE_URL}assets/wireframe/${filename}`;
+
 export default function Discover() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -61,7 +63,7 @@ export default function Discover() {
       community: "✦/FashionDrops",
       time: "2 hours ago",
       title: "SPRK x Balenciaga drop collection is officially live! First 100 to share receive exclusive drop cards today. NGL click now. FRFR.",
-      image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=800&q=80",
+      image: wireframeAsset("home_balenciaga_hoodie_drop.png"),
       comments: 2100,
       shares: 16000,
       category: "fashion",
@@ -87,7 +89,7 @@ export default function Discover() {
       community: "✦/PCGaming",
       time: "4 hours ago",
       title: "Just beat the Elden Ring GOTY DLC blindfolded. My wife isn't impressed... but the stream chat went wild.",
-      image: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=800&q=80",
+      image: wireframeAsset("home_crimson_dawn_game_stream.png"),
       comments: 902,
       shares: 88,
       category: "gaming",
@@ -107,7 +109,7 @@ export default function Discover() {
       community: "✦/AnimeExpo",
       time: "1 day ago",
       title: "Full cosplay showcase of my custom Cyberpunk netrunner build from Momo Con 2026. Process breakdown inside!",
-      image: "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=800&q=80",
+      image: wireframeAsset("dark_trending_anime.png"),
       comments: 407,
       shares: 318,
       category: "anime",
@@ -127,7 +129,7 @@ export default function Discover() {
       community: "✦/SciFiMovies",
       time: "2 days ago",
       title: "Blade Runner 2099 casting rumors and release schedule leak. What does this mean for the franchise timeline?",
-      image: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?auto=format&fit=crop&w=800&q=80",
+      image: wireframeAsset("clip_neon_city.png"),
       comments: 118,
       shares: 46,
       category: "comics",
@@ -147,7 +149,7 @@ export default function Discover() {
       community: "$/GamingHardware",
       time: "3 days ago",
       title: "Meet the new Razer Viper V3 Pro. Ultralight wireless performance optimized for elite competitive gaming. Get 10% off with code SPRK10.",
-      image: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=800&q=80",
+      image: wireframeAsset("clip_makeup_artist.png"),
       comments: 480,
       shares: 1200,
       category: "gaming",
@@ -173,7 +175,7 @@ export default function Discover() {
       community: "✦/HipHopVibe",
       time: "4 days ago",
       title: "The Death of the 16-Bar Verse: How short-form video algorithms are radically reshaping modern song structures.",
-      image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80",
+      image: wireframeAsset("clip_musician_human.png"),
       comments: 310,
       shares: 245,
       category: "fashion",
@@ -193,7 +195,7 @@ export default function Discover() {
       community: "✦/Humor",
       time: "5 days ago",
       title: "When the brand asks for 'organic TikTok vibes' but hands you a 45-page PDF of strict script guidelines.",
-      image: "https://images.unsplash.com/photo-1531259683007-016a7b628fc3?auto=format&fit=crop&w=800&q=80",
+      image: wireframeAsset("creator_itsdylan.png"),
       comments: 188,
       shares: 94,
       category: "comics",
@@ -213,7 +215,7 @@ export default function Discover() {
       community: "✦/FashionDrops",
       time: "6 days ago",
       title: "RTFKT x Nike Clone X Sneaker Drops: Secondary market prices surge after physical redemption window closes.",
-      image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80",
+      image: wireframeAsset("light_elden_card.png"),
       comments: 290,
       shares: 112,
       category: "fashion",
@@ -233,7 +235,7 @@ export default function Discover() {
       community: "✦/SciFiAnticipation",
       time: "8 days ago",
       title: "Neo-Tokyo 2099 Skylines: A comprehensive matte painting study using custom neural shaders.",
-      image: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80",
+      image: wireframeAsset("dark_cyberpunk_video.png"),
       comments: 72,
       shares: 41,
       category: "comics",
@@ -253,7 +255,7 @@ export default function Discover() {
       community: "✦/Humor",
       time: "10 days ago",
       title: "I asked SPRK-OS to optimize my code pipeline and it sent me a notification to touch grass.",
-      image: "https://images.unsplash.com/photo-1607799279861-4dd421887fb3?auto=format&fit=crop&w=800&q=80",
+      image: wireframeAsset("clip_citymotion_distinct.png"),
       comments: 420,
       shares: 310,
       category: "gaming",
@@ -277,7 +279,7 @@ export default function Discover() {
   });
 
   return (
-    <SharedLayout activeSite="discover">
+    <SharedLayout activeSite="home">
       <div className="bg-[#F5F0EB]/30 min-h-screen py-8 relative overflow-x-hidden">
         <div className="container max-w-6xl">
           

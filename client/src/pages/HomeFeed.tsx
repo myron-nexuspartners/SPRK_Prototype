@@ -31,7 +31,7 @@ function FeaturedPost() {
       <Link href={`/article/${post.id}`}>
         <button className="group relative w-full overflow-hidden bg-[#0A0A0F] text-left text-white">
           <div className="relative aspect-[2.17/1] min-h-[300px] w-full md:min-h-[380px]">
-            <img src="/SPRK_Prototype/assets/wireframe/ProtoSPRK0025.png" alt="Human model wearing the SPRK 0025 collaboration collection before the drop" className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.015]" />
+            <img src={`${import.meta.env.BASE_URL}assets/wireframe/ProtoSPRK0025.png`} alt="Human model wearing the SPRK 0025 collaboration collection before the drop" className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.015]" />
             <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0F]/72 via-[#0A0A0F]/18 to-transparent" />
             <div className="absolute right-6 top-6 hidden h-20 w-20 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white/85 backdrop-blur-sm md:flex"><Sparkles className="h-10 w-10" /></div>
             <div className="absolute bottom-0 left-0 z-10 max-w-xl p-6 md:p-8">
@@ -102,7 +102,7 @@ function DesignPromo() {
             <Link href="/pavilion"><button className="rounded-full border border-black/10 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.1em] text-[#0A0A0F] hover:bg-[#F5F0EB]">Pavilion landing →</button></Link>
           </div>
         </div>
-        <div className="relative aspect-square overflow-hidden rounded-[28px] bg-[#F0E8E4]"><img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=700&q=85" alt="Creative team using content editor tools" className="h-full w-full object-cover" /></div>
+        <div className="relative aspect-square overflow-hidden rounded-[28px] bg-[#F0E8E4]"><img src={`${import.meta.env.BASE_URL}assets/wireframe/clip_citymotion_distinct.png`} alt="Creative team using content editor tools" className="h-full w-full object-cover" /></div>
       </div>
     </article>
   );

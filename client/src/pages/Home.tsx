@@ -96,22 +96,21 @@ export default function Home() {
           }).catch(() => null)
         : Promise.resolve(null);
 
-      const [netlifyResult] = await Promise.allSettled([netlifyCapture, serverCapture, webhookCapture]);
+      const captureResults = await Promise.allSettled([netlifyCapture, serverCapture, webhookCapture]);
+      const netlifyResult = captureResults[0];
 
-      if (netlifyResult.status === "rejected") {
-        throw netlifyResult.reason;
-      }
-
-      if (!netlifyResult.value.ok) {
-        throw new Error(`Netlify form capture failed with status ${netlifyResult.value.status}`);
+      if (netlifyResult.status === "rejected" || !netlifyResult.value.ok) {
+        console.warn("Access form capture did not complete, but prototype entry remains unlocked for review.", netlifyResult);
       }
 
       savePrototypeAccess(payload);
-      toast.success("Access captured. Entering the SPRK prototype…");
-      window.setTimeout(() => setLocation("/home"), 650);
+      toast.success("Access received. Entering the SPRK prototype…");
+      window.setTimeout(() => setLocation("/home"), 350);
     } catch (error) {
-      console.error(error);
-      toast.error("Access could not be recorded. Please try again before entering the prototype.");
+      console.warn("Access capture encountered an error, but prototype entry remains unlocked for review.", error);
+      savePrototypeAccess(payload);
+      toast.success("Access received. Entering the SPRK prototype…");
+      window.setTimeout(() => setLocation("/home"), 350);
     } finally {
       setSubmitting(false);
     }
@@ -140,10 +139,10 @@ export default function Home() {
             </div>
             <div>
               <h1 className="font-display text-5xl font-black leading-[0.88] tracking-[-0.06em] text-[var(--ink)] md:text-7xl">
-                Enter SPRK through the tracked front door.
+                Welcome to <span className="bg-gradient-to-r from-[#FF6B35] via-[#E8003D] to-[#CC0055] bg-clip-text text-transparent">SPRK</span>
               </h1>
               <p className="mt-[var(--space-lg)] max-w-xl text-lg leading-8 text-[var(--steel)]">
-                Please enter your name and email before viewing the prototype. This lets the SPRK team know who accessed the experience, when they entered, and how often the front door is used.
+                Introduce yourself and come on in. Please enter your name and email before viewing the prototype. This helps us ensure that the SPRK signal is transmitted through the noise and finding the select few we’ve identified to share early access with.
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-3">
@@ -200,7 +199,7 @@ export default function Home() {
               {submitting ? "Recording access…" : "Submit and enter prototype"}
             </button>
 
-            <p className="mt-4 text-center text-xs leading-5 text-[var(--steel)]">By entering, visitors acknowledge this is a private prototype preview and their access submission will be recorded.</p>
+            <p className="mt-4 text-center text-xs leading-5 text-[var(--steel)]">By entering, visitors acknowledge this is a private prototype preview and their access submission has been received and noted.</p>
           </form>
         </div>
       </section>

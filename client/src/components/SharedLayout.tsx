@@ -10,19 +10,18 @@ import {
 
 interface SharedLayoutProps {
   children: ReactNode;
-  activeSite: "lead-gen" | "discover" | "os" | "pavilion" | "yoursprk";
+  activeSite: "lead-gen" | "home" | "os" | "pavilion" | "yoursprk";
 }
 
 export default function SharedLayout({ children, activeSite }: SharedLayoutProps) {
   const sites = [
-    { id: "lead-gen", label: "yourSPRK.com", path: "/", desc: "Official Beta Access Portal" },
-    { id: "discover", label: "the-SPRK.com", path: "/discover", desc: "Reddit-style creator content platform" },
+    { id: "home", label: "the-sprk.com", path: "/home", desc: "Open-norm creator content platform" },
     { id: "os", label: "SPRK-OS", path: "/os", desc: "AI creator studio workspace" },
     { id: "pavilion", label: "SPRK Pavilion", path: "/pavilion", desc: "Brand and creator marketplace" },
     { id: "yoursprk", label: "yourSPRK Hub", path: "/yoursprk", desc: "Authenticated creator dashboard" },
   ];
 
-  const activeSiteObj = sites.find((site) => site.id === activeSite) || sites[0];
+  const activeSiteObj = activeSite === "lead-gen" ? { label: "Access Gate" } : sites.find((site) => site.id === activeSite) || sites[0];
 
   return (
     <div className="flex min-h-screen flex-col bg-[var(--white)] text-[var(--ink)] antialiased selection:bg-[var(--warm)]">
@@ -60,7 +59,7 @@ export default function SharedLayout({ children, activeSite }: SharedLayoutProps
 
       <nav className="sticky left-0 right-0 top-0 z-30 border-b border-[var(--border)] bg-[var(--white)]/90 px-[var(--space-lg)] py-[var(--space-md)] backdrop-blur-md transition-all md:px-[var(--space-2xl)]">
         <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-[var(--space-lg)]">
-          <Link href="/" className="group flex items-center gap-[var(--space-sm)]">
+          <Link href="/home" className="group flex items-center gap-[var(--space-sm)]">
             <svg className="h-8 w-8 shrink-0 transition-transform group-hover:scale-105" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <rect width="32" height="32" rx="8" fill="url(#sprk-logo-grad)" />
               <path d="M16 8C16 12.4183 19.5817 16 24 16C19.5817 16 16 19.5817 16 24C16 19.5817 12.4183 16 8 16C12.4183 16 16 12.4183 16 8Z" fill="var(--white)" />
@@ -99,7 +98,7 @@ export default function SharedLayout({ children, activeSite }: SharedLayoutProps
           <div className="flex items-center gap-[var(--space-sm)]">
             <span className="font-extrabold text-[var(--ink)]">SPRK*</span>
             <span className="text-[var(--blush)]">|</span>
-            <span>© 2026 SPRK Ecosystems Inc. All rights reserved.</span>
+            <span>© 2026 SPRK Unlimited LLC. All rights reserved.</span>
           </div>
           <div className="flex flex-wrap justify-center gap-[var(--space-lg)]">
             {sites.map((site) => (

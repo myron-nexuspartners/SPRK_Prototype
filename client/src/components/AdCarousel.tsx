@@ -15,6 +15,8 @@ interface AdItem {
   href?: string;
 }
 
+const wireframeAsset = (filename: string) => `${import.meta.env.BASE_URL}assets/wireframe/${filename}`;
+
 interface AdCarouselProps {
   label?: string;
   compact?: boolean;
@@ -29,7 +31,7 @@ const ads: AdItem[] = [
     body: "A limited creator-first drop engineered for movement, footage, and launch-day heat.",
     cta: "Shop the exclusive drop",
     tone: "dark",
-    image: "/SPRK_Prototype/assets/wireframe/ProtoSPRK0025.png",
+    image: wireframeAsset("ProtoSPRK0025.png"),
     imageAlt: "Human model wearing the SPRK 0025 collaboration collection before the drop",
     href: "/pavilion",
   },
@@ -39,7 +41,7 @@ const ads: AdItem[] = [
     body: "The Polyculture has spoken and it will not be ignored. 40% off using code: OPENNORM.",
     cta: "Register early",
     tone: "event",
-    image: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=900&q=85",
+    image: wireframeAsset("home_dance_review.png"),
     imageAlt: "Crowd gathered at a live creator event",
     href: "/pavilion",
   },
@@ -49,7 +51,7 @@ const ads: AdItem[] = [
     body: "3,000+ tips, tricks, deal structures, and creator-business resources on demand.",
     cta: "Open SPRK*OS tools",
     tone: "academy",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=900&q=85",
+    image: wireframeAsset("clip_citymotion_distinct.png"),
     imageAlt: "Creative team planning content on a wall",
     href: "/os",
   },
@@ -59,7 +61,7 @@ const ads: AdItem[] = [
     body: "SPRK your realness. SPRK your returns. Access brand-safe escrow and rights tools today.",
     cta: "Access SPRK*Pavilion",
     tone: "light",
-    image: "https://images.unsplash.com/photo-1521335629791-ce4aec67dd47?auto=format&fit=crop&w=900&q=85",
+    image: wireframeAsset("light_balenciaga_card.png"),
     imageAlt: "Premium fashion retail rack and boutique interior",
     href: "/pavilion",
   },

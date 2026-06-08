@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
+import { getPrototypeAccessEmail, getYoursprkDashboardEmail, isValidEmail, saveYoursprkDashboardEmail } from "@/lib/accessGate";
 import {
   ArrowUpRight,
   BarChart3,
@@ -53,9 +54,9 @@ type Deal = {
 
 const base = import.meta.env.BASE_URL === "/" ? "/" : import.meta.env.BASE_URL;
 const thumbnail = `${base}assets/wireframe/bring_in_the_katz_line_dance_preview.png`;
-const cookingThumbnail = "https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=900&q=85";
-const meditationThumbnail = "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=900&q=85";
-const gamingThumbnail = "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=900&q=85";
+const cookingThumbnail = `${base}assets/wireframe/clip_beautylab_distinct.png`;
+const meditationThumbnail = `${base}assets/wireframe/clip_waterfall.png`;
+const gamingThumbnail = `${base}assets/wireframe/clip_basketball.png`;
 
 const navItems: Array<{ id: HubView; label: string; icon: typeof LayoutDashboard; badge?: number }> = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -176,7 +177,7 @@ function statusClass(status: DealStatus) {
 
 export default function Yoursprk() {
   const [email, setEmail] = useState("");
-  const [authedEmail, setAuthedEmail] = useState("");
+  const [authedEmail, setAuthedEmail] = useState(() => getYoursprkDashboardEmail());
   const [view, setView] = useState<HubView>("dashboard");
   const [selectedSprk, setSelectedSprk] = useState<SprkItem | null>(null);
   const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null);
@@ -192,6 +193,20 @@ export default function Yoursprk() {
   const [twoFactor, setTwoFactor] = useState(false);
 
   const isAuthenticated = authedEmail.length > 0;
+  const emailIsValid = isValidEmail(email);
+
+  useEffect(() => {
+    const savedDashboardEmail = getYoursprkDashboardEmail();
+    if (savedDashboardEmail) {
+      setAuthedEmail(savedDashboardEmail);
+      return;
+    }
+
+    const accessEmail = getPrototypeAccessEmail();
+    if (accessEmail) {
+      setEmail(accessEmail);
+    }
+  }, []);
   const displayName = authedEmail ? authedEmail.split("@")[0].replace(/[._-]/g, " ").replace(/\b\w/g, (char) => char.toUpperCase()) : "Creator";
   const totalViews = sprks.reduce((sum, item) => sum + item.views, 0);
   const pendingDeals = deals.filter((deal) => deal.status === "Pending").length;
@@ -212,11 +227,13 @@ export default function Yoursprk() {
   }, [platformFilters, query, sortBy]);
 
   const login = () => {
-    if (!email.includes("@")) {
-      setSavedNotice("Enter any email address to simulate secure access.");
+    if (!emailIsValid) {
+      setSavedNotice("Enter a properly formatted email address to simulate secure access.");
       return;
     }
-    setAuthedEmail(email);
+    const normalizedEmail = email.trim().toLowerCase();
+    saveYoursprkDashboardEmail(normalizedEmail);
+    setAuthedEmail(normalizedEmail);
     setSavedNotice("Welcome back. Dashboard unlocked for prototype review.");
   };
 
@@ -261,19 +278,24 @@ export default function Yoursprk() {
                 <input
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
-                  onKeyDown={(event) => event.key === "Enter" && login()}
+                  onKeyDown={(event) => event.key === "Enter" && emailIsValid && login()}
                   placeholder="creator@yoursprk.com"
                   className="rounded-[var(--r)] border border-[var(--border)] bg-[var(--white)] px-[var(--space-lg)] py-[var(--space-md)] text-base text-[var(--ink)] outline-none transition focus:border-[var(--ember)] focus:ring-2 focus:ring-[var(--warm)]"
                 />
               </label>
 
-              {savedNotice && <p className="rounded-[var(--r)] border border-[var(--warning)] bg-[var(--cream)] p-[var(--space-md)] text-sm font-bold text-[var(--ink)]">{savedNotice}</p>}
-
-              <button onClick={login} className="inline-flex items-center justify-center gap-[var(--space-sm)] rounded-[var(--r-pill)] bg-[var(--grad)] px-[var(--space-xl)] py-[var(--space-md)] text-sm font-black uppercase tracking-[0.12em] text-[var(--white)] shadow-[0_12px_30px_var(--shadow)] transition hover:scale-[1.01]">
-                Enter <ArrowUpRight className="h-4 w-4" />
+              <button
+                type="button"
+                onClick={login}
+                disabled={!emailIsValid}
+                className={`inline-flex items-center justify-center gap-[var(--space-sm)] rounded-[var(--r-pill)] border px-[var(--space-xl)] py-[var(--space-md)] text-sm font-black uppercase tracking-[0.12em] shadow-[0_12px_30px_var(--shadow)] transition ${emailIsValid ? "border-[var(--ink)] bg-[var(--ink)] text-[var(--white)] hover:scale-[1.01] hover:bg-[var(--navy)]" : "cursor-not-allowed border-[var(--border)] bg-[var(--cream)] text-[var(--steel)] opacity-80"}`}
+              >
+                Enter yourSPRK Hub <ArrowUpRight className="h-4 w-4" />
               </button>
 
-              <Link href="/landing" className="text-sm font-bold text-[var(--steel)] underline decoration-[var(--blush)] decoration-2 underline-offset-4 hover:text-[var(--ink)]">New to SPRK? Join the beta</Link>
+              {savedNotice && <p className="rounded-[var(--r)] border border-[var(--warning)] bg-[var(--cream)] p-[var(--space-md)] text-sm font-bold text-[var(--ink)]">{savedNotice}</p>}
+
+              <a href="https://www.yoursprk.com/" target="_blank" rel="noreferrer" className="text-sm font-bold text-[var(--steel)] underline decoration-[var(--blush)] decoration-2 underline-offset-4 hover:text-[var(--ink)]">New to SPRK? Join the Beta</a>
             </div>
           </div>
         </section>

@@ -5,7 +5,6 @@ import {
   Bookmark,
   CalendarDays,
   ChevronDown,
-  Compass,
   Flame,
   FolderHeart,
   History,
@@ -36,9 +35,16 @@ interface FeedShellProps {
   railMode?: "home" | "article";
 }
 
+
+const familyNav = [
+  { label: "the-sprk.com", href: "/home", desc: "Open-norm creator content platform" },
+  { label: "SPRK-OS", href: "/os", desc: "AI creator studio workspace" },
+  { label: "SPRK Pavilion", href: "/pavilion", desc: "Brand and creator marketplace" },
+  { label: "yourSPRK Hub", href: "/yoursprk", desc: "Authenticated creator dashboard" },
+];
+
 const mainNav = [
   { label: "Home", icon: Home, href: "/home" },
-  { label: "Explore", icon: Compass, href: "/discover" },
   { label: "Short Clips", icon: Zap, href: "/home#clips" },
   { label: "Articles", icon: FolderHeart, href: "/article/sprk-0025" },
   { label: "Events", icon: CalendarDays, href: "/pavilion" },
@@ -76,6 +82,27 @@ const events = [
   { date: "AUG 21", title: "SPRK*Showcase: New Heroes X", desc: "Community shorts screening" },
   { date: "SEP 07", title: "SPRK*Academy: BTS Creator Workshop", desc: "Creator strategy & growth" },
 ];
+
+function PrototypeFamilyRibbon({ active }: { active?: "home" | "article" }) {
+  return (
+    <div className="border-b border-black/5 bg-[#F5F0EB] px-4 py-2 text-xs font-medium md:px-8">
+      <div className="mx-auto flex max-w-[1440px] flex-col gap-2 md:flex-row md:items-center md:justify-between">
+        <div className="flex min-w-0 items-center gap-2">
+          <span className="inline-block h-2 w-2 shrink-0 animate-pulse rounded-full bg-[#FF6B35]" aria-hidden="true" />
+          <span className="truncate text-[10px] font-semibold uppercase tracking-[0.16em] text-[#4A5278]">SPRK proto-family demo</span>
+          <span className="hidden text-[10px] font-bold uppercase tracking-[0.14em] text-[#8E7A8A] sm:inline">Viewing: {active === "article" ? "the-sprk.com Article" : "the-sprk.com"}</span>
+        </div>
+        <nav aria-label="SPRK prototype family navigation" className="flex flex-wrap items-center gap-3 text-[11px] font-bold text-[#4A5278] md:justify-end">
+          {familyNav.map((site) => (
+            <Link key={site.label} href={site.href} title={site.desc} className={`transition-colors hover:text-[#0A0A0F] ${site.href === "/home" ? "text-[#0A0A0F]" : ""}`}>
+              {site.label}
+            </Link>
+          ))}
+        </nav>
+      </div>
+    </div>
+  );
+}
 
 function SprkMark({ dark = false, collapsed = false }: { dark?: boolean; collapsed?: boolean }) {
   return (
@@ -122,7 +149,7 @@ function RailContent({ active, collapsed = false, onNavigate }: { active?: strin
     <div className="space-y-4">
       <nav className="rounded-2xl border border-black/5 bg-white p-2 shadow-sm">
         <div className={`mb-3 flex items-center ${collapsed ? "justify-center" : "justify-between"} px-2 py-1`}>
-          <SprkMark collapsed={collapsed} />
+          <Link href="/home" aria-label="Return to prototype home"><SprkMark collapsed={collapsed} /></Link>
         </div>
         {mainNav.map((item) => (
           <NavItem key={item.label} item={item} selected={(active === "home" && item.label === "Home") || (active === "article" && item.label === "Articles")} collapsed={collapsed} onNavigate={onNavigate} />
@@ -148,7 +175,7 @@ function RailContent({ active, collapsed = false, onNavigate }: { active?: strin
       {!collapsed && (
         <>
           <div className="relative overflow-hidden rounded-2xl border border-[#F0E8E4] bg-[#F5F0EB] p-5 shadow-sm">
-            <img src="https://images.unsplash.com/photo-1521335629791-ce4aec67dd47?auto=format&fit=crop&w=600&q=85" alt="Creator commerce workspace" className="absolute inset-0 h-full w-full object-cover opacity-18" />
+            <img src={`${import.meta.env.BASE_URL}assets/wireframe/light_balenciaga_card.png`} alt="Creator commerce workspace" className="absolute inset-0 h-full w-full object-cover opacity-18" />
             <Sparkles className="absolute -right-5 bottom-4 h-24 w-24 text-[#C4A09A]/40" />
             <h3 className="relative text-lg font-extrabold leading-tight text-[#0A0A0F]">Bring your ideas to life on SPRK*</h3>
             <p className="relative mt-2 text-xs font-light leading-relaxed text-[#4A5278]">Create, share, and connect with a community that inspires.</p>
@@ -217,7 +244,7 @@ function MobileRail({ active, open, onClose }: { active?: string; open: boolean;
       <button className="absolute inset-0 bg-[#0A0A0F]/55 backdrop-blur-sm" onClick={onClose} aria-label="Close navigation overlay" />
       <aside className="absolute left-0 top-0 h-full w-[86vw] max-w-[340px] overflow-y-auto bg-[#F5F0EB] p-4 shadow-2xl">
         <div className="mb-3 flex items-center justify-between">
-          <SprkMark />
+          <Link href="/home" aria-label="Return to prototype home"><SprkMark /></Link>
           <button onClick={onClose} className="rounded-full bg-white p-2 text-[#4A5278]"><X className="h-4 w-4" /></button>
         </div>
         <RailContent active={active} onNavigate={onClose} />
@@ -232,7 +259,7 @@ function RightRail({ mode = "home" }: { mode?: "home" | "article" }) {
       <div className="space-y-4">
         {mode === "article" && (
           <div className="relative overflow-hidden rounded-2xl bg-[#1E2235] p-5 text-white shadow-sm">
-            <img src="https://images.unsplash.com/photo-1521335629791-ce4aec67dd47?auto=format&fit=crop&w=700&q=85" alt="SPRK Pavilion marketplace" className="absolute inset-0 h-full w-full object-cover opacity-25" />
+            <img src={`${import.meta.env.BASE_URL}assets/wireframe/light_balenciaga_card.png`} alt="SPRK Pavilion marketplace" className="absolute inset-0 h-full w-full object-cover opacity-25" />
             <div className="relative">
               <span className="label-caps text-[#C4A09A]">SPRK*Pavilion</span>
               <h3 className="mt-3 text-2xl font-extrabold leading-none tracking-[-0.04em]">Protect your work. Fund your vision. Own your future.</h3>
@@ -315,6 +342,7 @@ export default function FeedShell({ children, active = "home", railMode = "home"
 
   return (
     <div className="min-h-screen bg-[#F5F0EB]/45 text-[#0A0A0F]">
+      <PrototypeFamilyRibbon active={active} />
       <Header onMenu={() => setMobileOpen(true)} onToggleRail={() => setRailCollapsed((prev) => !prev)} railCollapsed={railCollapsed} />
       <MobileRail active={active} open={mobileOpen} onClose={() => setMobileOpen(false)} />
       <div className="mx-auto flex max-w-[1520px] items-start gap-4 px-4 py-4 md:px-8">

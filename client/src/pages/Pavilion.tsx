@@ -92,15 +92,15 @@ type Message = {
 
 const base = import.meta.env.BASE_URL;
 const generatedThumbnail = `${base}assets/wireframe/bring_in_the_katz_line_dance_preview.png`;
-const fallbackPortrait = "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=700&q=85";
-const fallbackDance = "https://images.unsplash.com/photo-1504609813442-a8924e83f76e?auto=format&fit=crop&w=900&q=85";
-const fallbackStreetwear = "https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=900&q=85";
-const fallbackStudio = "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=85";
-const fallbackCooking = "https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=900&q=85";
-const fallbackMeditation = "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=900&q=85";
-const fallbackBeauty = "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=900&q=85";
-const fallbackCinema = "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=900&q=85";
-const fallbackFictionActivism = "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=900&q=85";
+const fallbackPortrait = `${base}assets/wireframe/creator_kingmyron.png`;
+const fallbackDance = `${base}assets/wireframe/bring_in_the_katz_line_dance_preview.png`;
+const fallbackStreetwear = `${base}assets/wireframe/home_balenciaga_hoodie_drop.png`;
+const fallbackStudio = `${base}assets/wireframe/clip_musician_human.png`;
+const fallbackCooking = `${base}assets/wireframe/clip_beautylab_distinct.png`;
+const fallbackMeditation = `${base}assets/wireframe/clip_waterfall.png`;
+const fallbackBeauty = `${base}assets/wireframe/home_makeup_artist_live.png`;
+const fallbackCinema = `${base}assets/wireframe/home_michael_movie_review.png`;
+const fallbackFictionActivism = `${base}assets/wireframe/dark_trending_anime.png`;
 
 const tabs: { key: TabKey; label: string }[] = [
   { key: "discovery", label: "Discovery Feed" },
@@ -264,7 +264,7 @@ const baseContent: ContentRecord[] = [
     title: "Ranked Reset: PC to Mobile Meta",
     description: "Gaming creator breaks down cross-platform skill transfer with sponsor-safe overlays and live-stream cutdowns.",
     creatorId: "mari-volt",
-    thumbnail: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=900&q=85",
+    thumbnail: `${base}assets/wireframe/clip_basketball.png`,
     contentType: "Short Clips",
     tags: ["Gaming & Esports", "Gaming Live-Streaming", "Tech & Innovation"],
     platforms: ["SPRK", "TikTok", "Twitch"],
