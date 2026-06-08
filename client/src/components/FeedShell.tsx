@@ -29,6 +29,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import AdCarousel from "./AdCarousel";
+import PrototypeFamilyRibbon from "./PrototypeFamilyRibbon";
 
 interface FeedShellProps {
   children: React.ReactNode;
@@ -315,6 +316,7 @@ export default function FeedShell({ children, active = "home", railMode = "home"
 
   return (
     <div className="min-h-screen bg-[#F5F0EB]/45 text-[#0A0A0F]">
+      <PrototypeFamilyRibbon activeSite="discover" />
       <Header onMenu={() => setMobileOpen(true)} onToggleRail={() => setRailCollapsed((prev) => !prev)} railCollapsed={railCollapsed} />
       <MobileRail active={active} open={mobileOpen} onClose={() => setMobileOpen(false)} />
       <div className="mx-auto flex max-w-[1520px] items-start gap-4 px-4 py-4 md:px-8">

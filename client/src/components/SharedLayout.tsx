@@ -1,62 +1,19 @@
 import type { ReactNode } from "react";
 import { Link } from "wouter";
-import { ArrowUpRight, Check, ChevronDown } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ArrowUpRight } from "lucide-react";
+import PrototypeFamilyRibbon, { prototypeFamilySites, type PrototypeFamilySiteId } from "@/components/PrototypeFamilyRibbon";
 
 interface SharedLayoutProps {
   children: ReactNode;
-  activeSite: "lead-gen" | "discover" | "os" | "pavilion" | "yoursprk";
+  activeSite: PrototypeFamilySiteId;
 }
 
 export default function SharedLayout({ children, activeSite }: SharedLayoutProps) {
-  const sites = [
-    { id: "lead-gen", label: "yourSPRK.com", path: "/", desc: "Official Beta Access Portal" },
-    { id: "discover", label: "the-SPRK.com", path: "/discover", desc: "Reddit-style creator content platform" },
-    { id: "os", label: "SPRK-OS", path: "/os", desc: "AI creator studio workspace" },
-    { id: "pavilion", label: "SPRK Pavilion", path: "/pavilion", desc: "Brand and creator marketplace" },
-    { id: "yoursprk", label: "yourSPRK Hub", path: "/yoursprk", desc: "Authenticated creator dashboard" },
-  ];
-
-  const activeSiteObj = sites.find((site) => site.id === activeSite) || sites[0];
+  const sites = prototypeFamilySites;
 
   return (
     <div className="flex min-h-screen flex-col bg-[var(--white)] text-[var(--ink)] antialiased selection:bg-[var(--warm)]">
-      <div className="border-b border-[var(--border)] bg-[var(--cream)] px-[var(--space-lg)] py-[var(--space-sm)] text-xs font-medium md:px-[var(--space-2xl)]">
-        <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-[var(--space-md)]">
-          <div className="flex min-w-0 items-center gap-[var(--space-sm)]">
-            <span className="inline-block h-2 w-2 shrink-0 animate-pulse rounded-full bg-[var(--ember)]" aria-hidden="true" />
-            <span className="truncate text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--steel)]">SPRK proto-family demo</span>
-          </div>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center gap-[var(--space-xs)] text-[var(--ink)] font-bold transition-opacity hover:opacity-80 outline-none cursor-pointer">
-              <span className="truncate">Viewing: {activeSiteObj.label}</span>
-              <ChevronDown className="h-3.5 w-3.5 text-[var(--steel)]" aria-hidden="true" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="z-[100] w-72 rounded-[var(--r)] border border-[var(--border)] bg-[var(--white)] p-[var(--space-sm)] shadow-xl">
-              <div className="mb-[var(--space-xs)] border-b border-[var(--border)] px-[var(--space-md)] py-[var(--space-sm)]">
-                <span className="block text-[9px] font-bold uppercase tracking-[0.16em] text-[var(--mauve)]">Navigate family platforms</span>
-              </div>
-              {sites.map((site) => (
-                <DropdownMenuItem key={site.id} asChild className="rounded-[var(--r-sm)] focus:bg-[var(--cream)]">
-                  <Link href={site.path} className="flex w-full cursor-pointer items-start justify-between p-[var(--space-md)]">
-                    <div>
-                      <span className="block text-sm font-bold text-[var(--ink)]">{site.label}</span>
-                      <span className="mt-[var(--space-xs)] block text-xs text-[var(--steel)]">{site.desc}</span>
-                    </div>
-                    {activeSite === site.id && <Check className="mt-1 h-4 w-4 shrink-0 text-[var(--ember)]" aria-hidden="true" />}
-                  </Link>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
+      <PrototypeFamilyRibbon activeSite={activeSite} />
 
       <nav className="sticky left-0 right-0 top-0 z-30 border-b border-[var(--border)] bg-[var(--white)]/90 px-[var(--space-lg)] py-[var(--space-md)] backdrop-blur-md transition-all md:px-[var(--space-2xl)]">
         <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-[var(--space-lg)]">
@@ -99,7 +56,7 @@ export default function SharedLayout({ children, activeSite }: SharedLayoutProps
           <div className="flex items-center gap-[var(--space-sm)]">
             <span className="font-extrabold text-[var(--ink)]">SPRK*</span>
             <span className="text-[var(--blush)]">|</span>
-            <span>© 2026 SPRK Ecosystems Inc. All rights reserved.</span>
+            <span>© 2026 SPRK Unlimited LLC. All rights reserved.</span>
           </div>
           <div className="flex flex-wrap justify-center gap-[var(--space-lg)]">
             {sites.map((site) => (
