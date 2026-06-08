@@ -205,8 +205,10 @@ function vitePluginStorageProxy(): Plugin {
 
 const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePluginStorageProxy()];
 
+const buildBase = process.env.VITE_BASE_PATH ?? (process.env.NETLIFY ? "/" : "/SPRK_Prototype/");
+
 export default defineConfig({
-  base: "/SPRK_Prototype/",
+  base: buildBase,
   plugins,
   resolve: {
     alias: {

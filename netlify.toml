@@ -1,0 +1,12 @@
+[build]
+  command = "VITE_BASE_PATH=/ pnpm build"
+  publish = "dist/public"
+
+[build.environment]
+  NODE_VERSION = "22"
+  VITE_BASE_PATH = "/"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
