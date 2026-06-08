@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Discover from "./pages/Discover";
 import Os from "./pages/Os";
 import Pavilion from "./pages/Pavilion";
+import Yoursprk from "./pages/Yoursprk";
 import HomeFeed from "./pages/HomeFeed";
 import ArticleDetail from "./pages/ArticleDetail";
 
@@ -17,13 +18,14 @@ function Router() {
   return (
     <WouterRouter base={base}>
       <Switch>
-      <Route path="/" component={HomeFeed} />
+      <Route path="/" component={Home} />
       <Route path="/landing" component={Home} />
       <Route path="/discover" component={Discover} />
       <Route path="/home" component={HomeFeed} />
       <Route path="/article/:id" component={ArticleDetail} />
       <Route path="/os" component={Os} />
       <Route path="/pavilion" component={Pavilion} />
+      <Route path="/yoursprk" component={Yoursprk} />
       <Route path="/404" component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

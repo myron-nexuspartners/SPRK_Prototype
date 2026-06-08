@@ -48,7 +48,8 @@ const mainNav = [
 
 const toolNav = [
   { label: "SPRK*OS", icon: Settings2, href: "/os", badge: "Editor" },
-  { label: "SPRK*Pavilion", icon: Store, href: "/pavilion", badge: "Landing" },
+  { label: "SPRK*Pavilion", icon: Store, href: "/pavilion", badge: "Market" },
+  { label: "yourSPRK Hub", icon: Users, href: "/yoursprk", badge: "Hub" },
   { label: "SPRK*AI", icon: WandSparkles, href: "/os", badge: "Beta" },
 ];
 
@@ -63,7 +64,7 @@ const trends = [
   { label: "Drake Lawsuit Update", tag: "Music", posts: "154.6K posts" },
   { label: "Apple WWDC 2025", tag: "Technology", posts: "511.9K posts" },
   { label: "Balenciaga Drop Program", tag: "Fashion", posts: "370.7K posts" },
-  { label: "Elden Ring Nightreign", tag: "Gaming", posts: "220.8K posts" },
+  { label: "Crimson Dawn Boss Clear", tag: "Gaming", posts: "220.8K posts" },
   { label: "Cannes Film Festival", tag: "Film", posts: "163.7K posts" },
   { label: "NBA Playoffs Round 2", tag: "Sports", posts: "151K posts" },
   { label: "Tyler, The Creator Tour", tag: "Music", posts: "93.7K posts" },
@@ -108,7 +109,7 @@ function NavItem({ item, selected, collapsed, onNavigate }: { item: { label: str
           <Icon className="h-4 w-4 shrink-0" />
           {!collapsed && item.label}
         </span>
-        {!collapsed && item.badge && <span className="rounded-full bg-[#F0E8E4] px-2 py-0.5 text-[9px] uppercase tracking-wider text-[#8E7A8A]">{item.badge}</span>}
+        {!collapsed && item.badge && <span className="rounded-full bg-gradient-to-r from-[#FF6B35] to-[#CC0055] px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-white shadow-sm">{item.badge}</span>}
       </button>
     </Link>
   );
@@ -127,11 +128,11 @@ function RailContent({ active, collapsed = false, onNavigate }: { active?: strin
           <NavItem key={item.label} item={item} selected={(active === "home" && item.label === "Home") || (active === "article" && item.label === "Articles")} collapsed={collapsed} onNavigate={onNavigate} />
         ))}
         <div className="mt-4 border-t border-black/5 pt-4">
-          {!collapsed && <span className="px-3 text-[10px] font-bold uppercase tracking-[0.16em] text-[#8E7A8A]">Prototype Navigation</span>}
+          {!collapsed && <span className="px-3 text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#FF6B35]">Prototype Navigation</span>}
           {toolNav.map((item) => <NavItem key={item.label} item={item} collapsed={collapsed} onNavigate={onNavigate} />)}
         </div>
         <div className="mt-4 border-t border-black/5 pt-4">
-          {!collapsed && <span className="px-3 text-[10px] font-bold uppercase tracking-[0.16em] text-[#8E7A8A]">Your*SPRKS</span>}
+          {!collapsed && <span className="px-3 text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#FF6B35]">Your*SPRKS</span>}
           {mySprks.map((item) => {
             const Icon = item.icon;
             return (
@@ -151,7 +152,7 @@ function RailContent({ active, collapsed = false, onNavigate }: { active?: strin
             <Sparkles className="absolute -right-5 bottom-4 h-24 w-24 text-[#C4A09A]/40" />
             <h3 className="relative text-lg font-extrabold leading-tight text-[#0A0A0F]">Bring your ideas to life on SPRK*</h3>
             <p className="relative mt-2 text-xs font-light leading-relaxed text-[#4A5278]">Create, share, and connect with a community that inspires.</p>
-            <button type="button" onClick={() => window.open(`${import.meta.env.BASE_URL}yoursprk.html`, "_blank")} className="relative mt-4 inline-flex items-center gap-1.5 rounded-full bg-[#C4A09A] px-4 py-2 text-xs font-bold text-white hover:bg-[#8E7A8A]"><Plus className="h-3 w-3" /> Create</button>
+            <Link href="/yoursprk"><button type="button" className="relative mt-4 inline-flex items-center gap-1.5 rounded-full bg-[#C4A09A] px-4 py-2 text-xs font-bold text-white hover:bg-[#8E7A8A]"><Plus className="h-3 w-3" /> Open Hub</button></Link>
           </div>
 
           <form
@@ -163,13 +164,29 @@ function RailContent({ active, collapsed = false, onNavigate }: { active?: strin
               setEmail("");
             }}
           >
-            <span className="label-caps text-[#8E7A8A]">The Spark Letter</span>
+            <span className="label-caps text-[#FF6B35]">The Spark Letter</span>
             <p className="mt-2 text-xs font-light leading-relaxed text-[#4A5278]">Curated inspiration, creator features, and community highlights — straight to your inbox.</p>
             <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="you@example.com" className="mt-3 w-full rounded-full border border-black/10 bg-[#F5F0EB] px-3 py-2 text-xs outline-none focus:border-[#FF6B35]" />
             <button className="mt-2 w-full rounded-full bg-[#0A0A0F] px-3 py-2 text-xs font-bold text-white hover:bg-[#1E2235]">Subscribe</button>
           </form>
 
-          <AdCarousel variant="rail" compact />
+          <AdCarousel variant="rail" compact staticMode />
+
+          <div className="rounded-2xl border border-black/5 bg-white p-4 shadow-sm">
+            <div className="mb-3 flex items-center justify-between"><span className="label-caps text-[#FF6B35]">Upcoming events</span><Link href="/pavilion" className="text-[10px] font-bold text-[#FF6B35]">View all</Link></div>
+            <div className="space-y-3">
+              {events.map((event) => (
+                <article key={event.title} className="grid grid-cols-[46px_1fr] gap-3 rounded-xl border border-black/5 p-2">
+                  <div className="rounded-lg bg-[#F5F0EB] px-2 py-2 text-center text-[10px] font-extrabold leading-tight text-[#0A0A0F]">{event.date}</div>
+                  <div>
+                    <h4 className="text-xs font-extrabold text-[#0A0A0F]">{event.title}</h4>
+                    <p className="mt-0.5 text-[11px] font-light text-[#4A5278]">{event.desc}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+
           <div className="flex justify-center gap-4 text-[#8E7A8A]">
             <Twitter className="h-4 w-4" /><Instagram className="h-4 w-4" /><MessageCircle className="h-4 w-4" />
           </div>
@@ -181,8 +198,8 @@ function RailContent({ active, collapsed = false, onNavigate }: { active?: strin
 
 function LeftRail({ active, collapsed, onToggle }: { active?: string; collapsed: boolean; onToggle: () => void }) {
   return (
-    <aside className={`hidden shrink-0 transition-all duration-300 lg:block ${collapsed ? "w-[76px]" : "w-[230px]"}`}>
-      <div className="sticky top-24 space-y-3">
+    <aside className={`sticky top-[76px] hidden h-[calc(100vh-5.5rem)] shrink-0 self-start overflow-y-auto pr-1 transition-all duration-300 [scrollbar-width:thin] lg:block ${collapsed ? "w-[76px]" : "w-[280px]"}`}>
+      <div className="space-y-3">
         <button type="button" onClick={onToggle} className="flex w-full items-center justify-center gap-2 rounded-2xl border border-black/5 bg-white px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-[#4A5278] shadow-sm hover:bg-[#F5F0EB] hover:text-[#0A0A0F]">
           {collapsed ? <Menu className="h-4 w-4" /> : <X className="h-4 w-4" />}
           {!collapsed && "Collapse"}
@@ -211,8 +228,8 @@ function MobileRail({ active, open, onClose }: { active?: string; open: boolean;
 
 function RightRail({ mode = "home" }: { mode?: "home" | "article" }) {
   return (
-    <aside className="hidden w-[280px] shrink-0 xl:block">
-      <div className="sticky top-24 space-y-4">
+    <aside className="sticky top-[76px] hidden h-[calc(100vh-5.5rem)] w-[320px] shrink-0 self-start overflow-y-auto pr-1 [scrollbar-width:thin] xl:block">
+      <div className="space-y-4">
         {mode === "article" && (
           <div className="relative overflow-hidden rounded-2xl bg-[#1E2235] p-5 text-white shadow-sm">
             <img src="https://images.unsplash.com/photo-1521335629791-ce4aec67dd47?auto=format&fit=crop&w=700&q=85" alt="SPRK Pavilion marketplace" className="absolute inset-0 h-full w-full object-cover opacity-25" />
@@ -230,7 +247,7 @@ function RightRail({ mode = "home" }: { mode?: "home" | "article" }) {
 
         <div className="rounded-2xl border border-black/5 bg-white p-4 shadow-sm">
           <div className="mb-2 flex items-center justify-between">
-            <span className="label-caps text-[#8E7A8A]"><Flame className="mr-1 inline h-3 w-3 text-[#FF6B35]" /> Trending now</span>
+            <span className="label-caps text-[#FF6B35]"><Flame className="mr-1 inline h-3 w-3 text-[#FF6B35]" /> Trending now</span>
             <button onClick={() => toast("Refreshing trends…")} className="rounded-full border border-black/10 p-1.5 text-[#8E7A8A] hover:text-[#0A0A0F]"><Sparkles className="h-3.5 w-3.5" /></button>
           </div>
           {trends.map((trend, idx) => (
@@ -238,17 +255,17 @@ function RightRail({ mode = "home" }: { mode?: "home" | "article" }) {
               <span className="text-sm font-extrabold text-[#FF6B35]">{idx + 1}</span>
               <span>
                 <span className="block text-xs font-extrabold text-[#0A0A0F]">{trend.label}</span>
-                <span className="mt-0.5 flex justify-between text-[10px] font-light text-[#8E7A8A]"><em className="not-italic">{trend.tag}</em><span>{trend.posts}</span></span>
+                <span className="mt-0.5 flex justify-between text-[10px] font-bold text-[#4A5278]"><em className="not-italic text-[#CC0055]">{trend.tag}</em><span className="text-[#FF6B35]">{trend.posts}</span></span>
               </span>
             </button>
           ))}
-          <button onClick={() => toast("Loading all trends…")} className="mt-2 w-full text-center text-xs font-bold text-[#8E7A8A] hover:text-[#0A0A0F]">View All Trending →</button>
+          <button onClick={() => toast("Loading all trends…")} className="mt-2 w-full text-center text-xs font-extrabold text-[#FF6B35] hover:text-[#CC0055]">View All Trending →</button>
         </div>
 
         <AdCarousel variant="rail" />
 
         <div className="rounded-2xl border border-black/5 bg-white p-4 shadow-sm">
-          <div className="mb-3 flex items-center justify-between"><span className="label-caps text-[#8E7A8A]">Upcoming events</span><Link href="/pavilion" className="text-[10px] font-bold text-[#FF6B35]">View all</Link></div>
+          <div className="mb-3 flex items-center justify-between"><span className="label-caps text-[#FF6B35]">Upcoming events</span><Link href="/pavilion" className="text-[10px] font-bold text-[#FF6B35]">View all</Link></div>
           <div className="space-y-3">
             {events.map((event) => (
               <article key={event.title} className="grid grid-cols-[48px_1fr] gap-3 rounded-xl border border-black/5 p-2">
@@ -284,7 +301,7 @@ function Header({ onMenu, onToggleRail, railCollapsed }: { onMenu: () => void; o
         <button onClick={() => toast("Going back…")} className="hidden rounded-full border border-black/10 p-2 text-[#8E7A8A] hover:text-[#0A0A0F] md:block"><ChevronDown className="h-4 w-4 rotate-90" /></button>
         <button onClick={() => toast("Going forward…")} className="hidden rounded-full border border-black/10 p-2 text-[#8E7A8A] hover:text-[#0A0A0F] md:block"><ChevronDown className="h-4 w-4 -rotate-90" /></button>
         <Link href="/pavilion" className="hidden rounded-full border border-black/10 px-4 py-2 text-xs font-bold text-[#0A0A0F] hover:bg-[#F5F0EB] sm:inline-flex"><Store className="mr-1.5 h-3.5 w-3.5" /> Pavilion</Link>
-        <button onClick={() => window.open(`${import.meta.env.BASE_URL}yoursprk.html`, "_blank")} className="inline-flex items-center gap-1.5 rounded-full bg-[#C4A09A] px-4 py-2 text-xs font-bold text-white hover:bg-[#8E7A8A]"><Plus className="h-3 w-3" /> Create</button>
+        <button onClick={() => setLocation("/yoursprk")} className="inline-flex items-center gap-1.5 rounded-full bg-[#C4A09A] px-4 py-2 text-xs font-bold text-white hover:bg-[#8E7A8A]"><Plus className="h-3 w-3" /> Hub</button>
         <button onClick={() => toast("Notification center opened.")} className="rounded-full p-2 text-[#4A5278] hover:bg-[#F5F0EB]"><Bell className="h-5 w-5" /></button>
         <button onClick={() => setLocation("/os")} className="hidden rounded-full bg-[#0A0A0F] px-4 py-2 text-xs font-bold text-white hover:bg-[#1E2235] sm:inline-flex"><Settings2 className="mr-1.5 h-3.5 w-3.5" /> SPRK*OS</button>
       </div>
@@ -300,7 +317,7 @@ export default function FeedShell({ children, active = "home", railMode = "home"
     <div className="min-h-screen bg-[#F5F0EB]/45 text-[#0A0A0F]">
       <Header onMenu={() => setMobileOpen(true)} onToggleRail={() => setRailCollapsed((prev) => !prev)} railCollapsed={railCollapsed} />
       <MobileRail active={active} open={mobileOpen} onClose={() => setMobileOpen(false)} />
-      <div className="mx-auto flex max-w-[1440px] gap-4 px-4 py-4 md:px-8">
+      <div className="mx-auto flex max-w-[1520px] items-start gap-4 px-4 py-4 md:px-8">
         <LeftRail active={active} collapsed={railCollapsed} onToggle={() => setRailCollapsed((prev) => !prev)} />
         <main className="min-w-0 flex-1">{children}</main>
         <RightRail mode={railMode} />

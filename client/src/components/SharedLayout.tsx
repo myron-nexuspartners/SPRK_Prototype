@@ -1,6 +1,6 @@
-import React from "react";
-import { Link, useLocation } from "wouter";
-import { Sparkles, Layers, ShieldCheck, ChevronDown, Check, ArrowUpRight } from "lucide-react";
+import type { ReactNode } from "react";
+import { Link } from "wouter";
+import { ArrowUpRight, Check, ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,130 +9,105 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 interface SharedLayoutProps {
-  children: React.ReactNode;
-  activeSite: "lead-gen" | "discover" | "os" | "pavilion";
+  children: ReactNode;
+  activeSite: "lead-gen" | "discover" | "os" | "pavilion" | "yoursprk";
 }
 
 export default function SharedLayout({ children, activeSite }: SharedLayoutProps) {
-  const [location] = useLocation();
-
   const sites = [
     { id: "lead-gen", label: "yourSPRK.com", path: "/", desc: "Official Beta Access Portal" },
-    { id: "discover", label: "the-SPRK.com", path: "/discover", desc: "Reddit-Style Creator Content Platform" },
-    { id: "os", label: "SPRK-OS", path: "/os", desc: "Claude-Style AI Creator Studio Workspace" },
-    { id: "pavilion", label: "SPRK Pavilion", path: "/pavilion", desc: "Spotify-Style Brand & Creator Marketplace" },
+    { id: "discover", label: "the-SPRK.com", path: "/discover", desc: "Reddit-style creator content platform" },
+    { id: "os", label: "SPRK-OS", path: "/os", desc: "AI creator studio workspace" },
+    { id: "pavilion", label: "SPRK Pavilion", path: "/pavilion", desc: "Brand and creator marketplace" },
+    { id: "yoursprk", label: "yourSPRK Hub", path: "/yoursprk", desc: "Authenticated creator dashboard" },
   ];
 
-  const activeSiteObj = sites.find((s) => s.id === activeSite) || sites[0];
+  const activeSiteObj = sites.find((site) => site.id === activeSite) || sites[0];
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-[#0A0A0F] antialiased selection:bg-[#FF6B35]/20">
-      
-      {/* Premium Top Global Switching Bar */}
-      <div className="bg-[#F5F0EB] border-b border-black/5 px-6 py-2 text-xs font-medium flex items-center justify-between z-50">
-        <div className="flex items-center gap-2">
-          <span className="inline-block w-2 h-2 rounded-full bg-[#FF6B35] animate-pulse"></span>
-          <span className="text-[#4A5278] font-semibold tracking-wide uppercase text-[10px]">SPRK PROTO-FAMILY DEMO</span>
+    <div className="flex min-h-screen flex-col bg-[var(--white)] text-[var(--ink)] antialiased selection:bg-[var(--warm)]">
+      <div className="border-b border-[var(--border)] bg-[var(--cream)] px-[var(--space-lg)] py-[var(--space-sm)] text-xs font-medium md:px-[var(--space-2xl)]">
+        <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-[var(--space-md)]">
+          <div className="flex min-w-0 items-center gap-[var(--space-sm)]">
+            <span className="inline-block h-2 w-2 shrink-0 animate-pulse rounded-full bg-[var(--ember)]" aria-hidden="true" />
+            <span className="truncate text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--steel)]">SPRK proto-family demo</span>
+          </div>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex items-center gap-[var(--space-xs)] text-[var(--ink)] font-bold transition-opacity hover:opacity-80 outline-none cursor-pointer">
+              <span className="truncate">Viewing: {activeSiteObj.label}</span>
+              <ChevronDown className="h-3.5 w-3.5 text-[var(--steel)]" aria-hidden="true" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="z-[100] w-72 rounded-[var(--r)] border border-[var(--border)] bg-[var(--white)] p-[var(--space-sm)] shadow-xl">
+              <div className="mb-[var(--space-xs)] border-b border-[var(--border)] px-[var(--space-md)] py-[var(--space-sm)]">
+                <span className="block text-[9px] font-bold uppercase tracking-[0.16em] text-[var(--mauve)]">Navigate family platforms</span>
+              </div>
+              {sites.map((site) => (
+                <DropdownMenuItem key={site.id} asChild className="rounded-[var(--r-sm)] focus:bg-[var(--cream)]">
+                  <Link href={site.path} className="flex w-full cursor-pointer items-start justify-between p-[var(--space-md)]">
+                    <div>
+                      <span className="block text-sm font-bold text-[var(--ink)]">{site.label}</span>
+                      <span className="mt-[var(--space-xs)] block text-xs text-[var(--steel)]">{site.desc}</span>
+                    </div>
+                    {activeSite === site.id && <Check className="mt-1 h-4 w-4 shrink-0 text-[var(--ember)]" aria-hidden="true" />}
+                  </Link>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
-        
-        {/* Dropdown switcher */}
-        <DropdownMenu>
-          <DropdownMenuTrigger className="flex items-center gap-1.5 text-[#0A0A0F] font-bold hover:opacity-80 transition-opacity outline-none cursor-pointer">
-            <span>Viewing: {activeSiteObj.label}</span>
-            <ChevronDown className="w-3.5 h-3.5 text-[#4A5278]" />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-72 bg-white border border-black/10 rounded-xl p-1.5 shadow-xl z-[100]">
-            <div className="px-3 py-2 border-b border-black/5 mb-1">
-              <span className="text-[9px] font-bold uppercase text-[#8E7A8A] tracking-wider block">Navigate Family Platforms</span>
-            </div>
-            {sites.map((site) => (
-              <DropdownMenuItem key={site.id} asChild className="rounded-lg focus:bg-[#F5F0EB]">
-                <Link href={site.path} className="flex items-start justify-between w-full p-2.5 cursor-pointer">
-                  <div>
-                    <span className="font-bold text-sm block text-[#0A0A0F]">{site.label}</span>
-                    <span className="text-xs text-[#4A5278] block mt-0.5">{site.desc}</span>
-                  </div>
-                  {activeSite === site.id && (
-                    <Check className="w-4 h-4 text-[#FF6B35] mt-1 shrink-0" />
-                  )}
-                </Link>
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
 
-      {/* Main Official Header Navigation - Clean Sticky Z-Index */}
-      <nav className="sticky top-0 left-0 right-0 z-30 bg-white/90 backdrop-blur-md border-b border-black/5 px-6 md:px-12 py-4 flex items-center justify-between transition-all">
-        
-        {/* Brand Logo Wordmark */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          {/* Custom SVG SPRK Logo */}
-          <svg className="w-8 h-8 shrink-0 transition-transform group-hover:scale-105" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="32" height="32" rx="8" fill="url(#sprk-logo-grad)" />
-            <path d="M16 8C16 12.4183 19.5817 16 24 16C19.5817 16 16 19.5817 16 24C16 19.5817 12.4183 16 8 16C12.4183 16 16 12.4183 16 8Z" fill="white" />
-            <defs>
-              <linearGradient id="sprk-logo-grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="#FF6B35" />
-                <stop offset="60%" stopColor="#E8003D" />
-                <stop offset="100%" stopColor="#CC0055" />
-              </linearGradient>
-            </defs>
-          </svg>
-          <span className="font-display font-extrabold text-2xl tracking-tight text-[#0A0A0F]">
-            SPRK<span className="text-[#FF6B35] font-medium">*</span>
-          </span>
-        </Link>
+      <nav className="sticky left-0 right-0 top-0 z-30 border-b border-[var(--border)] bg-[var(--white)]/90 px-[var(--space-lg)] py-[var(--space-md)] backdrop-blur-md transition-all md:px-[var(--space-2xl)]">
+        <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-[var(--space-lg)]">
+          <Link href="/" className="group flex items-center gap-[var(--space-sm)]">
+            <svg className="h-8 w-8 shrink-0 transition-transform group-hover:scale-105" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect width="32" height="32" rx="8" fill="url(#sprk-logo-grad)" />
+              <path d="M16 8C16 12.4183 19.5817 16 24 16C19.5817 16 16 19.5817 16 24C16 19.5817 12.4183 16 8 16C12.4183 16 16 12.4183 16 8Z" fill="var(--white)" />
+              <defs>
+                <linearGradient id="sprk-logo-grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stopColor="var(--ember)" />
+                  <stop offset="60%" stopColor="var(--error)" />
+                  <stop offset="100%" stopColor="var(--crimson)" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <span className="font-display text-2xl font-extrabold tracking-tight text-[var(--ink)]">SPRK<span className="font-medium text-[var(--ember)]">*</span></span>
+          </Link>
 
-        {/* Navigation Links */}
-        <div className="hidden md:flex items-center gap-8 font-semibold text-sm text-[#4A5278]">
-          <Link href="/" className={`hover:text-[#0A0A0F] transition-colors ${activeSite === "lead-gen" ? "text-[#0A0A0F]" : ""}`}>
-            yourSPRK.com
-          </Link>
-          <Link href="/discover" className={`hover:text-[#0A0A0F] transition-colors ${activeSite === "discover" ? "text-[#0A0A0F]" : ""}`}>
-            the-SPRK.com
-          </Link>
-          <Link href="/os" className={`hover:text-[#0A0A0F] transition-colors ${activeSite === "os" ? "text-[#0A0A0F]" : ""}`}>
-            SPRK-OS
-          </Link>
-          <Link href="/pavilion" className={`hover:text-[#0A0A0F] transition-colors ${activeSite === "pavilion" ? "text-[#0A0A0F]" : ""}`}>
-            SPRK Pavilion
-          </Link>
-        </div>
+          <div className="hidden items-center gap-[var(--space-xl)] text-sm font-semibold text-[var(--steel)] md:flex">
+            {sites.map((site) => (
+              <Link key={site.id} href={site.path} className={`transition-colors hover:text-[var(--ink)] ${activeSite === site.id ? "text-[var(--ink)]" : ""}`}>
+                {site.label}
+              </Link>
+            ))}
+          </div>
 
-        {/* CTA Button */}
-        <div className="flex items-center gap-4">
-          <Link href="/os">
-            <button className="inline-flex items-center gap-1.5 bg-[#0A0A0F] text-white font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full hover:bg-[#1E2235] transition-colors">
-              <span>Launch Studio</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
-            </button>
+          <Link href="/os" className="inline-flex items-center gap-[var(--space-xs)] rounded-[var(--r-pill)] bg-[var(--ink)] px-[var(--space-lg)] py-[var(--space-sm)] text-xs font-bold uppercase tracking-[0.12em] text-[var(--white)] transition-colors hover:bg-[var(--navy)]">
+            <span>Launch Studio</span>
+            <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
           </Link>
         </div>
       </nav>
 
-      {/* Main Content Area - Correct Static/Relative Layout to prevent obscuring */}
-      <main className="flex-1 flex flex-col relative z-10">
+      <main className="relative z-10 flex flex-1 flex-col">
         {children}
       </main>
 
-      {/* Clean Global Footer */}
-      <footer className="bg-[#F5F0EB] border-t border-black/5 py-12 px-6 md:px-12 text-center text-xs text-[#8E7A8A] font-medium uppercase tracking-wider relative z-20">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2">
-            <span className="font-extrabold text-sm text-[#0A0A0F]">SPRK*</span>
-            <span className="text-black/30">|</span>
-            <span>© 2026 SPRK ECOSYSTEMS INC. ALL RIGHTS RESERVED.</span>
+      <footer className="relative z-20 border-t border-[var(--border)] bg-[var(--cream)] px-[var(--space-lg)] py-[var(--space-2xl)] text-center text-xs font-medium uppercase tracking-[0.12em] text-[var(--mauve)] md:px-[var(--space-2xl)]">
+        <div className="mx-auto flex max-w-[1440px] flex-col items-center justify-between gap-[var(--space-lg)] md:flex-row">
+          <div className="flex items-center gap-[var(--space-sm)]">
+            <span className="font-extrabold text-[var(--ink)]">SPRK*</span>
+            <span className="text-[var(--blush)]">|</span>
+            <span>© 2026 SPRK Ecosystems Inc. All rights reserved.</span>
           </div>
-          <div className="flex gap-6">
-            <Link href="/" className="hover:text-[#0A0A0F] transition-colors">yoursprk.com</Link>
-            <Link href="/discover" className="hover:text-[#0A0A0F] transition-colors">the-sprk.com</Link>
-            <Link href="/os" className="hover:text-[#0A0A0F] transition-colors">sprk-os</Link>
-            <Link href="/pavilion" className="hover:text-[#0A0A0F] transition-colors">sprk pavilion</Link>
+          <div className="flex flex-wrap justify-center gap-[var(--space-lg)]">
+            {sites.map((site) => (
+              <Link key={site.id} href={site.path} className="transition-colors hover:text-[var(--ink)]">{site.label}</Link>
+            ))}
           </div>
         </div>
       </footer>
-
     </div>
   );
 }

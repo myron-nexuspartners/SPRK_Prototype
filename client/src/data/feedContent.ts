@@ -30,15 +30,15 @@ export interface FeedPost {
 }
 
 export const feedPosts: FeedPost[] = [
-  {
+{
     id: "sprk-0025",
     author: "Generra_Sprrkles",
     community: "↑ /FashionDrops",
     time: "3 hours ago",
     title: "Yoouu Already knowwww! The SPRK 0025 collection is LIVE!",
     deck: "A new collection has arrived for creators, collectors, and authentic passion populations ready to turn launch-day energy into shared culture.",
-    image: "/assets/wireframe/dark_sprk_0025_hero.png",
-    imageAlt: "SPRK 0025 streetwear creator from the dark wireframe mockup",
+    image: "/SPRK_Prototype/assets/wireframe/ProtoSPRK0025.png",
+    imageAlt: "Hip young Black man in sunglasses and denim presenting the SPRK 0025 collection hero",
     comments: "67",
     shares: "1.2K",
     likes: "842",
@@ -59,15 +59,38 @@ export const feedPosts: FeedPost[] = [
       survey: { culture: "Streetwear Drops", vibe: "Premium", focus: "Collaborative Commerce" }
     }
   },
-  {
+{
+    id: "makeup-artist-glow-map",
+    author: "glowbyimani",
+    community: "✦ /BeautyLab",
+    time: "12 hours ago",
+    title: "A make-up artist maps the glow: how I turned one client story into a look that photographed like memory.",
+    deck: "A human-centered beauty breakdown where complexion, undertone, lighting, and identity stay visible from chair to final cut.",
+    image: "/SPRK_Prototype/assets/wireframe/home_makeup_artist_live.png",
+    imageAlt: "Make-up artist portrait from the light wireframe short clip row",
+    comments: "512",
+    shares: "2.8K",
+    likes: "14.6K",
+    category: "beauty",
+    contentType: "article",
+    isAiAssisted: true,
+    body: [
+      "Imani starts every look with a listening pass before the palette opens. The client wanted softness, but not invisibility; color, but not costume. SPRK*OS translated the brief into lighting notes, undertone references, and a shot list that kept the artist's hand at the center.",
+      "The article template turns a fifteen-second transformation clip into a fuller record of decisions: skin prep, shade matching, accessibility notes, and the emotional reason the final shimmer mattered.",
+      "That is the high-empathy use case for AI assistance on SPRK. It does not flatten beauty into a trend; it helps a creator explain why one face, one room, and one story needed a specific kind of glow."
+    ],
+    quote: "The best beauty content does not erase the person under the look. It makes the person easier to see.",
+    creatorBio: { name: "Imani Bello", handle: "@glowbyimani", metric: "390K Reach", survey: { culture: "Beauty Storytelling", vibe: "Warm / Precise", focus: "Inclusive Complexion Work" } }
+  },
+{
     id: "balenciaga-drop-cards",
     author: "streetwear_drop",
     community: "✦ /FashionDrops",
     time: "2 hours ago",
-    title: "SPRK x Balenciaga drop collection is officially live! First 100 to share receive exclusive drop cards today.",
-    deck: "Smart-contract backed redemption cards are turning launch-day discovery into a creator-first streetwear ritual.",
-    image: "/assets/wireframe/light_balenciaga_card.png",
-    imageAlt: "Balenciaga drop card from the light wireframe mockup with a human streetwear model",
+    title: "SPRK x Balenciaga drop goes live with a photoreal hoodie campaign built for the open-norm runway.",
+    deck: "A creator-first streetwear launch turns a luxury hoodie moment into a warmer, more inclusive culture signal.",
+    image: "/SPRK_Prototype/assets/wireframe/home_balenciaga_hoodie_drop.png",
+    imageAlt: "Photorealistic creator wearing a SPRK x Balenciaga-style hoodie in a bright city plaza",
     comments: "2.1K",
     shares: "16K",
     likes: "12.4K",
@@ -83,37 +106,60 @@ export const feedPosts: FeedPost[] = [
     quote: "Drops work when the community can see the rules, feel the scarcity, and trust that creators share in the upside.",
     creatorBio: { name: "Aria 'Valkyrie' Chen", handle: "@aria_valk", metric: "450K Reach", survey: { culture: "Cyberpunk / Techwear", vibe: "Aesthetic", focus: "Sneaker Drops" } }
   },
-  {
-    id: "elden-ring-blindfolded",
+{
+    id: "trans-fashion-designer-open-norm",
+    author: "ateliernova",
+    community: "✦ /OpenNormFashion",
+    time: "8 hours ago",
+    title: "A transfeminine fashion designer shares how one jacket became a story about fit, safety, and being seen.",
+    deck: "Inside a warm atelier where identity, patternmaking, and community feedback turn a garment fitting into proof of belonging.",
+    image: "/SPRK_Prototype/assets/wireframe/home_trans_fashion_designer.png",
+    imageAlt: "Transfeminine fashion designer fitting a crimson-orange jacket on a dress form",
+    comments: "689",
+    shares: "3.6K",
+    likes: "18.2K",
+    category: "fashion",
+    contentType: "article",
+    isAiAssisted: true,
+    body: [
+      "Nova calls the jacket a memoir with seams. The shoulder line changed after a community fitting, the lining color came from a childhood room, and the final silhouette was built to feel protective without hiding the person wearing it.",
+      "SPRK turns that process into context instead of flattening it into a trend. The article holds sketches, fit notes, fabric references, and the designer's own language around safety, glamour, and being recognized in public.",
+      "That is the open-norm ecosystem at work: content, commerce, and community making room for creators whose stories have too often been edited out of the frame."
+    ],
+    quote: "Fit is technical, but belonging is the brief.",
+    creatorBio: { name: "Nova Reyes", handle: "@ateliernova", metric: "520K Reach", survey: { culture: "Open-Norm Fashion", vibe: "Warm / Defiant", focus: "Story-Led Design" } }
+  },
+{
+    id: "crimson-dawn-blindfolded",
     author: "ingaming",
-    community: "✦ /PCGaming",
+    community: "✦ /CrimsonDawn",
     time: "4 hours ago",
-    title: "Just beat the Elden Ring GOTY DLC blindfolded. The stream chat went wild.",
-    deck: "A full creator breakdown of the run, chat-driven route voting, and the exact ten-second clip that broke the feed.",
-    image: "https://images.unsplash.com/photo-1542751110-97427bbecf20?auto=format&fit=crop&w=1200&q=85",
-    imageAlt: "Diverse gaming creator immersed in a competitive setup",
+    title: "Crimson Dawn's first blindfolded boss clear turned a live-stream into a full community ritual.",
+    deck: "A bright, high-energy creator breakdown of the run, chat-driven route voting, and the exact ten-second clip that broke the feed.",
+    image: "/SPRK_Prototype/assets/wireframe/home_crimson_dawn_game_stream.png",
+    imageAlt: "Gaming creator celebrating a Crimson Dawn boss clear on stream",
     comments: "902",
     shares: "88",
     likes: "5.8K",
     category: "gaming",
     contentType: "video",
     body: [
-      "It took 14 hours, three broken controllers, and an absolute miracle, but the blindfolded Elden Ring speedrun is officially complete. The community voted live on boss routes, recovery windows, and one dangerously ambitious no-hit detour.",
+      "It took 14 hours, three broken controllers, and an absolute miracle, but the blindfolded Crimson Dawn boss clear is officially complete. The community voted live on boss routes, recovery windows, and one dangerously ambitious no-hit detour.",
       "The run became a showcase for why SPRK clips need context. A single highlight carried the spectacle, but the article template lets the creator document preparation, risk, and the collaborative mechanics that made the moment legible.",
       "SPRK*OS now packages the run into short hooks, long-form recap notes, and sponsor-safe overlays without removing the original creator voice."
     ],
     quote: "The best gaming content does not just show the win. It shows the room that helped build the attempt.",
-    creatorBio: { name: "Myron 'KingMyron' Sterling", handle: "@kingmyron", metric: "1.2M Reach", survey: { culture: "Hardcore Competitive", vibe: "High-Octane", focus: "Action RPGs" } }
+    creatorBio: { name: "Myron 'KingMyron' Sterling", handle: "@kingmyron", metric: "1.2M Reach", survey: { culture: "Crimson Dawn Runs", vibe: "High-Octane", focus: "Action RPGs" } }
   },
-  {
+{
     id: "cyberpunk-netrunner-build",
     author: "cosplay_nexus",
     community: "✦ /AnimeExpo",
     time: "1 day ago",
     title: "Full cosplay showcase of my custom Cyberpunk netrunner build from Momo Con 2026.",
     deck: "A fiber-optic fabrication process breakdown for builders who want the glow without losing mobility.",
-    image: "https://images.unsplash.com/photo-1608889175123-8ee362201f81?auto=format&fit=crop&w=1200&q=85",
-    imageAlt: "Expressive cosplay creator in a detailed handmade costume",
+    image: "/SPRK_Prototype/assets/wireframe/home_black_woman_cosplay.png",
+    imageAlt: "Black woman creator wearing custom cyberpunk cosplay on a convention floor",
     comments: "407",
     shares: "318",
     likes: "8.1K",
@@ -127,61 +173,37 @@ export const feedPosts: FeedPost[] = [
     quote: "Process is not extra content. For builders, process is the proof of authorship.",
     creatorBio: { name: "Yuki 'Momo_Cos' Tanaka", handle: "@yuki_momo", metric: "680K Reach", survey: { culture: "Cosplay Fabrication", vibe: "Creative", focus: "Cyberpunk Builds" } }
   },
-  {
-    id: "blade-runner-2099-timeline",
-    author: "sci_fi_vault",
-    community: "✦ /SciFiMovies",
-    time: "2 days ago",
-    title: "Blade Runner 2099 casting rumors and release schedule leak. What does this mean for the timeline?",
-    deck: "A lore-first timeline analysis for fans tracking where the franchise can expand without breaking the original mood.",
-    image: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?auto=format&fit=crop&w=1200&q=85",
-    imageAlt: "Dark futuristic city skyline with moody lighting",
-    comments: "118",
-    shares: "46",
-    likes: "2.7K",
+{
+    id: "michael-movie-review-empathy",
+    author: "reelcareclub",
+    community: "✦ /FilmRoom",
+    time: "6 hours ago",
+    title: "Review: Michael works best when it lets the myth breathe and remembers the person inside the choreography.",
+    deck: "A high-relevance, high-empathy film review built for fans who need craft, context, memory, and care in the same place.",
+    image: "/SPRK_Prototype/assets/wireframe/home_michael_movie_review.png",
+    imageAlt: "Black woman film critic taking notes during a music-biopic screening",
+    comments: "1.4K",
+    shares: "4.7K",
+    likes: "22.8K",
     category: "film",
     contentType: "article",
     isAiAssisted: true,
     body: [
-      "Leaked schedules suggest the upcoming series will establish a new cyber-detective agency in the heart of Los Angeles, potentially bridging the atmospheric noir of the original film with a wider institutional mythology.",
-      "The risk is obvious: more world can mean less mystery. The opportunity is equally clear: SPRK communities can map theory threads, visual references, and casting implications without flattening debate into hot takes.",
-      "This article format collects the open questions, strongest evidence, and creator-led readings now circulating across film communities."
+      "The most useful way to review a legacy performance is not to ask whether any film can contain the entire phenomenon. It cannot. The better question is whether the work creates enough room for a human being to exist inside an image the world has already over-owned.",
+      "At its strongest, the film treats performance as language rather than spectacle. Dance sequences carry biography, pressure, family inheritance, and the cost of precision. SPRK's AI-assisted notes help separate craft observations from reaction noise, giving fans a place to disagree without flattening grief, admiration, or critique.",
+      "The review format matters because cultural memory is crowded. A high-empathy article can hold joy and discomfort at once, letting readers talk about choreography, childhood, celebrity, and accountability without turning a person into a content war."
     ],
-    quote: "A franchise timeline works when expansion creates sharper questions, not just additional dates.",
-    creatorBio: { name: "Marcus 'SciFi_Guy' Vance", handle: "@scifi_vance", metric: "820K Reach", survey: { culture: "Lore & Theory", vibe: "Deep-Dive", focus: "Blade Runner Franchise" } }
+    quote: "The film is most moving when the iconography stops performing certainty and lets uncertainty stay in the frame.",
+    creatorBio: { name: "Nia Okafor", handle: "@reelcareclub", metric: "640K Reach", survey: { culture: "Film Criticism", vibe: "Careful / Fan-Literate", focus: "Music Biopics" } }
   },
-  {
-    id: "razer-viper-pro-demo",
-    author: "razer_hq",
-    community: "$ /GamingHardware",
-    time: "3 days ago",
-    title: "Meet the new Razer Viper V3 Pro, optimized for elite competitive gaming.",
-    deck: "A hardware demo built for creators who compare latency, grip, and in-game decision timing under pressure.",
-    image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=85",
-    imageAlt: "Esports creator testing hardware during a live competitive session",
-    comments: "480",
-    shares: "1.2K",
-    likes: "9.9K",
-    category: "gaming",
-    contentType: "video",
-    sponsored: true,
-    cta: "Shop Razer Pro",
-    body: [
-      "Designed in collaboration with world-class esports athletes, the Viper V3 Pro features a high-polling wireless sensor, featherlight shell, and tournament-ready response profile.",
-      "The SPRK article template lets hardware sponsors move beyond banner ads by pairing measurable product specs with creator testing notes and clip-ready proof points.",
-      "For buyers, the clearest value comes from seeing how a tool behaves inside the exact content environment where it will be used."
-    ],
-    quote: "Creator commerce works best when performance claims can be demonstrated, clipped, and challenged in public.",
-    creatorBio: { name: "Razer Gaming", handle: "@razer", metric: "Global Sponsor", survey: { culture: "Esports Hardware", vibe: "Professional", focus: "Pro Mice & Keyboards" } }
-  },
-  {
+{
     id: "hiphop-short-form-structures",
     author: "hiphop_central",
     community: "✦ /HipHopVibe",
     time: "4 days ago",
     title: "The death of the 16-bar verse: how short-form video algorithms are reshaping modern song structures.",
     deck: "A music-tech essay on hook-first writing, creator distribution, and what artists lose when songs start at the chorus.",
-    image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=1200&q=85",
+    image: "/SPRK_Prototype/assets/wireframe/home_16_bar_verse.png",
     imageAlt: "Up-and-coming musician performing with guitar in a warm live room",
     comments: "310",
     shares: "245",
@@ -197,7 +219,7 @@ export const feedPosts: FeedPost[] = [
     quote: "The verse is not dead, but it is negotiating with the feed.",
     creatorBio: { name: "Metro Synth", handle: "@metro_synth", metric: "320K Reach", survey: { culture: "Hip-Hop Production", vibe: "Analytical", focus: "Music Tech & Trends" } }
   },
-  {
+{
     id: "creator-guidelines-meme",
     author: "giga_chuckle",
     community: "✦ /Humor",
@@ -219,7 +241,7 @@ export const feedPosts: FeedPost[] = [
     quote: "Authenticity cannot be added in post after the brief has already removed it.",
     creatorBio: { name: "Alex 'Chuckle' Miller", handle: "@giga_chuckle", metric: "180K Reach", survey: { culture: "Creator Comedy", vibe: "Satirical", focus: "Industry Memes" } }
   },
-  {
+{
     id: "rtfkt-nike-secondary-market",
     author: "sneaker_head",
     community: "✦ /FashionDrops",
@@ -242,7 +264,7 @@ export const feedPosts: FeedPost[] = [
     quote: "A drop becomes durable when ownership has memory, not just scarcity.",
     creatorBio: { name: "Marcus 'Sole' Vance", handle: "@sneaker_head", metric: "510K Reach", survey: { culture: "Sneaker Investing", vibe: "Informative", focus: "Web3 Streetwear" } }
   },
-  {
+{
     id: "neo-tokyo-shader-study",
     author: "concept_craft",
     community: "✦ /SciFiAnticipation",
@@ -265,7 +287,7 @@ export const feedPosts: FeedPost[] = [
     quote: "The future of creative tooling is not faster sameness. It is traceable iteration with room for taste.",
     creatorBio: { name: "Sarah 'Concept' Chen", handle: "@concept_craft", metric: "240K Reach", survey: { culture: "Sci-Fi Concept Art", vibe: "Educational", focus: "Neural Shading" } }
   },
-  {
+{
     id: "sprk-os-touch-grass",
     author: "dev_struggles",
     community: "✦ /Humor",
@@ -287,30 +309,7 @@ export const feedPosts: FeedPost[] = [
     quote: "The humane tool is the one brave enough to tell you the pipeline is not the bottleneck.",
     creatorBio: { name: "Dev Struggles", handle: "@dev_struggles", metric: "95K Reach", survey: { culture: "Tech Humor", vibe: "Sarcastic", focus: "Developer Lifestyle" } }
   },
-  {
-    id: "makeup-artist-glow-map",
-    author: "glowbyimani",
-    community: "✦ /BeautyLab",
-    time: "12 hours ago",
-    title: "A make-up artist maps the glow: how I turned one client story into a look that photographed like memory.",
-    deck: "A human-centered beauty breakdown where complexion, undertone, lighting, and identity stay visible from chair to final cut.",
-    image: "/assets/wireframe/clip_makeup_artist.png",
-    imageAlt: "Make-up artist portrait from the light wireframe short clip row",
-    comments: "512",
-    shares: "2.8K",
-    likes: "14.6K",
-    category: "beauty",
-    contentType: "article",
-    isAiAssisted: true,
-    body: [
-      "Imani starts every look with a listening pass before the palette opens. The client wanted softness, but not invisibility; color, but not costume. SPRK*OS translated the brief into lighting notes, undertone references, and a shot list that kept the artist's hand at the center.",
-      "The article template turns a fifteen-second transformation clip into a fuller record of decisions: skin prep, shade matching, accessibility notes, and the emotional reason the final shimmer mattered.",
-      "That is the high-empathy use case for AI assistance on SPRK. It does not flatten beauty into a trend; it helps a creator explain why one face, one room, and one story needed a specific kind of glow."
-    ],
-    quote: "The best beauty content does not erase the person under the look. It makes the person easier to see.",
-    creatorBio: { name: "Imani Bello", handle: "@glowbyimani", metric: "390K Reach", survey: { culture: "Beauty Storytelling", vibe: "Warm / Precise", focus: "Inclusive Complexion Work" } }
-  },
-  {
+{
     id: "up-next-musician-room-tone",
     author: "solsundays",
     community: "✦ /NewMusicRoom",
@@ -333,15 +332,15 @@ export const feedPosts: FeedPost[] = [
     quote: "A debut does not need to look expensive to feel inevitable. It needs to feel like somebody real is arriving.",
     creatorBio: { name: "Sol Alvarez", handle: "@solsundays", metric: "118K Reach", survey: { culture: "Indie Soul", vibe: "Tender / Neighborhood", focus: "First EP Rollout" } }
   },
-  {
-    id: "michael-movie-review-empathy",
+{
+    id: "community-dance-review-empathy",
     author: "reelcareclub",
-    community: "✦ /FilmRoom",
+    community: "✦ /CultureRoom",
     time: "18 hours ago",
-    title: "Review: Michael works best when it lets the myth breathe and remembers the person inside the choreography.",
-    deck: "A high-relevance, high-empathy film review built for fans who need craft, context, memory, and care in the same place.",
-    image: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1200&q=85",
-    imageAlt: "A vibrant concert crowd with performers and fans sharing a collective music moment",
+    title: "When a dance review remembers the room, fans get craft, context, and care without losing joy.",
+    deck: "A high-empathy culture essay built for audiences who need memory, movement, and disagreement in the same place.",
+    image: "/SPRK_Prototype/assets/wireframe/home_dance_review.png",
+    imageAlt: "Bright concert and dance crowd moment with community energy",
     comments: "1.4K",
     shares: "4.7K",
     likes: "22.8K",
@@ -349,14 +348,14 @@ export const feedPosts: FeedPost[] = [
     contentType: "article",
     isAiAssisted: true,
     body: [
-      "The most useful way to review Michael is not to ask whether any film can contain the entire phenomenon. It cannot. The better question is whether the movie creates enough room for a human being to exist inside an image the world has already over-owned.",
+      "The most useful way to review a legacy performance is not to ask whether any film can contain the entire phenomenon. It cannot. The better question is whether the work creates enough room for a human being to exist inside an image the world has already over-owned.",
       "At its strongest, the film treats performance as language rather than spectacle. Dance sequences carry biography, pressure, family inheritance, and the cost of precision. SPRK's AI-assisted notes help separate craft observations from reaction noise, giving fans a place to disagree without flattening grief, admiration, or critique.",
       "The review format matters because cultural memory is crowded. A high-empathy article can hold joy and discomfort at once, letting readers talk about choreography, childhood, celebrity, and accountability without turning a person into a content war."
     ],
     quote: "The film is most moving when the iconography stops performing certainty and lets uncertainty stay in the frame.",
     creatorBio: { name: "Nia Okafor", handle: "@reelcareclub", metric: "640K Reach", survey: { culture: "Film Criticism", vibe: "Careful / Fan-Literate", focus: "Music Biopics" } }
   },
-  {
+{
     id: "the-burroughs-netflix-op-ed",
     author: "streamingcommons",
     community: "✦ /TVCulture",
@@ -378,7 +377,8 @@ export const feedPosts: FeedPost[] = [
     ],
     quote: "A neighborhood drama becomes powerful when the camera understands that the corner store, the stoop, and the family table are all archives.",
     creatorBio: { name: "Darius Bell", handle: "@streamingcommons", metric: "410K Reach", survey: { culture: "Television Essays", vibe: "Community-Literate", focus: "Ensemble Drama" } }
-  },
+  }
+
 ];
 
 export function getFeedPost(id?: string) {

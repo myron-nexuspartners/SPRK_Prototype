@@ -19,6 +19,7 @@ interface AdCarouselProps {
   label?: string;
   compact?: boolean;
   variant?: "feed" | "rail" | "strip";
+  staticMode?: boolean;
 }
 
 const ads: AdItem[] = [
@@ -28,8 +29,8 @@ const ads: AdItem[] = [
     body: "A limited creator-first drop engineered for movement, footage, and launch-day heat.",
     cta: "Shop the exclusive drop",
     tone: "dark",
-    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=85",
-    imageAlt: "Red sneakers on a bright studio background",
+    image: "/SPRK_Prototype/assets/wireframe/ProtoSPRK0025.png",
+    imageAlt: "Human model wearing the SPRK 0025 collaboration collection before the drop",
     href: "/pavilion",
   },
   {
@@ -77,7 +78,7 @@ function toneClasses(tone: AdTone) {
   }
 }
 
-export default function AdCarousel({ label = "Sponsored Ad", compact = false, variant = "feed" }: AdCarouselProps) {
+export default function AdCarousel({ label = "Sponsored Ad", compact = false, variant = "feed", staticMode = false }: AdCarouselProps) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [dismissed, setDismissed] = useState(false);
@@ -85,15 +86,15 @@ export default function AdCarousel({ label = "Sponsored Ad", compact = false, va
 
   const heightClass = useMemo(() => {
     if (variant === "strip") return "min-h-[88px]";
-    if (variant === "rail") return compact ? "min-h-[190px]" : "min-h-[260px]";
+    if (variant === "rail") return compact ? "min-h-[270px]" : "min-h-[340px]";
     return compact ? "min-h-[160px]" : "min-h-[220px]";
   }, [compact, variant]);
 
   useEffect(() => {
-    if (paused || dismissed) return;
+    if (staticMode || paused || dismissed) return;
     const timer = window.setInterval(() => setIndex((prev) => (prev + 1) % ads.length), 4000);
     return () => window.clearInterval(timer);
-  }, [paused, dismissed]);
+  }, [paused, dismissed, staticMode]);
 
   if (dismissed) {
     return (
@@ -121,7 +122,7 @@ export default function AdCarousel({ label = "Sponsored Ad", compact = false, va
       onMouseLeave={() => setPaused(false)}
       aria-label={label}
     >
-      <img src={visibleAd.image} alt={visibleAd.imageAlt} className="absolute inset-0 h-full w-full object-cover" />
+      <img src={visibleAd.image} alt={visibleAd.imageAlt} className={`absolute inset-0 h-full w-full ${visibleAd.image.includes("ProtoSPRK0025") ? "object-cover object-center" : "object-cover"}`} />
       <div className={`absolute inset-0 ${visibleAd.tone === "light" || visibleAd.tone === "event" ? "bg-white/72" : "bg-[#0A0A0F]/68"}`} />
       <div className="absolute inset-0 bg-gradient-to-r from-black/35 via-transparent to-[#FF6B35]/20" />
       <div className="relative z-10 flex h-full min-h-[inherit] flex-col justify-between gap-5 p-4 md:p-5">
@@ -159,14 +160,16 @@ export default function AdCarousel({ label = "Sponsored Ad", compact = false, va
           >
             {visibleAd.cta} <ExternalLink className="h-3 w-3" />
           </button>
-          <div className="flex items-center gap-1">
-            <button type="button" onClick={() => go(-1)} className="rounded-full bg-white/20 p-1.5 hover:bg-white/30" aria-label="Previous ad">
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            <button type="button" onClick={() => go(1)} className="rounded-full bg-white/20 p-1.5 hover:bg-white/30" aria-label="Next ad">
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
+          {!staticMode && (
+            <div className="flex items-center gap-1">
+              <button type="button" onClick={() => go(-1)} className="rounded-full bg-white/20 p-1.5 hover:bg-white/30" aria-label="Previous ad">
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <button type="button" onClick={() => go(1)} className="rounded-full bg-white/20 p-1.5 hover:bg-white/30" aria-label="Next ad">
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </section>

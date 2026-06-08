@@ -1,539 +1,494 @@
-import React, { useState } from "react";
-import { 
-  Search, SlidersHorizontal, Star, DollarSign, ArrowRight, 
-  ShieldCheck, FileText, CheckCircle, Flame, Sparkles, 
-  Play, Video, BookOpen, Layers, X, Calendar, MapPin, Award
+import { useMemo, useState } from "react";
+import { Link, useLocation } from "wouter";
+import {
+  ArrowRight,
+  BarChart3,
+  CheckCircle2,
+  ChevronRight,
+  Clock,
+  Download,
+  Filter,
+  HandCoins,
+  HeartHandshake,
+  MessageCircle,
+  Search,
+  ShieldCheck,
+  Sparkles,
+  TrendingUp,
+  Users,
+  X,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import SharedLayout from "@/components/SharedLayout";
 
+type TabKey = "discovery" | "content" | "trending" | "deals" | "messages";
+type ModalState =
+  | { type: "content"; id: string }
+  | { type: "creator"; id: string }
+  | { type: "deal"; id: string }
+  | { type: "info"; id: "escrow" | "rights" | "marketplace" }
+  | null;
+
+type Creator = {
+  id: string;
+  name: string;
+  handle: string;
+  tier: "Verified" | "Top Creator" | "Elite";
+  focus: string[];
+  followers: string;
+  views: string;
+  engagement: string;
+  bio: string;
+  avatar: string;
+};
+
+type ContentRecord = {
+  id: string;
+  title: string;
+  description: string;
+  creatorId: string;
+  thumbnail: string;
+  contentType: "Short Clips" | "Articles" | "Collections" | "Drops";
+  tags: string[];
+  platforms: string[];
+  views: string;
+  comments: string;
+  saves: string;
+  engagement: string;
+  earnings: string;
+  date: string;
+  brandCallout?: string;
+  source?: "sprk-os" | "pavilion";
+  packageMetadata?: {
+    origin: string;
+    project: string;
+    audio: string;
+    format: string;
+    rights: string;
+    packageStatus: string;
+    commerceLane: string;
+    exported: string;
+  };
+};
+
+type Deal = {
+  id: string;
+  brand: string;
+  title: string;
+  amount: string;
+  status: "Pending" | "In Escrow" | "Accepted" | "Paid" | "Returned";
+  due: string;
+  terms: string;
+};
+
+type Message = {
+  id: string;
+  sender: string;
+  subject: string;
+  body: string;
+  time: string;
+  unread: boolean;
+};
+
+const base = import.meta.env.BASE_URL;
+const generatedThumbnail = `${base}assets/wireframe/bring_in_the_katz_line_dance_preview.png`;
+const fallbackPortrait = "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=700&q=85";
+const fallbackDance = "https://images.unsplash.com/photo-1504609813442-a8924e83f76e?auto=format&fit=crop&w=900&q=85";
+const fallbackStreetwear = "https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=900&q=85";
+const fallbackStudio = "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=85";
+const fallbackCooking = "https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=900&q=85";
+const fallbackMeditation = "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=900&q=85";
+const fallbackBeauty = "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=900&q=85";
+const fallbackCinema = "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=900&q=85";
+const fallbackFictionActivism = "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=900&q=85";
+
+const tabs: { key: TabKey; label: string }[] = [
+  { key: "discovery", label: "Discovery Feed" },
+  { key: "content", label: "My Content" },
+  { key: "trending", label: "Trending" },
+  { key: "deals", label: "Deals" },
+  { key: "messages", label: "Messages" },
+];
+
+const creators: Creator[] = [
+  {
+    id: "nina-katz",
+    name: "Nina Katz",
+    handle: "@ninakatzmoves",
+    tier: "Elite",
+    focus: ["Music Scene", "Dance", "Streetwear"],
+    followers: "1.2M",
+    views: "18.4M",
+    engagement: "12.8%",
+    bio: "Choreographer turning community dance moments into brand-safe cultural campaigns.",
+    avatar: generatedThumbnail,
+  },
+  {
+    id: "mari-volt",
+    name: "Mari Volt",
+    handle: "@marivolt",
+    tier: "Top Creator",
+    focus: ["Gaming & Esports", "Tech & Innovation"],
+    followers: "842K",
+    views: "9.7M",
+    engagement: "9.1%",
+    bio: "Competitive creator building high-signal gaming explainers and stream-ready edits.",
+    avatar: fallbackPortrait,
+  },
+  {
+    id: "sol-june",
+    name: "Sol June",
+    handle: "@soljune",
+    tier: "Verified",
+    focus: ["Fashion & Streetwear", "Drops"],
+    followers: "514K",
+    views: "5.1M",
+    engagement: "8.4%",
+    bio: "Streetwear documentarian tracking limited drops and independent designers.",
+    avatar: fallbackStreetwear,
+  },
+  {
+    id: "ana-river",
+    name: "Ana River",
+    handle: "@anariverstudio",
+    tier: "Top Creator",
+    focus: ["Music Scene", "Creator Tools"],
+    followers: "389K",
+    views: "4.8M",
+    engagement: "10.2%",
+    bio: "Producer and educator translating studio workflows into short-form learning loops.",
+    avatar: fallbackStudio,
+  },
+  {
+    id: "chef-lina",
+    name: "Chef Lina Park",
+    handle: "@linalivekitchen",
+    tier: "Verified",
+    focus: ["Cooking", "Health & Beauty", "Wellness"],
+    followers: "276K",
+    views: "3.6M",
+    engagement: "8.9%",
+    bio: "Food creator translating weeknight cooking, skin-friendly nutrition, and sponsor-safe recipes into live-ready packages.",
+    avatar: fallbackCooking,
+  },
+  {
+    id: "kai-still",
+    name: "Kai Still",
+    handle: "@kaistill",
+    tier: "Top Creator",
+    focus: ["Wellness", "Meditation", "Activism"],
+    followers: "608K",
+    views: "7.4M",
+    engagement: "12.1%",
+    bio: "Meditation guide and community organizer building restorative campaigns for wellness and social impact partners.",
+    avatar: fallbackMeditation,
+  },
+  {
+    id: "noor-frames",
+    name: "Noor Frames",
+    handle: "@noorframes",
+    tier: "Elite",
+    focus: ["TV & Movies", "Fiction", "Activism"],
+    followers: "931K",
+    views: "11.8M",
+    engagement: "10.7%",
+    bio: "Narrative critic producing film, streaming, speculative fiction, and culture-change breakdowns for premium campaigns.",
+    avatar: fallbackCinema,
+  },
+];
+
+const baseContent: ContentRecord[] = [
+  {
+    id: "bring-in-the-katz",
+    title: "Bring in the Katz — Line Dance Launch Cut",
+    description: "A polished short-form dance package generated through SPRK-OS for syndicated commerce activation.",
+    creatorId: "nina-katz",
+    thumbnail: generatedThumbnail,
+    contentType: "Short Clips",
+    tags: ["Music Scene", "Dance", "Syndicated Commerce"],
+    platforms: ["SPRK", "TikTok", "Instagram", "YouTube Shorts"],
+    views: "88.4K",
+    comments: "1.9K",
+    saves: "12.2K",
+    engagement: "14.6%",
+    earnings: "$4,820",
+    date: "Today",
+    brandCallout: "Brand Partner Ready",
+    source: "sprk-os",
+    packageMetadata: {
+      origin: "SPRK-OS Editor",
+      project: "SPRK 0025 / Bring in the Katz",
+      audio: "Bring in the Katz",
+      format: "9:16 short-form video package",
+      rights: "Creator-owned · review-ready · no production launch",
+      packageStatus: "Healthy export · Pavilion verified",
+      commerceLane: "Syndicated Commerce",
+      exported: "Queued from SPRK-OS handoff",
+    },
+  },
+  {
+    id: "drop-field-notes",
+    title: "SPRK 0025 Drop Field Notes",
+    description: "Street-level collection recap with shoppable moments and audience sentiment tags.",
+    creatorId: "sol-june",
+    thumbnail: fallbackStreetwear,
+    contentType: "Drops",
+    tags: ["Fashion & Streetwear", "Drops"],
+    platforms: ["SPRK", "Instagram"],
+    views: "42.7K",
+    comments: "620",
+    saves: "6.1K",
+    engagement: "8.8%",
+    earnings: "$1,940",
+    date: "Yesterday",
+    brandCallout: "Sponsored Drop",
+  },
+  {
+    id: "studio-loop",
+    title: "Studio Loop: Hooks That Travel",
+    description: "Creator education micro-series about turning one idea into a multi-platform package.",
+    creatorId: "ana-river",
+    thumbnail: fallbackStudio,
+    contentType: "Articles",
+    tags: ["Creator Tools", "Music Scene"],
+    platforms: ["SPRK", "YouTube Shorts"],
+    views: "31.8K",
+    comments: "410",
+    saves: "4.3K",
+    engagement: "7.9%",
+    earnings: "$1,120",
+    date: "2 days ago",
+  },
+  {
+    id: "ranked-reset",
+    title: "Ranked Reset: PC to Mobile Meta",
+    description: "Gaming creator breaks down cross-platform skill transfer with sponsor-safe overlays and live-stream cutdowns.",
+    creatorId: "mari-volt",
+    thumbnail: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=900&q=85",
+    contentType: "Short Clips",
+    tags: ["Gaming & Esports", "Gaming Live-Streaming", "Tech & Innovation"],
+    platforms: ["SPRK", "TikTok", "Twitch"],
+    views: "73.9K",
+    comments: "980",
+    saves: "8.7K",
+    engagement: "11.3%",
+    earnings: "$3,080",
+    date: "3 days ago",
+  },
+  {
+    id: "supper-sprint",
+    title: "Table-to-Story Supper Sprint",
+    description: "A cooking creator packages a thirty-minute dinner tutorial with wellness notes and shoppable pantry moments.",
+    creatorId: "chef-lina",
+    thumbnail: fallbackCooking,
+    contentType: "Short Clips",
+    tags: ["Cooking", "Health & Beauty", "Wellness"],
+    platforms: ["SPRK", "Instagram", "YouTube Shorts"],
+    views: "58.6K",
+    comments: "740",
+    saves: "9.2K",
+    engagement: "10.5%",
+    earnings: "$2,440",
+    date: "4 days ago",
+    brandCallout: "Grocery Partner Ready",
+  },
+  {
+    id: "seven-minute-reset",
+    title: "Seven-Minute Reset Meditation",
+    description: "Guided meditation and breathwork sequence built for wellness brands, workplace benefits, and community care activations.",
+    creatorId: "kai-still",
+    thumbnail: fallbackMeditation,
+    contentType: "Short Clips",
+    tags: ["Wellness", "Meditation", "Activism"],
+    platforms: ["SPRK", "TikTok", "Instagram"],
+    views: "91.4K",
+    comments: "1.2K",
+    saves: "15.8K",
+    engagement: "13.9%",
+    earnings: "$3,720",
+    date: "5 days ago",
+    brandCallout: "Community Impact Fit",
+  },
+  {
+    id: "stream-scene-watchlist",
+    title: "Stream Scene Watchlist: Fiction Worlds That Move Culture",
+    description: "TV, movie, and fiction essay package connecting genre fandom to values-led audience conversations.",
+    creatorId: "noor-frames",
+    thumbnail: fallbackCinema,
+    contentType: "Articles",
+    tags: ["TV & Movies", "Fiction", "Activism"],
+    platforms: ["SPRK", "YouTube Shorts", "Threads"],
+    views: "104.2K",
+    comments: "1.6K",
+    saves: "11.5K",
+    engagement: "11.8%",
+    earnings: "$5,160",
+    date: "6 days ago",
+    brandCallout: "Streaming Partner Ready",
+  },
+  {
+    id: "skin-story-routine",
+    title: "Skin Story Routine: Beauty With Ingredient Receipts",
+    description: "Health and beauty creator explains a transparent routine with accessible product literacy and creator-owned shopping links.",
+    creatorId: "chef-lina",
+    thumbnail: fallbackBeauty,
+    contentType: "Collections",
+    tags: ["Health & Beauty", "Wellness", "Creator Tools"],
+    platforms: ["SPRK", "Instagram", "TikTok"],
+    views: "49.3K",
+    comments: "530",
+    saves: "7.4K",
+    engagement: "9.6%",
+    earnings: "$2,210",
+    date: "1 week ago",
+  },
+  {
+    id: "paper-lanterns",
+    title: "Paper Lanterns: Fiction for Mutual Aid",
+    description: "Short fiction serial and activism explainer pairing creator storytelling with local mutual-aid fundraising prompts.",
+    creatorId: "noor-frames",
+    thumbnail: fallbackFictionActivism,
+    contentType: "Articles",
+    tags: ["Fiction", "Activism", "TV & Movies"],
+    platforms: ["SPRK", "Substack", "Instagram"],
+    views: "37.8K",
+    comments: "690",
+    saves: "5.9K",
+    engagement: "10.1%",
+    earnings: "$1,880",
+    date: "1 week ago",
+  },
+];
+
+const dealsSeed: Deal[] = [
+  { id: "nike-katz", brand: "Nike x SPRK Drops", title: "Dance challenge launch package", amount: "$12,500", status: "In Escrow", due: "Due Jun 18", terms: "Three short-form cuts, usage cleared for 30-day campaign, creator retains source package." },
+  { id: "sonic-loop", brand: "Sonic Archive", title: "Music education activation", amount: "$6,800", status: "Pending", due: "Response by Jun 12", terms: "One educational clip, one live Q&A prompt set, 75% creator share after escrow acceptance." },
+  { id: "thread-market", brand: "Thread Market", title: "Streetwear collection recap", amount: "$4,200", status: "Paid", due: "Paid Jun 04", terms: "Completed collection recap with shoppable article cards and proof-of-performance export." },
+];
+
+const messages: Message[] = [
+  { id: "m1", sender: "Nike x SPRK Drops", subject: "Partnership opportunity: Bring in the Katz", body: "We would like to discuss activating the line dance cut as a creator-owned campaign. The package metadata and Pavilion performance are exactly what our team needs to review.", time: "2h ago", unread: true },
+  { id: "m2", sender: "SPRK System", subject: "Your content is trending in Music Scene", body: "Congratulations. Bring in the Katz is currently ranked in the top music and dance lane, with healthy completion and save rates.", time: "Today", unread: true },
+  { id: "m3", sender: "SPRK Academy", subject: "Creator education feature request", body: "Your SPRK-OS to Pavilion workflow has been selected for a creator education walkthrough in the next prototype review cycle.", time: "Yesterday", unread: false },
+];
+
+const cultures = ["Gaming & Esports", "Gaming Live-Streaming", "Cooking", "Meditation", "Health & Beauty", "Wellness", "TV & Movies", "Fiction", "Activism", "Fashion & Streetwear", "Music Scene", "Tech & Innovation", "Dance", "Creator Tools", "Drops"];
+
+function creatorFor(id: string) {
+  return creators.find((creator) => creator.id === id) ?? creators[0];
+}
+
+function ShellCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return <div className={`rounded-[var(--r-lg)] border border-[color:var(--border)] bg-[var(--white)] shadow-sm ${className}`}>{children}</div>;
+}
+
+function GradientButton({ children, onClick, disabled = false }: { children: React.ReactNode; onClick?: () => void; disabled?: boolean }) {
+  return (
+    <button type="button" disabled={disabled} onClick={onClick} className="inline-flex items-center justify-center gap-2 rounded-[var(--r-pill)] px-5 py-3 text-sm font-extrabold uppercase tracking-[0.1em] text-[var(--white)] shadow-sm transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50" style={{ backgroundImage: "var(--grad)" }}>
+      {children}
+    </button>
+  );
+}
+
+function SecondaryButton({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
+  return <button type="button" onClick={onClick} className="inline-flex items-center justify-center gap-2 rounded-[var(--r-pill)] border border-[color:var(--border)] bg-[var(--cream)] px-5 py-3 text-sm font-extrabold uppercase tracking-[0.1em] text-[var(--ink)] transition-colors hover:bg-[var(--warm)]">{children}</button>;
+}
+
+function ContentCard({ record, onOpen, onCreator, compact = false }: { record: ContentRecord; onOpen: (id: string) => void; onCreator: (id: string) => void; compact?: boolean }) {
+  const creator = creatorFor(record.creatorId);
+  return (
+    <ShellCard className="overflow-hidden transition-transform duration-300 hover:-translate-y-1">
+      <button type="button" onClick={() => onOpen(record.id)} className="block w-full text-left">
+        <div className={`relative overflow-hidden bg-[var(--navy)] ${compact ? "aspect-[4/3]" : "aspect-video"}`}>
+          <img src={record.thumbnail} alt={`${record.title} preview`} className="h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--ink)]/80 via-transparent to-transparent" />
+          <div className="absolute left-3 top-3 flex flex-wrap gap-2">
+            <span className="rounded-[var(--r-pill)] bg-[var(--white)]/95 px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.1em] text-[var(--ink)]">{record.contentType}</span>
+            {record.source === "sprk-os" && <span className="rounded-[var(--r-pill)] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.1em] text-[var(--white)]" style={{ backgroundImage: "var(--grad)" }}>New from SPRK-OS</span>}
+          </div>
+          <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between gap-2 text-[var(--white)]">
+            <span className="text-xs font-bold">{record.views} views</span>
+            <span className="text-xs font-bold">{record.engagement}</span>
+          </div>
+        </div>
+      </button>
+      <div className="space-y-4 p-4">
+        <button type="button" onClick={() => onCreator(creator.id)} className="flex items-center gap-3 text-left">
+          <img src={creator.avatar} alt="" className="h-10 w-10 rounded-[var(--r-pill)] object-cover" />
+          <span><span className="block text-sm font-extrabold text-[var(--ink)]">{creator.name}</span><span className="block text-xs font-bold text-[var(--mauve)]">{creator.tier} · {creator.handle}</span></span>
+        </button>
+        <div><h3 className="text-lg font-extrabold leading-tight tracking-[-0.03em] text-[var(--ink)]">{record.title}</h3><p className="mt-2 line-clamp-2 text-sm font-light leading-relaxed text-[var(--steel)]">{record.description}</p></div>
+        {record.packageMetadata && <div className="rounded-[var(--r)] border border-[color:var(--border)] bg-[var(--cream)] p-3"><div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--crimson)]"><Sparkles className="h-3.5 w-3.5" /> {record.packageMetadata.commerceLane}</div><p className="mt-1 text-xs font-semibold text-[var(--steel)]">{record.packageMetadata.format} · {record.packageMetadata.packageStatus}</p></div>}
+        <div className="flex flex-wrap gap-2">{record.tags.map((tag) => <span key={tag} className="rounded-[var(--r-pill)] bg-[var(--cream)] px-3 py-1 text-xs font-bold text-[var(--steel)]">{tag}</span>)}</div>
+        <div className="grid grid-cols-3 gap-2 text-center text-xs font-bold text-[var(--steel)]"><span className="rounded-[var(--r)] bg-[var(--cream)] p-2">{record.comments}<br />comments</span><span className="rounded-[var(--r)] bg-[var(--cream)] p-2">{record.saves}<br />saves</span><span className="rounded-[var(--r)] bg-[var(--cream)] p-2">{record.earnings}<br />earned</span></div>
+        <div className="flex flex-wrap items-center justify-between gap-3">{record.brandCallout && <button type="button" onClick={() => toast("Opening brand partnership details…")} className="text-xs font-extrabold uppercase tracking-[0.1em] text-[var(--crimson)]">{record.brandCallout}</button>}<button type="button" onClick={() => onOpen(record.id)} className="ml-auto inline-flex items-center gap-1 text-sm font-extrabold text-[var(--ember)]">View Details <ChevronRight className="h-4 w-4" /></button></div>
+      </div>
+    </ShellCard>
+  );
+}
+
 export default function Pavilion() {
-  // Search & Taxonomy Filter State
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
-  
-  // Escrow Deal Modal State
-  const [isEscrowOpen, setIsEscrowOpen] = useState(false);
-  const [selectedCreator, setSelectedCreator] = useState<any>(null);
-  const [dealBudget, setDealBudget] = useState("5000");
-  const [dealTerms, setDealTerms] = useState("30-second integrated overlay drop during next livestream.");
+  const [location] = useLocation();
+  const hasHandoff = location.includes("handoff=sprk-os");
+  const [activeTab, setActiveTab] = useState<TabKey>(hasHandoff ? "content" : "discovery");
+  const [query, setQuery] = useState("");
+  const [tier, setTier] = useState("All");
+  const [selectedCultures, setSelectedCultures] = useState<string[]>([]);
+  const [followed, setFollowed] = useState<string[]>([]);
+  const [modal, setModal] = useState<ModalState>(null);
+  const [deals, setDeals] = useState(dealsSeed);
+  const [selectedMessage, setSelectedMessage] = useState(messages[0].id);
+  const [replyOpen, setReplyOpen] = useState(false);
+  const [replyText, setReplyText] = useState("");
+  const [trendingMode, setTrendingMode] = useState<"creators" | "content">("creators");
+  const [sortMode, setSortMode] = useState("Recency");
 
-  // Realistic Grounded Creators
-  const featuredCreators = [
-    {
-      id: 1,
-      name: "Myron 'KingMyron' Sterling",
-      handle: "@kingmyron",
-      niche: "Gaming & Esports",
-      metric: "1.2M Reach",
-      rate: "$2,500 / Drop",
-      image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=300&q=80",
-      badge: "Verified Partner",
-      surveyResults: { culture: "Hardcore Competitive", vibe: "High-Octane", focus: "First-Person Shooters" }
-    },
-    {
-      id: 2,
-      name: "Aria 'Valkyrie' Chen",
-      handle: "@aria_valk",
-      niche: "Fashion & Streetwear",
-      metric: "450K Reach",
-      rate: "$1,800 / Drop",
-      image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
-      badge: "Rising Star",
-      surveyResults: { culture: "Cyberpunk / Techwear", vibe: "Aesthetic / Minimalist", focus: "Limited Sneaker Drops" }
-    },
-    {
-      id: 3,
-      name: "Marcus 'SciFi_Guy' Vance",
-      handle: "@scifi_vance",
-      niche: "Sci-Fi & Comics",
-      metric: "820K Reach",
-      rate: "$2,000 / Drop",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
-      badge: "Official Expert",
-      surveyResults: { culture: "Lore & Theory", vibe: "Deep-Dive / Analytical", focus: "Blade Runner & Timelines" }
-    },
-    {
-      id: 4,
-      name: "Yuki 'Momo_Cos' Tanaka",
-      handle: "@yuki_momo",
-      niche: "Anime & Cosplay",
-      metric: "680K Reach",
-      rate: "$1,500 / Drop",
-      image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=300&q=80",
-      badge: "CCXP Master",
-      surveyResults: { culture: "Cosplay & Fabrication", vibe: "Creative / Tutorial", focus: "Cyberpunk Builds" }
-    }
-  ];
+  const filteredContent = useMemo(() => baseContent.filter((record) => {
+    const creator = creatorFor(record.creatorId);
+    const textMatch = `${record.title} ${record.description} ${creator.name} ${record.tags.join(" ")}`.toLowerCase().includes(query.toLowerCase());
+    const tierMatch = tier === "All" || creator.tier === tier;
+    const cultureMatch = selectedCultures.length === 0 || selectedCultures.some((culture) => record.tags.includes(culture) || creator.focus.includes(culture));
+    return textMatch && tierMatch && cultureMatch;
+  }), [query, tier, selectedCultures]);
 
-  // Realistic Grounded Content Library (Last 30 Days)
-  const contentItems = [
-    {
-      id: 101,
-      title: "SPRK x Balenciaga Drop Collection: Live Coverage & Exclusive Drop Cards",
-      creator: "@aria_valk",
-      type: "Article",
-      interest: "Fashion & Drops",
-      views: "16.4K",
-      image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=600&q=80",
-      desc: "An inside look at the limited-edition techwear drops featuring secure smart-contract physical redemption keys."
-    },
-    {
-      id: 102,
-      title: "Elden Ring GOTY DLC Blindfolded Speedrun (Timestamp 10-Second Hook)",
-      creator: "@kingmyron",
-      type: "Live Stream",
-      interest: "Gaming & Esports",
-      views: "48.2K",
-      image: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80",
-      desc: "Watch the legendary full stream run where interactive poll overlays determined the path in real-time."
-    },
-    {
-      id: 103,
-      title: "Blade Runner 2099: Casting Leaks, Timeline Analysis & Production Rumors",
-      creator: "@scifi_vance",
-      type: "Video",
-      interest: "Sci-Fi & Fantasy",
-      views: "12.5K",
-      image: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?auto=format&fit=crop&w=600&q=80",
-      desc: "Breaking down the recent scheduling rumors and what they mean for the Cyberpunk timeline expansion."
-    },
-    {
-      id: 104,
-      title: "Cyberpunk Netrunner Momo Con Cosplay Build Process & Fabrications",
-      creator: "@yuki_momo",
-      type: "Shorts",
-      interest: "Anime & Comics",
-      views: "24.1K",
-      image: "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=600&q=80",
-      desc: "How I built the illuminated LED wiring panels for my Momo Con stage appearance under $200."
-    },
-    {
-      id: 105,
-      title: "Streetwear Drops 2026: Sneaker Drop Escrow Coupon Deployment Tutorial",
-      creator: "@aria_valk",
-      type: "Video",
-      interest: "Creator Resources",
-      views: "8.9K",
-      image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80",
-      desc: "A quick walkthrough on using SPRK-OS to deploy secure discount smart contracts directly into video feeds."
-    },
-    {
-      id: 106,
-      title: "Momo Con & Comic-Con 2026: Live Stage Highlights & Cosplay Winners",
-      creator: "@yuki_momo",
-      type: "Live Stream",
-      interest: "Events & Expos",
-      views: "31.2K",
-      image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80",
-      desc: "Streaming live from the exhibition floor with active interactive sponsor overlays and real-time polls."
-    }
-  ];
-
-  // Handle taxonomy filtering
-  const handleTypeChange = (type: string) => {
-    setSelectedTypes(prev => 
-      prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
-    );
-  };
-
-  const handleInterestChange = (interest: string) => {
-    setSelectedInterests(prev => 
-      prev.includes(interest) ? prev.filter(i => i !== interest) : [...prev, interest]
-    );
-  };
-
-  const filteredContent = contentItems.filter(item => {
-    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          item.creator.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          item.desc.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesType = selectedTypes.length === 0 || selectedTypes.includes(item.type);
-    const matchesInterest = selectedInterests.length === 0 || selectedInterests.includes(item.interest);
-    
-    return matchesSearch && matchesType && matchesInterest;
-  });
-
-  const openEscrowModal = (creator: any) => {
-    setSelectedCreator(creator);
-    setIsEscrowOpen(true);
-  };
-
-  const handleFundEscrow = () => {
-    toast.success(`Smart Contract Escrow initialized for ${selectedCreator.name}! $${dealBudget} locked in secure escrow.`);
-    setIsEscrowOpen(false);
-  };
+  const toggleCulture = (culture: string) => setSelectedCultures((current) => current.includes(culture) ? current.filter((item) => item !== culture) : [...current, culture]);
+  const toggleFollow = (id: string) => setFollowed((current) => { const next = current.includes(id) ? current.filter((item) => item !== id) : [...current, id]; toast.success(next.includes(id) ? "Creator followed." : "Creator unfollowed."); return next; });
+  const activeContent = modal?.type === "content" ? baseContent.find((record) => record.id === modal.id) : undefined;
+  const activeCreator = modal?.type === "creator" ? creators.find((creator) => creator.id === modal.id) : activeContent ? creatorFor(activeContent.creatorId) : undefined;
+  const activeDeal = modal?.type === "deal" ? deals.find((deal) => deal.id === modal.id) : undefined;
+  const currentMessage = messages.find((message) => message.id === selectedMessage) ?? messages[0];
+  const acceptDeal = (dealId: string) => { setDeals((current) => current.map((deal) => deal.id === dealId ? { ...deal, status: "Accepted" } : deal)); toast.success("Deal accepted for prototype review."); };
 
   return (
     <SharedLayout activeSite="pavilion">
-      <div className="bg-[#F5F0EB]/30 min-h-screen py-8">
-        <div className="container max-w-6xl">
-          
-          {/* 1. HERO SECTION: Confirmed Tagline & Full Subhead */}
-          <div className="bg-white border border-black/5 rounded-3xl p-8 lg:p-12 mb-8 shadow-sm relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-[#FF6B35]/10 to-[#E8003D]/10 rounded-full blur-3xl -z-10"></div>
-            <div className="max-w-3xl">
-              <Badge className="bg-gradient-to-r from-[#FF6B35] to-[#E8003D] text-white font-bold uppercase rounded-full px-3 py-1 text-xs mb-4">
-                SPRK Pavilion Marketplace
-              </Badge>
-              <h1 className="text-3xl lg:text-5xl font-extrabold text-[#0A0A0F] leading-tight tracking-tight">
-                Culture = Credibility.<br />
-                Credibility = Commerce.<br />
-                <span className="bg-gradient-to-r from-[#FF6B35] via-[#E8003D] to-[#CC0055] bg-clip-text text-transparent">
-                  SPRK Pavilion - Built for Both.
-                </span>
-              </h1>
-              <p className="text-sm lg:text-base text-[#4A5278] mt-4 leading-relaxed font-medium">
-                The ultimate Spotify-style marketplace connecting cultural trendsetters with elite brands. Deploy instant, secure sponsorship campaigns backed by real-time smart contract escrow. Lock in budgets, verify reach metrics, and deploy interactive overlay campaigns in minutes.
-              </p>
-            </div>
-          </div>
+      <div className="min-h-screen bg-[var(--cream)] px-4 py-6 text-[var(--ink)] md:px-6">
+        <div className="mx-auto max-w-[1440px] space-y-5">
+          <header className="grid gap-4 rounded-[var(--r-lg)] border border-[color:var(--border)] bg-[var(--white)] p-5 shadow-sm lg:grid-cols-[1fr_auto] lg:items-end">
+            <div><span className="label-caps text-[var(--ember)]">SPRK Pavilion Marketplace</span><h1 className="mt-2 text-4xl font-extrabold leading-none tracking-[-0.05em] md:text-5xl">Culture = Credibility. Credibility = Commerce.</h1><p className="mt-3 max-w-3xl text-sm font-light leading-relaxed text-[var(--steel)]">Discover verified creators, manage syndicated SPRKs, track transparent deals, and move campaign conversations through one connected marketplace.</p></div>
+            <div className="flex flex-wrap gap-2"><GradientButton onClick={() => setModal({ type: "info", id: "escrow" })}><HandCoins className="h-4 w-4" /> Fund Escrow</GradientButton><SecondaryButton onClick={() => setModal({ type: "info", id: "rights" })}><ShieldCheck className="h-4 w-4" /> Secure Rights</SecondaryButton></div>
+          </header>
 
-          {/* 2. MAIN LAYOUT GRID */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
-            {/* LEFT COLUMN: Spotify-Style Taxonomy Filters */}
-            <aside className="lg:col-span-3 w-full">
-              <div className="sticky top-24 flex flex-col gap-6">
-                
-                {/* Search Field */}
-                <div className="bg-white border border-black/5 rounded-2xl p-5 shadow-sm">
-                  <h4 className="text-xs font-bold text-[#0A0A0F] uppercase tracking-wider mb-3">Search Creators & Content</h4>
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8E7A8A]" />
-                    <Input
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search titles, tags, handles..."
-                      className="pl-9 bg-[#F5F0EB]/50 border border-black/5 rounded-xl h-10 text-xs font-medium focus:ring-[#FF6B35]"
-                    />
-                  </div>
-                </div>
+          {hasHandoff && <ShellCard className="grid gap-4 p-4 md:grid-cols-[120px_1fr_auto] md:items-center"><img src={generatedThumbnail} alt="Bring in the Katz marketplace thumbnail" className="aspect-[9/16] h-32 rounded-[var(--r)] object-cover" /><div><span className="inline-flex rounded-[var(--r-pill)] px-3 py-1 text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--white)]" style={{ backgroundImage: "var(--grad)" }}>New from SPRK-OS</span><h2 className="mt-2 text-2xl font-extrabold tracking-[-0.04em] text-[var(--ink)]">Bring in the Katz is now in Pavilion with required package data.</h2><p className="mt-1 text-sm font-light text-[var(--steel)]">Metadata includes origin, audio, format, rights state, commerce lane, health status, platforms, performance, and earnings signals.</p></div><button type="button" onClick={() => toast.success("Verified: thumbnail, metadata, creator, platforms, and deal-readiness are present.")} className="rounded-[var(--r-pill)] border border-[color:var(--success)] bg-[var(--white)] px-5 py-3 text-sm font-extrabold uppercase tracking-[0.1em] text-[var(--success)]">Verify Path</button></ShellCard>}
 
-                {/* Taxonomy Filter Panel */}
-                <div className="bg-white border border-black/5 rounded-2xl p-5 shadow-sm flex flex-col gap-6">
-                  
-                  {/* Content Type Filters */}
-                  <div>
-                    <h4 className="text-xs font-bold text-[#0A0A0F] uppercase tracking-wider mb-3 pb-2 border-b border-black/5 flex items-center gap-1.5">
-                      <Video className="w-3.5 h-3.5 text-[#FF6B35]" />
-                      <span>Content Type</span>
-                    </h4>
-                    <div className="flex flex-col gap-2.5">
-                      {["Live Stream", "Video", "Article", "Shorts"].map((type) => (
-                        <div key={type} className="flex items-center gap-2">
-                          <Checkbox
-                            id={`type-${type}`}
-                            checked={selectedTypes.includes(type)}
-                            onCheckedChange={() => handleTypeChange(type)}
-                          />
-                          <label htmlFor={`type-${type}`} className="text-xs font-bold text-[#4A5278] cursor-pointer select-none">
-                            {type}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+          <nav className="flex gap-2 overflow-x-auto rounded-[var(--r-lg)] border border-[color:var(--border)] bg-[var(--white)] p-2 shadow-sm" aria-label="Pavilion sections">{tabs.map((tab) => <button key={tab.key} type="button" onClick={() => setActiveTab(tab.key)} className={`whitespace-nowrap rounded-[var(--r-pill)] px-4 py-2 text-sm font-extrabold transition-colors ${activeTab === tab.key ? "text-[var(--white)]" : "text-[var(--steel)] hover:bg-[var(--cream)] hover:text-[var(--ink)]"}`} style={activeTab === tab.key ? { backgroundImage: "var(--grad)" } : undefined}>{tab.label}</button>)}</nav>
 
-                  {/* Interest Category Filters */}
-                  <div>
-                    <h4 className="text-xs font-bold text-[#0A0A0F] uppercase tracking-wider mb-3 pb-2 border-b border-black/5 flex items-center gap-1.5">
-                      <Flame className="w-3.5 h-3.5 text-[#E8003D]" />
-                      <span>Interest Category</span>
-                    </h4>
-                    <div className="flex flex-col gap-2.5">
-                      {[
-                        "Gaming & Esports",
-                        "Sci-Fi & Fantasy",
-                        "Anime & Comics",
-                        "Fashion & Drops",
-                        "Events & Expos",
-                        "Creator Resources"
-                      ].map((interest) => (
-                        <div key={interest} className="flex items-center gap-2">
-                          <Checkbox
-                            id={`interest-${interest}`}
-                            checked={selectedInterests.includes(interest)}
-                            onCheckedChange={() => handleInterestChange(interest)}
-                          />
-                          <label htmlFor={`interest-${interest}`} className="text-xs font-bold text-[#4A5278] cursor-pointer select-none">
-                            {interest}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+          {activeTab === "discovery" && <div className="grid gap-5 lg:grid-cols-[280px_1fr_280px]">
+            <ShellCard className="h-fit p-4 lg:sticky lg:top-4"><div className="flex items-center gap-2 text-sm font-extrabold text-[var(--ink)]"><Filter className="h-4 w-4 text-[var(--ember)]" /> Filters</div><label className="mt-4 block text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--mauve)]">Search</label><div className="mt-2 flex items-center gap-2 rounded-[var(--r-pill)] border border-[color:var(--border)] bg-[var(--cream)] px-3 py-2"><Search className="h-4 w-4 text-[var(--mauve)]" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search creators & content" className="w-full bg-transparent text-sm font-semibold text-[var(--ink)] outline-none placeholder:text-[var(--mauve)]" /></div><label className="mt-4 block text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--mauve)]">Creator Tier</label><select value={tier} onChange={(event) => setTier(event.target.value)} className="mt-2 w-full rounded-[var(--r)] border border-[color:var(--border)] bg-[var(--white)] p-3 text-sm font-bold text-[var(--ink)]">{["All", "Verified", "Top Creator", "Elite"].map((item) => <option key={item}>{item}</option>)}</select><div className="mt-4 max-h-[560px] space-y-2 overflow-auto pr-1"><span className="block text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--mauve)]">Culture Focus</span>{cultures.map((culture) => <label key={culture} className="flex items-center gap-2 rounded-[var(--r)] bg-[var(--cream)] px-3 py-2 text-sm font-semibold text-[var(--steel)]"><input type="checkbox" checked={selectedCultures.includes(culture)} onChange={() => toggleCulture(culture)} className="accent-[var(--ember)]" />{culture}</label>)}</div><button type="button" onClick={() => { setSelectedCultures([]); setTier("All"); setQuery(""); setActiveTab("content"); toast("Showing the expanded Pavilion content library."); }} className="mt-4 flex w-full items-center justify-center gap-2 rounded-[var(--r-pill)] border border-[color:var(--ember)] bg-[var(--white)] px-4 py-3 text-xs font-extrabold uppercase tracking-[0.1em] text-[var(--ember)] transition hover:bg-[var(--cream)]">View More <ChevronRight className="h-4 w-4" /></button></ShellCard>
+            <main className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{filteredContent.map((record) => <ContentCard key={record.id} record={record} onOpen={(id) => setModal({ type: "content", id })} onCreator={(id) => setModal({ type: "creator", id })} />)}{filteredContent.length === 0 && <ShellCard className="p-8 text-center text-sm font-semibold text-[var(--steel)] md:col-span-2 xl:col-span-3">No matching creator content yet. Clear filters or search another culture lane.</ShellCard>}</main>
+            <aside className="space-y-4"><ShellCard className="p-4"><h2 className="text-lg font-extrabold text-[var(--ink)]">Trending Creators</h2><div className="mt-3 space-y-3">{creators.map((creator) => <div key={creator.id} className="flex items-center gap-3"><button type="button" onClick={() => setModal({ type: "creator", id: creator.id })}><img src={creator.avatar} alt="" className="h-10 w-10 rounded-[var(--r-pill)] object-cover" /></button><div className="min-w-0 flex-1"><p className="truncate text-sm font-extrabold text-[var(--ink)]">{creator.name}</p><p className="text-xs font-bold text-[var(--mauve)]">{creator.followers}</p></div><button type="button" onClick={() => toggleFollow(creator.id)} className={`rounded-[var(--r-pill)] px-3 py-1 text-xs font-extrabold ${followed.includes(creator.id) ? "bg-[var(--success)] text-[var(--white)]" : "bg-[var(--cream)] text-[var(--ink)]"}`}>{followed.includes(creator.id) ? "Following" : "Follow"}</button></div>)}</div></ShellCard><ShellCard className="p-4"><h2 className="text-lg font-extrabold text-[var(--ink)]">Trending Content</h2><div className="mt-3 space-y-3">{baseContent.slice(0, 3).map((record) => <button key={record.id} type="button" onClick={() => setModal({ type: "content", id: record.id })} className="flex w-full items-center gap-3 text-left"><img src={record.thumbnail} alt="" className="h-12 w-12 rounded-[var(--r)] object-cover" /><span><span className="line-clamp-1 text-sm font-extrabold text-[var(--ink)]">{record.title}</span><span className="text-xs font-bold text-[var(--mauve)]">{record.views} views</span></span></button>)}</div></ShellCard><ShellCard className="p-4"><h2 className="text-lg font-extrabold text-[var(--ink)]">Ready to partner?</h2><p className="mt-2 text-sm font-light text-[var(--steel)]">Brands deploy campaigns, creators earn, culture wins.</p><div className="mt-4"><GradientButton onClick={() => setModal({ type: "info", id: "marketplace" })}>Join Marketplace <ArrowRight className="h-4 w-4" /></GradientButton></div></ShellCard></aside>
+          </div>}
 
-                  {/* Clear Filters Button */}
-                  {(selectedTypes.length > 0 || selectedInterests.length > 0 || searchQuery !== "") && (
-                    <button
-                      onClick={() => {
-                        setSelectedTypes([]);
-                        setSelectedInterests([]);
-                        setSearchQuery("");
-                        toast.success("Filters cleared successfully.");
-                      }}
-                      className="w-full text-center text-xs font-extrabold text-[#FF6B35] hover:underline"
-                    >
-                      Clear All Active Filters
-                    </button>
-                  )}
+          {activeTab === "content" && <section className="space-y-4"><ShellCard className="flex flex-wrap items-center justify-between gap-3 p-4"><div><h2 className="text-2xl font-extrabold text-[var(--ink)]">My SPRKs</h2><p className="text-sm font-light text-[var(--steel)]">Syndicated content from SPRK-OS and Pavilion uploads.</p></div><div className="flex flex-wrap gap-2">{["Recency", "Views", "Engagement", "Earnings"].map((item) => <button key={item} type="button" onClick={() => { setSortMode(item); toast(`Sorted by ${item}.`); }} className={`rounded-[var(--r-pill)] px-4 py-2 text-xs font-extrabold uppercase tracking-[0.08em] ${sortMode === item ? "bg-[var(--ink)] text-[var(--white)]" : "bg-[var(--cream)] text-[var(--steel)]"}`}>{item}</button>)}</div></ShellCard><div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{baseContent.map((record) => <ContentCard key={record.id} record={record} compact onOpen={(id) => setModal({ type: "content", id })} onCreator={(id) => setModal({ type: "creator", id })} />)}</div></section>}
 
-                </div>
+          {activeTab === "trending" && <section className="space-y-4"><ShellCard className="flex flex-wrap items-center justify-between gap-3 p-4"><div><h2 className="text-2xl font-extrabold text-[var(--ink)]">Trending Now</h2><p className="text-sm font-light text-[var(--steel)]">Last updated 2 minutes ago.</p></div><div className="flex gap-2"><SecondaryButton onClick={() => setTrendingMode("creators")}><Users className="h-4 w-4" /> Creators</SecondaryButton><SecondaryButton onClick={() => setTrendingMode("content")}><TrendingUp className="h-4 w-4" /> Content</SecondaryButton></div></ShellCard><div className="grid gap-4 md:grid-cols-2">{trendingMode === "creators" ? creators.map((creator) => <ShellCard key={creator.id} className="flex items-center gap-4 p-4"><img src={creator.avatar} alt="" className="h-16 w-16 rounded-[var(--r)] object-cover" /><button type="button" onClick={() => setModal({ type: "creator", id: creator.id })} className="min-w-0 flex-1 text-left"><h3 className="text-lg font-extrabold text-[var(--ink)]">{creator.name}</h3><p className="text-sm font-bold text-[var(--mauve)]">{creator.tier} · {creator.followers} followers</p><p className="line-clamp-1 text-xs font-semibold text-[var(--steel)]">{creator.focus.join(" · ")}</p></button><button type="button" onClick={() => toggleFollow(creator.id)} className="rounded-[var(--r-pill)] bg-[var(--cream)] px-4 py-2 text-xs font-extrabold text-[var(--ink)]">{followed.includes(creator.id) ? "Following" : "Follow"}</button></ShellCard>) : baseContent.map((record) => <ContentCard key={record.id} record={record} compact onOpen={(id) => setModal({ type: "content", id })} onCreator={(id) => setModal({ type: "creator", id })} />)}</div></section>}
 
-              </div>
-            </aside>
+          {activeTab === "deals" && <section className="space-y-4"><ShellCard className="p-4"><h2 className="text-2xl font-extrabold text-[var(--ink)]">My Deals & Partnerships</h2><p className="text-sm font-light text-[var(--steel)]">Transparent sponsorship offers with simulated smart-contract escrow status.</p></ShellCard><div className="grid gap-4">{deals.map((deal) => <ShellCard key={deal.id} className="grid gap-4 p-4 md:grid-cols-[auto_1fr_auto_auto] md:items-center"><div className="flex h-14 w-14 items-center justify-center rounded-[var(--r)] bg-[var(--cream)] text-[var(--ember)]"><HeartHandshake className="h-7 w-7" /></div><div><h3 className="text-lg font-extrabold text-[var(--ink)]">{deal.title}</h3><p className="text-sm font-bold text-[var(--mauve)]">{deal.brand} · {deal.due}</p></div><div className="text-2xl font-extrabold text-[var(--ink)]">{deal.amount}</div><button type="button" onClick={() => setModal({ type: "deal", id: deal.id })} className={`rounded-[var(--r-pill)] px-4 py-2 text-xs font-extrabold uppercase tracking-[0.08em] ${deal.status === "Pending" ? "bg-[var(--warning)] text-[var(--white)]" : deal.status === "Returned" ? "bg-[var(--mauve)] text-[var(--white)]" : deal.status === "In Escrow" ? "bg-[var(--steel)] text-[var(--white)]" : "bg-[var(--success)] text-[var(--white)]"}`}>{deal.status}</button></ShellCard>)}</div></section>}
 
-            {/* RIGHT COLUMN: Featured Ribbon + Content Grid */}
-            <main className="lg:col-span-9 w-full flex flex-col gap-8">
-              
-              {/* HORIZONTAL SCROLLING FEATURED CREATORS RIBBON */}
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h3 className="text-lg font-bold text-[#0A0A0F]">Featured Creators</h3>
-                    <p className="text-xs text-[#4A5278] mt-0.5">High-impact creators with verified survey profiles</p>
-                  </div>
-                  <span className="text-xs font-bold text-[#FF6B35] hover:underline cursor-pointer">View All Creators</span>
-                </div>
-
-                {/* Scrolling Container */}
-                <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scroll-smooth">
-                  {featuredCreators.map((creator) => (
-                    <div 
-                      key={creator.id} 
-                      className="bg-white border border-black/5 rounded-2xl p-4 shadow-sm min-w-[280px] max-w-[280px] flex flex-col justify-between hover:border-[#FF6B35]/20 transition-all shrink-0"
-                    >
-                      <div>
-                        {/* Creator Header */}
-                        <div className="flex items-center gap-3 mb-3">
-                          <div className="w-12 h-12 rounded-full overflow-hidden border border-black/5 bg-[#F5F0EB]">
-                            <img src={creator.image} alt={creator.name} className="w-full h-full object-cover" />
-                          </div>
-                          <div>
-                            <span className="text-xs font-extrabold text-[#0A0A0F] block leading-snug">{creator.name}</span>
-                            <span className="text-[10px] text-[#8E7A8A] block">{creator.handle}</span>
-                          </div>
-                        </div>
-
-                        {/* Niche & Metrics */}
-                        <div className="flex flex-wrap gap-1.5 mb-3">
-                          <Badge className="bg-[#F5F0EB] text-[#0A0A0F] border border-black/5 text-[9px] font-bold uppercase rounded-full">
-                            {creator.niche}
-                          </Badge>
-                          <Badge className="bg-[#FF6B35]/10 text-[#FF6B35] border border-[#FF6B35]/20 text-[9px] font-bold uppercase rounded-full">
-                            {creator.metric}
-                          </Badge>
-                        </div>
-
-                        {/* Culture Profile Survey Preview */}
-                        <div className="bg-[#F5F0EB]/30 rounded-xl p-3 text-[10px] font-semibold text-[#4A5278] flex flex-col gap-1.5 mb-4 border border-black/5">
-                          <div className="flex justify-between">
-                            <span>Culture Focus:</span>
-                            <span className="text-[#0A0A0F] font-extrabold">{creator.surveyResults.culture}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Vibe:</span>
-                            <span className="text-[#0A0A0F] font-extrabold">{creator.surveyResults.vibe}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Brand Deal Action CTA */}
-                      <div className="flex items-center justify-between border-t border-black/5 pt-3">
-                        <span className="text-xs font-extrabold text-[#0A0A0F]">{creator.rate}</span>
-                        <button 
-                          onClick={() => openEscrowModal(creator)}
-                          className="flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider text-white bg-[#0A0A0F] hover:bg-[#FF6B35] px-3 py-2 rounded-full transition-colors"
-                        >
-                          <span>Propose Deal</span>
-                          <ArrowRight className="w-3 h-3" />
-                        </button>
-                      </div>
-
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* DYNAMIC STREAMING CONTENT GRID */}
-              <div>
-                <div className="flex items-center justify-between mb-4 border-b border-black/5 pb-2">
-                  <div>
-                    <h3 className="text-lg font-bold text-[#0A0A0F]">Streaming Content Library</h3>
-                    <p className="text-xs text-[#4A5278] mt-0.5">Explore active content streams, articles, and shorts</p>
-                  </div>
-                  <Badge className="bg-[#0A0A0F] text-white text-xs font-bold px-3 py-1 rounded-full">
-                    {filteredContent.length} Assets Found
-                  </Badge>
-                </div>
-
-                {/* Library Grid */}
-                {filteredContent.length === 0 ? (
-                  <div className="bg-white border border-black/5 rounded-2xl p-12 text-center shadow-sm">
-                    <h4 className="font-bold text-[#0A0A0F] mb-1">No assets match your filters</h4>
-                    <p className="text-xs text-[#4A5278]">Try clearing some category checkboxes or refining your search term.</p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {filteredContent.map((item) => (
-                      <div key={item.id} className="bg-white border border-black/5 rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between hover:border-[#FF6B35]/20 transition-all">
-                        
-                        {/* Card Image Header */}
-                        <div className="relative aspect-video bg-[#F5F0EB] overflow-hidden">
-                          <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
-                          <div className="absolute top-3 left-3 flex gap-1.5">
-                            <Badge className="bg-[#0A0A0F] text-white text-[9px] font-extrabold uppercase rounded-full px-2.5 py-1">
-                              {item.type}
-                            </Badge>
-                            <Badge className="bg-white/90 text-[#0A0A0F] border border-black/5 text-[9px] font-extrabold uppercase rounded-full px-2.5 py-1">
-                              {item.interest}
-                            </Badge>
-                          </div>
-                          <div className="absolute bottom-3 right-3 bg-black/70 text-white text-[10px] font-bold px-2 py-0.5 rounded">
-                            {item.views} views
-                          </div>
-                        </div>
-
-                        {/* Card Body */}
-                        <div className="p-5 flex-1 flex flex-col justify-between gap-4">
-                          <div>
-                            <span className="text-[10px] font-extrabold text-[#FF6B35] uppercase tracking-wider block mb-1">
-                              By {item.creator}
-                            </span>
-                            <h4 className="text-sm font-bold text-[#0A0A0F] leading-snug mb-2">
-                              {item.title}
-                            </h4>
-                            <p className="text-xs text-[#4A5278] leading-relaxed">
-                              {item.desc}
-                            </p>
-                          </div>
-
-                          {/* Quick Overlay Action */}
-                          <div className="border-t border-black/5 pt-3 flex items-center justify-between">
-                            <button 
-                              onClick={() => toast.info(`Viewing live analytics for campaign: ${item.id}`)}
-                              className="text-xs font-bold text-[#4A5278] hover:text-[#0A0A0F] flex items-center gap-1"
-                            >
-                              <SlidersHorizontal className="w-3.5 h-3.5" />
-                              <span>View Metrics</span>
-                            </button>
-                            <button 
-                              onClick={() => toast.success(`Interactive overlay preview active for stream ${item.id}!`)}
-                              className="text-xs font-extrabold text-[#FF6B35] hover:underline"
-                            >
-                              Launch Stream Preview
-                            </button>
-                          </div>
-                        </div>
-
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-            </main>
-
-          </div>
-
+          {activeTab === "messages" && <section className="grid gap-4 lg:grid-cols-[340px_1fr]"><ShellCard className="overflow-hidden"><div className="border-b border-[color:var(--border)] p-4"><h2 className="text-2xl font-extrabold text-[var(--ink)]">Inbox</h2></div>{messages.map((message) => <button key={message.id} type="button" onClick={() => { setSelectedMessage(message.id); setReplyOpen(false); }} className={`flex w-full gap-3 border-b border-[color:var(--border)] p-4 text-left transition-colors hover:bg-[var(--cream)] ${selectedMessage === message.id ? "bg-[var(--cream)]" : "bg-[var(--white)]"}`}><span className="mt-1 h-3 w-3 rounded-[var(--r-pill)] bg-[var(--ember)] opacity-100" style={{ opacity: message.unread ? 1 : 0.18 }} /><span><span className="block text-sm font-extrabold text-[var(--ink)]">{message.sender}</span><span className="line-clamp-1 text-sm font-bold text-[var(--steel)]">{message.subject}</span><span className="text-xs font-semibold text-[var(--mauve)]">{message.time}</span></span></button>)}</ShellCard><ShellCard className="p-5"><span className="label-caps text-[var(--ember)]">{currentMessage.sender}</span><h2 className="mt-2 text-3xl font-extrabold tracking-[-0.04em] text-[var(--ink)]">{currentMessage.subject}</h2><p className="mt-4 rounded-[var(--r)] bg-[var(--cream)] p-4 text-sm font-light leading-relaxed text-[var(--steel)]">{currentMessage.body}</p>{replyOpen ? <div className="mt-4 space-y-3"><textarea value={replyText} onChange={(event) => setReplyText(event.target.value)} className="min-h-28 w-full rounded-[var(--r)] border border-[color:var(--border)] p-3 text-sm outline-none focus:ring-2 focus:ring-[var(--ember)]" placeholder="Write a prototype reply…" /><GradientButton disabled={!replyText.trim()} onClick={() => { toast.success("Reply simulated in thread."); setReplyText(""); setReplyOpen(false); }}>Send Reply</GradientButton></div> : <div className="mt-4"><SecondaryButton onClick={() => setReplyOpen(true)}><MessageCircle className="h-4 w-4" /> Reply</SecondaryButton></div>}</ShellCard></section>}
         </div>
       </div>
 
-      {/* SMART CONTRACT ESCROW DEAL MODAL */}
-      {isEscrowOpen && selectedCreator && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white border border-black/10 rounded-3xl p-6 lg:p-8 max-w-lg w-full shadow-2xl relative flex flex-col gap-6 animate-in fade-in zoom-in duration-200">
-            
-            {/* Close Button */}
-            <button 
-              onClick={() => setIsEscrowOpen(false)}
-              className="absolute top-4 right-4 p-1 rounded-full hover:bg-[#F5F0EB] transition-colors"
-            >
-              <X className="w-5 h-5 text-[#4A5278]" />
-            </button>
-
-            {/* Modal Header */}
-            <div className="border-b border-black/5 pb-4">
-              <div className="flex items-center gap-2 mb-1.5">
-                <ShieldCheck className="w-5 h-5 text-[#FF6B35]" />
-                <span className="text-[10px] font-bold text-[#FF6B35] uppercase tracking-widest">SPRK Escrow Smart Contract</span>
-              </div>
-              <h3 className="text-lg font-bold text-[#0A0A0F]">Propose Deal with {selectedCreator.name}</h3>
-              <p className="text-xs text-[#4A5278] mt-0.5">Secure your campaign budget with automated milestone verification</p>
-            </div>
-
-            {/* Modal Body */}
-            <div className="flex flex-col gap-4">
-              
-              {/* Creator Card Mini */}
-              <div className="flex items-center gap-3 bg-[#F5F0EB]/30 p-3 rounded-xl border border-black/5">
-                <div className="w-10 h-10 rounded-full overflow-hidden border border-black/5 bg-[#F5F0EB]">
-                  <img src={selectedCreator.image} alt={selectedCreator.name} className="w-full h-full object-cover" />
-                </div>
-                <div>
-                  <span className="text-xs font-extrabold text-[#0A0A0F] block">{selectedCreator.name}</span>
-                  <span className="text-[10px] text-[#8E7A8A] block">{selectedCreator.handle} • {selectedCreator.metric}</span>
-                </div>
-              </div>
-
-              {/* Budget Field */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-[#4A5278] uppercase tracking-wider">Escrow Budget (USD)</label>
-                <div className="relative">
-                  <DollarSign className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#0A0A0F]" />
-                  <Input
-                    type="number"
-                    value={dealBudget}
-                    onChange={(e) => setDealBudget(e.target.value)}
-                    className="pl-9 bg-[#F5F0EB]/30 border border-black/5 rounded-xl h-11 text-xs font-bold text-[#0A0A0F]"
-                  />
-                </div>
-              </div>
-
-              {/* Campaign Terms */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-[#4A5278] uppercase tracking-wider">Campaign Deliverables & Terms</label>
-                <textarea
-                  value={dealTerms}
-                  onChange={(e) => setDealTerms(e.target.value)}
-                  rows={3}
-                  className="w-full p-3 bg-[#F5F0EB]/30 border border-black/5 rounded-xl text-xs font-medium text-[#0A0A0F] focus:outline-none focus:ring-1 focus:ring-[#FF6B35]"
-                />
-              </div>
-
-              {/* Escrow Disclaimer */}
-              <div className="bg-[#FF6B35]/5 border border-[#FF6B35]/10 rounded-xl p-3 text-[10px] font-semibold text-[#FF6B35] leading-relaxed">
-                By initiating this escrow contract, your budget will be securely locked in the SPRK Escrow Vault. Funds will be released to the creator automatically upon verification of deliverables via SPRK-OS streaming telemetry.
-              </div>
-
-            </div>
-
-            {/* Modal Footer */}
-            <div className="flex items-center gap-3 border-t border-black/5 pt-4">
-              <button 
-                onClick={() => setIsEscrowOpen(false)}
-                className="flex-1 border border-black/5 text-[#4A5278] hover:bg-[#F5F0EB]/30 font-bold text-xs uppercase tracking-wider py-3 rounded-xl transition-all"
-              >
-                Cancel Proposal
-              </button>
-              <button 
-                onClick={handleFundEscrow}
-                className="flex-1 bg-[#0A0A0F] hover:bg-[#FF6B35] text-white font-bold text-xs uppercase tracking-wider py-3 rounded-xl transition-all"
-              >
-                Fund Escrow
-              </button>
-            </div>
-
-          </div>
-        </div>
-      )}
-
+      {modal && <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-[var(--ink)]/70 p-4 md:items-center" role="dialog" aria-modal="true"><div className="relative w-full max-w-3xl rounded-[var(--r-lg)] bg-[var(--white)] p-5 shadow-2xl"><button type="button" onClick={() => setModal(null)} className="absolute right-4 top-4 rounded-[var(--r-pill)] bg-[var(--cream)] p-2 text-[var(--ink)]"><X className="h-5 w-5" /></button>{modal.type === "content" && activeContent && <div className="grid gap-5 md:grid-cols-[280px_1fr]"><img src={activeContent.thumbnail} alt="" className="aspect-[9/16] w-full rounded-[var(--r)] object-cover" /><div className="pr-8"><span className="label-caps text-[var(--ember)]">Content Detail</span><h2 className="mt-2 text-3xl font-extrabold tracking-[-0.04em] text-[var(--ink)]">{activeContent.title}</h2><p className="mt-3 text-sm font-light leading-relaxed text-[var(--steel)]">{activeContent.description}</p><div className="mt-4 grid grid-cols-2 gap-2 text-sm font-bold text-[var(--steel)]"><span className="rounded-[var(--r)] bg-[var(--cream)] p-3">Views: {activeContent.views}</span><span className="rounded-[var(--r)] bg-[var(--cream)] p-3">Saves: {activeContent.saves}</span><span className="rounded-[var(--r)] bg-[var(--cream)] p-3">Comments: {activeContent.comments}</span><span className="rounded-[var(--r)] bg-[var(--cream)] p-3">Engagement: {activeContent.engagement}</span></div>{activeContent.packageMetadata && <div className="mt-4 rounded-[var(--r)] border border-[color:var(--border)] p-4"><h3 className="font-extrabold text-[var(--ink)]">Required package metadata</h3>{Object.entries(activeContent.packageMetadata).map(([key, value]) => <p key={key} className="mt-1 text-sm text-[var(--steel)]"><strong className="capitalize text-[var(--ink)]">{key.replace(/([A-Z])/g, " $1")}:</strong> {value}</p>)}</div>}<div className="mt-4 rounded-[var(--r)] bg-[var(--cream)] p-4"><h3 className="font-extrabold text-[var(--ink)]">Top comment</h3><p className="mt-1 text-sm text-[var(--steel)]">“This already feels like a campaign, not just a clip.”</p></div><div className="mt-5 flex flex-wrap gap-2"><SecondaryButton onClick={() => toast.success("Share link copied.")}>Share</SecondaryButton><SecondaryButton onClick={() => toast.success("Saved to Pavilion board.")}>Save</SecondaryButton><GradientButton onClick={() => setModal({ type: "deal", id: deals[0].id })}>Brand Partnership</GradientButton></div></div></div>}{modal.type === "creator" && activeCreator && <div className="pr-8"><img src={activeCreator.avatar} alt="" className="h-28 w-28 rounded-[var(--r-lg)] object-cover" /><span className="mt-4 inline-flex rounded-[var(--r-pill)] bg-[var(--cream)] px-3 py-1 text-xs font-extrabold text-[var(--crimson)]">{activeCreator.tier}</span><h2 className="mt-2 text-4xl font-extrabold tracking-[-0.05em] text-[var(--ink)]">{activeCreator.name}</h2><p className="text-sm font-bold text-[var(--mauve)]">{activeCreator.handle}</p><p className="mt-3 text-sm font-light leading-relaxed text-[var(--steel)]">{activeCreator.bio}</p><div className="mt-4 grid gap-2 md:grid-cols-3"><span className="rounded-[var(--r)] bg-[var(--cream)] p-3 text-sm font-bold text-[var(--steel)]">Followers<br /><strong className="text-xl text-[var(--ink)]">{activeCreator.followers}</strong></span><span className="rounded-[var(--r)] bg-[var(--cream)] p-3 text-sm font-bold text-[var(--steel)]">Views<br /><strong className="text-xl text-[var(--ink)]">{activeCreator.views}</strong></span><span className="rounded-[var(--r)] bg-[var(--cream)] p-3 text-sm font-bold text-[var(--steel)]">Engagement<br /><strong className="text-xl text-[var(--ink)]">{activeCreator.engagement}</strong></span></div><div className="mt-4 flex flex-wrap gap-2">{activeCreator.focus.map((tag) => <span key={tag} className="rounded-[var(--r-pill)] bg-[var(--cream)] px-3 py-1 text-xs font-bold text-[var(--steel)]">{tag}</span>)}</div><div className="mt-5 flex flex-wrap gap-2"><GradientButton onClick={() => toggleFollow(activeCreator.id)}>{followed.includes(activeCreator.id) ? "Following" : "Follow"}</GradientButton><SecondaryButton onClick={() => { setActiveTab("messages"); setModal(null); }}>Send Message</SecondaryButton></div></div>}{modal.type === "deal" && activeDeal && <div className="pr-8"><span className="label-caps text-[var(--ember)]">Deal Details</span><h2 className="mt-2 text-3xl font-extrabold tracking-[-0.04em] text-[var(--ink)]">{activeDeal.title}</h2><p className="mt-2 text-sm font-bold text-[var(--mauve)]">{activeDeal.brand} · {activeDeal.due}</p><p className="mt-4 text-sm font-light leading-relaxed text-[var(--steel)]">{activeDeal.terms}</p><div className="mt-4 grid gap-2 md:grid-cols-2"><span className="rounded-[var(--r)] bg-[var(--cream)] p-3 text-sm font-bold text-[var(--steel)]">Gross amount<br /><strong className="text-2xl text-[var(--ink)]">{activeDeal.amount}</strong></span><span className="rounded-[var(--r)] bg-[var(--cream)] p-3 text-sm font-bold text-[var(--steel)]">Creator share<br /><strong className="text-2xl text-[var(--ink)]">75%</strong></span><span className="rounded-[var(--r)] bg-[var(--cream)] p-3 text-sm font-bold text-[var(--steel)]">SPRK fee<br /><strong className="text-2xl text-[var(--ink)]">8%</strong></span><span className="rounded-[var(--r)] bg-[var(--cream)] p-3 text-sm font-bold text-[var(--steel)]">Status<br /><strong className="text-2xl text-[var(--success)]">{activeDeal.status}</strong></span></div><div className="mt-4 flex flex-wrap gap-2"><GradientButton disabled={activeDeal.status !== "Pending"} onClick={() => acceptDeal(activeDeal.id)}><CheckCircle2 className="h-4 w-4" /> Accept Deal</GradientButton><SecondaryButton onClick={() => toast.success("Invoice download simulated.")}><Download className="h-4 w-4" /> Download Invoice</SecondaryButton></div></div>}{modal.type === "info" && <div className="pr-8"><span className="label-caps text-[var(--ember)]">Pavilion System</span><h2 className="mt-2 text-3xl font-extrabold tracking-[-0.04em] text-[var(--ink)]">{modal.id === "escrow" ? "Smart escrow protects both sides." : modal.id === "rights" ? "Rights stay visible and creator-owned." : "Marketplace access is review-ready."}</h2><p className="mt-3 text-sm font-light leading-relaxed text-[var(--steel)]">This prototype explains the marketplace action without creating a production transaction. Brand funds, rights summaries, content metadata, and approvals remain simulated until final launch approval.</p><div className="mt-5"><GradientButton onClick={() => setModal(null)}>Understood</GradientButton></div></div>}</div></div>}
     </SharedLayout>
   );
 }

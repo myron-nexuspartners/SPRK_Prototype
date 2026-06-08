@@ -3,14 +3,14 @@ import { ChevronLeft, ChevronRight, Heart, MessageCircle, Play, Share2, X } from
 import { toast } from "sonner";
 
 const clips = [
-  { title: "Drop-day fit check", channel: "↑ /FashionDrops · 34m ago", stat: "8.7K", image: "/assets/wireframe/clip_balenciaga_human.png", note: "Streetwear creator styling a high-contrast drop look." },
-  { title: "Skate line after work", channel: "↑ /CityMotion · 1h ago", stat: "5.2K", image: "/assets/wireframe/clip_skater.png", note: "A creator turns a neighborhood curb into a daily practice ritual." },
-  { title: "Soft-glam shade match", channel: "↑ /BeautyLab · 2h ago", stat: "9.4K", image: "/assets/wireframe/clip_makeup_artist.png", note: "Make-up artist explains undertones, lighting, and trust." },
-  { title: "Pickup run, full joy", channel: "↑ /HoopCulture · 3h ago", stat: "4.8K", image: "/assets/wireframe/clip_basketball.png", note: "Everyday athlete, public court, real celebration." },
-  { title: "Tokyo signs, night walk", channel: "↑ /StreetPhoto · 5h ago", stat: "3.1K", image: "/assets/wireframe/clip_neon_city.png", note: "Photographer documents a city mood before the rain hits." },
-  { title: "New hook from the booth", channel: "↑ /NewMusicRoom · 6h ago", stat: "6.6K", image: "/assets/wireframe/clip_musician_human.png", note: "Up-and-coming musician in process, not just a microphone." },
-  { title: "Cosplay reveal with repair kit", channel: "↑ /OpenNorm · 7h ago", stat: "7.9K", image: "https://images.unsplash.com/photo-1608889175123-8ee362201f81?auto=format&fit=crop&w=700&q=85", note: "A better cosplay image focused on the creator, costume labor, and expression." },
-  { title: "Waterfall reset walk", channel: "↑ /OutsideTime · 9h ago", stat: "2.8K", image: "/assets/wireframe/clip_waterfall.png", note: "A nature clip that keeps the feed's lifestyle range open." },
+  { title: "Drop-day fit check", channel: "↑ /FashionDrops · 34m ago", stat: "8.7K", image: "/SPRK_Prototype/assets/wireframe/clip_fashiondrops_distinct.png", note: "Streetwear creator styling a high-contrast drop look." },
+  { title: "Skate line after work", channel: "↑ /CityMotion · 1h ago", stat: "5.2K", image: "/SPRK_Prototype/assets/wireframe/clip_citymotion_distinct.png", note: "A creator turns a neighborhood curb into a daily practice ritual." },
+  { title: "Soft-glam shade match", channel: "↑ /BeautyLab · 2h ago", stat: "9.4K", image: "/SPRK_Prototype/assets/wireframe/clip_beautylab_distinct.png", note: "Make-up artist explains undertones, lighting, and trust." },
+  { title: "Pickup run, full joy", channel: "↑ /HoopCulture · 3h ago", stat: "4.8K", image: "/SPRK_Prototype/assets/wireframe/clip_hoopculture_distinct.png", note: "Everyday athlete, public court, real celebration." },
+  { title: "Mascot dance break", channel: "↑ /CityMotion · 5h ago", stat: "3.1K", image: "/SPRK_Prototype/assets/wireframe/bring_in_the_katz_line_dance_preview.png", note: "A bright, funny street clip where a creator and mascot turn the sidewalk into a tiny parade." },
+  { title: "New hook from the booth", channel: "↑ /NewMusicRoom · 6h ago", stat: "6.6K", image: "/SPRK_Prototype/assets/wireframe/clip_musician_human.png", note: "Up-and-coming musician in process, not just a microphone." },
+  { title: "Cosplay reveal with repair kit", channel: "↑ /OpenNorm · 7h ago", stat: "7.9K", image: "/SPRK_Prototype/assets/wireframe/home_black_woman_cosplay.png", note: "A Black woman cosplayer foregrounds costume labor, repair, and expression." },
+  { title: "Waterfall reset walk", channel: "↑ /OutsideTime · 9h ago", stat: "2.8K", image: "/SPRK_Prototype/assets/wireframe/clip_waterfall.png", note: "A nature clip that keeps the feed's lifestyle range open." },
 ];
 
 export default function ClipsCarousel() {
@@ -23,7 +23,7 @@ export default function ClipsCarousel() {
     <section className="rounded-2xl border border-black/5 bg-white p-4 shadow-sm">
       <div className="mb-4 flex items-center justify-between gap-3">
         <div>
-          <span className="label-caps text-[#8E7A8A]">Trending clips</span>
+          <span className="label-caps text-[#FF6B35]">Trending clips</span>
           <h2 className="mt-1 text-xl font-extrabold tracking-[-0.03em] text-[#0A0A0F]">Shorts with signal</h2>
         </div>
         <div className="flex gap-1.5">
@@ -47,7 +47,7 @@ export default function ClipsCarousel() {
               </span>
             </button>
             <div className="p-3">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.09em] text-[#8E7A8A]">{clip.channel}</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.09em] text-[#CC0055]">{clip.channel}</p>
               <h3 className="mt-1 text-sm font-extrabold leading-tight text-[#0A0A0F]">{clip.title}</h3>
               <p className="mt-1 line-clamp-2 text-[11px] font-light leading-snug text-[#4A5278]">{clip.note}</p>
               <div className="mt-3 flex items-center justify-between text-[11px] font-semibold text-[#4A5278]">

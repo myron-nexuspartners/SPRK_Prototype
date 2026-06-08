@@ -8,7 +8,7 @@ import CreatorCarousel from "@/components/CreatorCarousel";
 import FeedShell from "@/components/FeedShell";
 import { feedPosts, type FeedPost } from "@/data/feedContent";
 
-const tabs = ["For You", "Following", "New", "Top"];
+const tabs = ["For You", "Following", "Beauty", "Open Norm", "Gaming", "Fashion"];
 
 function EngagementBar({ post }: { post?: FeedPost }) {
   const [liked, setLiked] = useState(false);
@@ -29,15 +29,17 @@ function FeaturedPost() {
   return (
     <article className="overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm">
       <Link href={`/article/${post.id}`}>
-        <button className="group relative flex min-h-[340px] w-full items-end overflow-hidden bg-[#1E2235] text-left text-white md:min-h-[430px]">
-          <img src={post.image} alt={post.imageAlt} className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0F]/88 via-[#0A0A0F]/45 to-[#FF6B35]/20" />
-          <div className="absolute right-6 top-8 flex h-24 w-24 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white/85 backdrop-blur-sm"><Sparkles className="h-12 w-12" /></div>
-          <div className="relative z-10 max-w-xl p-6 md:p-8">
-            <span className="mb-3 inline-flex rounded-full bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#F0E8E4]">{post.community} · {post.time}</span>
-            <h1 className="text-4xl font-extrabold uppercase leading-[0.92] tracking-[-0.05em] md:text-6xl">SPRK 0025 Collection Limited. Exclusive. Yours.</h1>
-            <p className="mt-4 max-w-lg text-sm font-light leading-relaxed text-white/78">{post.deck}</p>
-            <span className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-extrabold uppercase tracking-[0.1em] text-[#0A0A0F]"><ShoppingBag className="h-4 w-4" /> Read + shop the drop →</span>
+        <button className="group relative w-full overflow-hidden bg-[#0A0A0F] text-left text-white">
+          <div className="relative aspect-[2.17/1] min-h-[300px] w-full md:min-h-[380px]">
+            <img src="/SPRK_Prototype/assets/wireframe/ProtoSPRK0025.png" alt="Human model wearing the SPRK 0025 collaboration collection before the drop" className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.015]" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0F]/72 via-[#0A0A0F]/18 to-transparent" />
+            <div className="absolute right-6 top-6 hidden h-20 w-20 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white/85 backdrop-blur-sm md:flex"><Sparkles className="h-10 w-10" /></div>
+            <div className="absolute bottom-0 left-0 z-10 max-w-xl p-6 md:p-8">
+              <span className="mb-3 inline-flex rounded-full bg-white/16 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white">{post.community} · {post.time}</span>
+              <h1 className="text-3xl font-extrabold uppercase leading-[0.92] tracking-[-0.05em] md:text-5xl">SPRK 0025 Collection</h1>
+              <p className="mt-3 max-w-md text-sm font-light leading-relaxed text-white/88">A human-worn collab drop, limited, exclusive, and ready to shop.</p>
+              <span className="mt-5 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-extrabold uppercase tracking-[0.1em] text-[#0A0A0F]"><ShoppingBag className="h-4 w-4" /> Read + shop the drop →</span>
+            </div>
           </div>
         </button>
       </Link>
@@ -56,7 +58,6 @@ function FeedTabs() {
             {tab}
           </button>
         ))}
-        <button onClick={() => toast("Sort menu opened.")} className="ml-auto rounded-full border border-black/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-[#4A5278] hover:bg-[#F5F0EB]">Sort</button>
       </div>
     </div>
   );
@@ -93,8 +94,8 @@ function DesignPromo() {
     <article className="overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm">
       <div className="grid gap-4 p-5 md:grid-cols-[1fr_220px] md:items-center">
         <div>
-          <span className="label-caps text-[#8E7A8A]">SPRK Studio Systems</span>
-          <h2 className="mt-2 text-4xl font-extrabold leading-none tracking-[-0.05em] text-[#0A0A0F]">Transparency by design.</h2>
+          <span className="label-caps text-[#FF6B35]">SPRK Studio Systems</span>
+          <h2 className="mt-2 text-4xl font-extrabold leading-none tracking-[-0.05em] text-[#0A0A0F]">Transparency by <span className="bg-gradient-to-r from-[#FF6B35] via-[#E8003D] to-[#CC0055] bg-clip-text text-transparent">design</span>.</h2>
           <p className="mt-3 text-sm font-light leading-relaxed text-[#4A5278]">A premium paper-field interface for creators who want ownership, visibility, and clean collaboration lanes.</p>
           <div className="mt-5 flex flex-wrap gap-2">
             <Link href="/os"><button className="rounded-full bg-[#0A0A0F] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.1em] text-white hover:bg-[#1E2235]">Open SPRK*OS →</button></Link>
@@ -116,8 +117,8 @@ export default function HomeFeed() {
       <div className="mx-auto max-w-[720px] space-y-4">
         <FeedTabs />
         <FeaturedPost />
-        <AdCarousel label="Sponsored Ad" />
         <CreatorCarousel />
+        <AdCarousel label="Sponsored Ad" />
         <div className="grid gap-4 md:grid-cols-2">
           {primaryPosts.map((post) => <PostCard key={post.id} post={post} compact />)}
         </div>

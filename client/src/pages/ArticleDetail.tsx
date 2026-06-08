@@ -42,7 +42,7 @@ function ArticleEngagement({ post }: { post: FeedPost }) {
 function CreatorContext({ post }: { post: FeedPost }) {
   return (
     <aside className="my-8 rounded-2xl border border-black/5 bg-[#F5F0EB] p-5">
-      <span className="label-caps text-[#8E7A8A]">Creator context</span>
+      <span className="label-caps text-[#FF6B35]">Creator context</span>
       <div className="mt-4 flex flex-col gap-4 md:flex-row md:items-center">
         <span className="h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-[#1E2235]"><img src={post.image} alt="Creator profile context" className="h-full w-full object-cover" /></span>
         <div className="min-w-0 flex-1">
@@ -105,7 +105,7 @@ function RelatedArticles({ currentId }: { currentId: string }) {
   const related = useMemo(() => feedPosts.filter((post) => post.id !== currentId).slice(0, 3), [currentId]);
   return (
     <section className="rounded-2xl border border-black/5 bg-white p-5 shadow-sm">
-      <span className="label-caps text-[#8E7A8A]">Related Articles</span>
+      <span className="label-caps text-[#FF6B35]">Related Articles</span>
       <div className="mt-4 grid gap-3 md:grid-cols-3">
         {related.map((post) => (
           <Link key={post.id} href={`/article/${post.id}`}>
@@ -130,7 +130,7 @@ export default function ArticleDetail() {
         <Link href="/home" className="inline-flex items-center gap-2 text-sm font-bold text-[#4A5278] hover:text-[#0A0A0F]"><ArrowLeft className="h-4 w-4" /> Back to Feed</Link>
         <div className="rounded-2xl border border-black/5 bg-white p-5 shadow-sm md:p-7">
           <header>
-            <div className="mb-4 flex flex-wrap items-center gap-2 text-xs font-semibold text-[#8E7A8A]"><span className="rounded-full bg-[#F5F0EB] px-3 py-1 text-[#FF6B35]">{post.community}</span><span>{post.time}</span><span>·</span><span>@{post.author}</span>{post.sponsored && <span className="rounded-full bg-[#0A0A0F] px-3 py-1 text-white">Sponsored content</span>}</div>
+            <div className="mb-4 flex flex-wrap items-center gap-2 text-xs font-semibold text-[#4A5278]"><span className="rounded-full bg-[#F5F0EB] px-3 py-1 text-[#FF6B35]">{post.community}</span><span>{post.time}</span><span>·</span><span>@{post.author}</span>{post.sponsored && <span className="rounded-full bg-[#0A0A0F] px-3 py-1 text-white">Sponsored content</span>}</div>
             <h1 className="text-4xl font-extrabold leading-[0.98] tracking-[-0.055em] text-[#0A0A0F] md:text-6xl">{post.title}</h1>
             <p className="mt-5 text-xl font-light leading-relaxed text-[#4A5278]">{post.deck}</p>
           </header>
