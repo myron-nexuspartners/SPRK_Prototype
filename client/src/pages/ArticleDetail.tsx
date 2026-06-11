@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useRoute } from "wouter";
 import { ArrowLeft, Bookmark, Heart, MessageCircle, Reply, Share2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
@@ -18,8 +18,7 @@ function ArticleHeroImage({ post }: { post: FeedPost }) {
       <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0F]/86 via-[#0A0A0F]/38 to-[#FF6B35]/18" />
       <div className="absolute right-8 top-8 flex h-24 w-24 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white/85 backdrop-blur-sm"><Sparkles className="h-12 w-12" /></div>
       <div className="relative z-10 max-w-xl p-6 md:p-8">
-        <span className="label-caps text-[#C4A09A]">{post.contentType} · {post.category}</span>
-        <h2 className="mt-2 text-4xl font-extrabold uppercase leading-[0.92] tracking-[-0.05em] md:text-6xl">{post.title.split(":")[0]}</h2>
+        <span className="label-caps rounded-full bg-[#0A0A0F]/55 px-3 py-1 text-[#F5F0EB] backdrop-blur-sm">{post.contentType} · {post.category}</span>
       </div>
     </div>
   );
@@ -123,6 +122,11 @@ function RelatedArticles({ currentId }: { currentId: string }) {
 export default function ArticleDetail() {
   const [, params] = useRoute("/article/:id");
   const post = getFeedPost(params?.id);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [post.id]);
 
   return (
     <FeedShell active="article" railMode="article">

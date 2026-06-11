@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useLocation } from "wouter";
-import { ArrowRight, CheckCircle2, Loader2, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, CheckCircle2, Eye, EyeOff, Loader2, ShieldCheck, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import SharedLayout from "@/components/SharedLayout";
 import { isValidEmail, savePrototypeAccess } from "@/lib/accessGate";
@@ -9,15 +9,82 @@ type GateForm = {
   firstName: string;
   lastName: string;
   email: string;
+  accessPassword: string;
   botField: string;
 };
 
 const base = import.meta.env.BASE_URL === "/" ? "/" : import.meta.env.BASE_URL;
 const webhookEndpoint = ((import.meta.env.VITE_ACCESS_WEBHOOK_ENDPOINT as string | undefined) || (import.meta.env.VITE_ACCESS_FORM_ENDPOINT as string | undefined) || "").trim();
-const initialForm: GateForm = { firstName: "", lastName: "", email: "", botField: "" };
+const ACCESS_PASSWORD = "Lg3Nd.1234!";
+const initialForm: GateForm = { firstName: "", lastName: "", email: "", accessPassword: "", botField: "" };
 
 function encodeNetlifyForm(data: Record<string, string>) {
   return new URLSearchParams(data).toString();
+}
+
+type AccessAttemptPayload = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  submittedAt: string;
+  visitId: string;
+  entryPath: string;
+  referrer: string;
+  userAgent: string;
+  timezone: string;
+  source: string;
+  attemptStatus: "granted" | "denied";
+  accessGranted: boolean;
+  passwordValid: boolean;
+  validationErrors: string;
+};
+
+async function captureAccessAttempt(payload: AccessAttemptPayload) {
+  const netlifyBody = encodeNetlifyForm({
+    "form-name": "sprk-prototype-access",
+    firstName: payload.firstName,
+    lastName: payload.lastName,
+    email: payload.email,
+    submittedAt: payload.submittedAt,
+    visitId: payload.visitId,
+    entryPath: payload.entryPath,
+    referrer: payload.referrer,
+    userAgent: payload.userAgent,
+    timezone: payload.timezone,
+    source: payload.source,
+    attemptStatus: payload.attemptStatus,
+    accessGranted: String(payload.accessGranted),
+    passwordValid: String(payload.passwordValid),
+    validationErrors: payload.validationErrors,
+  });
+
+  const netlifyCapture = fetch("/", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: netlifyBody,
+  });
+
+  const serverCapture = fetch(`${base.replace(/\/$/, "")}/api/access-log`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  }).catch(() => null);
+
+  const webhookCapture = webhookEndpoint
+    ? fetch(webhookEndpoint, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify(payload),
+      }).catch(() => null)
+    : Promise.resolve(null);
+
+  const captureResults = await Promise.allSettled([netlifyCapture, serverCapture, webhookCapture]);
+  const netlifyResult = captureResults[0];
+
+  if (netlifyResult.status === "rejected" || !netlifyResult.value.ok) {
+    console.warn("Access form capture did not complete.", netlifyResult);
+  }
 }
 
 export default function Home() {
@@ -25,6 +92,7 @@ export default function Home() {
   const [form, setForm] = useState<GateForm>(initialForm);
   const [errors, setErrors] = useState<Partial<Record<keyof GateForm, string>>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [showAccessPassword, setShowAccessPassword] = useState(false);
 
   const update = <K extends keyof GateForm>(key: K, value: GateForm[K]) => {
     setForm((current) => ({ ...current, [key]: value }));
@@ -36,6 +104,7 @@ export default function Home() {
     if (form.firstName.trim().length < 2) nextErrors.firstName = "Please enter your first name.";
     if (form.lastName.trim().length < 2) nextErrors.lastName = "Please enter your last name.";
     if (!isValidEmail(form.email)) nextErrors.email = "Please enter a valid email address.";
+    if (form.accessPassword !== ACCESS_PASSWORD) nextErrors.accessPassword = "Incorrect access password. Please try again.";
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   };
@@ -43,10 +112,17 @@ export default function Home() {
   const submitAccess = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (form.botField) return;
-    if (!validate()) return;
 
     const submittedAt = new Date().toISOString();
-    const payload = {
+    const isPasswordValid = form.accessPassword === ACCESS_PASSWORD;
+    const isFormValid = validate();
+    const currentErrors: Partial<Record<keyof GateForm, string>> = {};
+    if (form.firstName.trim().length < 2) currentErrors.firstName = "Please enter your first name.";
+    if (form.lastName.trim().length < 2) currentErrors.lastName = "Please enter your last name.";
+    if (!isValidEmail(form.email)) currentErrors.email = "Please enter a valid email address.";
+    if (!isPasswordValid) currentErrors.accessPassword = "Incorrect access password. Please try again.";
+
+    const payload: AccessAttemptPayload = {
       firstName: form.firstName.trim(),
       lastName: form.lastName.trim(),
       email: form.email.trim().toLowerCase(),
@@ -57,57 +133,32 @@ export default function Home() {
       userAgent: navigator.userAgent,
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       source: "SPRK Prototype Netlify Gate",
+      attemptStatus: isFormValid ? "granted" : "denied",
+      accessGranted: isFormValid,
+      passwordValid: isPasswordValid,
+      validationErrors: Object.entries(currentErrors).map(([field, message]) => `${field}: ${message}`).join(" | "),
     };
 
     setSubmitting(true);
     try {
-      const netlifyBody = encodeNetlifyForm({
-        "form-name": "sprk-prototype-access",
-        firstName: payload.firstName,
-        lastName: payload.lastName,
-        email: payload.email,
-        submittedAt: payload.submittedAt,
-        visitId: payload.visitId,
-        entryPath: payload.entryPath,
-        referrer: payload.referrer,
-        userAgent: payload.userAgent,
-        timezone: payload.timezone,
-        source: payload.source,
-      });
+      await captureAccessAttempt(payload);
 
-      const netlifyCapture = fetch("/", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: netlifyBody,
-      });
-
-      const serverCapture = fetch(`${base.replace(/\/$/, "")}/api/access-log`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      }).catch(() => null);
-
-      const webhookCapture = webhookEndpoint
-        ? fetch(webhookEndpoint, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "text/plain" },
-            body: JSON.stringify(payload),
-          }).catch(() => null)
-        : Promise.resolve(null);
-
-      const captureResults = await Promise.allSettled([netlifyCapture, serverCapture, webhookCapture]);
-      const netlifyResult = captureResults[0];
-
-      if (netlifyResult.status === "rejected" || !netlifyResult.value.ok) {
-        console.warn("Access form capture did not complete, but prototype entry remains unlocked for review.", netlifyResult);
+      if (!isFormValid) {
+        toast.error(isPasswordValid ? "Please correct the highlighted fields." : "Incorrect access password. Please try again.");
+        return;
       }
 
       savePrototypeAccess(payload);
       toast.success("Access received. Entering the SPRK prototype…");
       window.setTimeout(() => setLocation("/home"), 350);
     } catch (error) {
-      console.warn("Access capture encountered an error, but prototype entry remains unlocked for review.", error);
+      console.warn("Access capture encountered an error.", error);
+
+      if (!isFormValid) {
+        toast.error(isPasswordValid ? "Please correct the highlighted fields." : "Incorrect access password. Please try again.");
+        return;
+      }
+
       savePrototypeAccess(payload);
       toast.success("Access received. Entering the SPRK prototype…");
       window.setTimeout(() => setLocation("/home"), 350);
@@ -142,11 +193,11 @@ export default function Home() {
                 Welcome to <span className="bg-gradient-to-r from-[#FF6B35] via-[#E8003D] to-[#CC0055] bg-clip-text text-transparent">SPRK</span>
               </h1>
               <p className="mt-[var(--space-lg)] max-w-xl text-lg leading-8 text-[var(--steel)]">
-                Introduce yourself and come on in. Please enter your name and email before viewing the prototype. This helps us ensure that the SPRK signal is transmitted through the noise and finding the select few we’ve identified to share early access with.
+                Introduce yourself and come on in. Please enter your name, email, and access password before viewing the prototype. This helps us ensure that the SPRK signal is transmitted through the noise and finding the select few we’ve identified to share early access with.
               </p>
             </div>
-            <div className="grid gap-3 sm:grid-cols-3">
-              {["Name captured", "Email captured", "Session unlocked"].map((item) => (
+            <div className="grid gap-3 sm:grid-cols-4">
+              {["Name captured", "Email captured", "Password verified", "Session unlocked"].map((item) => (
                 <div key={item} className="rounded-[var(--r)] border border-[var(--border)] bg-[var(--white)]/88 p-4 text-xs font-black uppercase tracking-[0.12em] text-[var(--ink)] shadow-sm">
                   <CheckCircle2 className="mb-2 h-4 w-4 text-[var(--ember)]" /> {item}
                 </div>
@@ -155,7 +206,7 @@ export default function Home() {
             <div className="rounded-[var(--r-lg)] border border-[var(--border)] bg-[var(--white)]/90 p-[var(--space-lg)] text-sm leading-6 text-[var(--steel)] shadow-sm">
               <div className="flex items-start gap-3">
                 <ShieldCheck className="mt-1 h-5 w-5 shrink-0 text-[var(--success)]" />
-                <p><strong className="text-[var(--ink)]">Simple gate:</strong> internal prototype routes redirect here until this form is submitted in the visitor browser.</p>
+                <p><strong className="text-[var(--ink)]">Protected gate:</strong> internal prototype routes redirect here until this form is submitted with the current access password in the visitor browser.</p>
               </div>
             </div>
           </div>
@@ -174,7 +225,7 @@ export default function Home() {
             <div className="mb-[var(--space-xl)]">
               <p className="text-xs font-black uppercase tracking-[0.16em] text-[var(--ember)]">Audience access</p>
               <h2 className="mt-2 font-display text-3xl font-black tracking-[-0.04em] text-[var(--ink)]">Who is entering?</h2>
-              <p className="mt-3 text-sm leading-6 text-[var(--steel)]">Submit once to unlock the prototype in this browser session.</p>
+              <p className="mt-3 text-sm leading-6 text-[var(--steel)]">Submit once with the access password to unlock the prototype in this browser session.</p>
             </div>
 
             <div className="grid gap-[var(--space-lg)]">
@@ -192,6 +243,16 @@ export default function Home() {
                 <input name="email" type="email" autoComplete="email" value={form.email} onChange={(event) => update("email", event.target.value)} placeholder="name@example.com" className="rounded-[var(--r)] border border-[var(--border)] bg-[var(--white)] px-4 py-3 outline-none focus:border-[var(--ember)] focus:ring-2 focus:ring-[var(--warm)]" />
                 {errors.email && <span className="text-xs font-bold text-[var(--error)]">{errors.email}</span>}
               </label>
+
+              <label className="grid gap-2 text-sm font-bold text-[var(--ink)]">Access password
+                <span className="relative block">
+                  <input name="accessPassword" type={showAccessPassword ? "text" : "password"} autoComplete="current-password" value={form.accessPassword} onChange={(event) => update("accessPassword", event.target.value)} placeholder="Enter access password" className="w-full rounded-[var(--r)] border border-[var(--border)] bg-[var(--white)] px-4 py-3 pr-14 outline-none focus:border-[var(--ember)] focus:ring-2 focus:ring-[var(--warm)]" />
+                  <button type="button" onClick={() => setShowAccessPassword((current) => !current)} aria-label={showAccessPassword ? "Hide access password" : "Show access password"} aria-pressed={showAccessPassword} className="absolute right-3 top-1/2 inline-flex -translate-y-1/2 items-center justify-center rounded-full p-2 text-[var(--steel)] transition hover:bg-[var(--warm)] hover:text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[var(--ember)]">
+                    {showAccessPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </span>
+                {errors.accessPassword && <span className="text-xs font-bold text-[var(--error)]">{errors.accessPassword}</span>}
+              </label>
             </div>
 
             <button type="submit" disabled={submitting} className="mt-[var(--space-xl)] flex w-full items-center justify-center gap-2 rounded-[var(--r-pill)] bg-[var(--ink)] px-6 py-4 text-sm font-black uppercase tracking-[0.14em] text-[var(--white)] transition hover:-translate-y-0.5 hover:bg-[var(--ember)] disabled:cursor-not-allowed disabled:opacity-70">
@@ -199,7 +260,7 @@ export default function Home() {
               {submitting ? "Recording access…" : "Submit and enter prototype"}
             </button>
 
-            <p className="mt-4 text-center text-xs leading-5 text-[var(--steel)]">By entering, visitors acknowledge this is a private prototype preview and their access submission has been received and noted.</p>
+            <p className="mt-4 text-center text-xs leading-5 text-[var(--steel)]">By entering, visitors acknowledge this is a private prototype preview and their access submission, including successful and unsuccessful password attempts, has been received and noted.</p>
           </form>
         </div>
       </section>

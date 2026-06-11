@@ -1,6 +1,6 @@
 # SPRK Prototype Access Form: Google Sheets Capture
 
-This repository now includes a Google Apps Script webhook at `scripts/sprk-access-google-sheets-webhook.gs`. The access form already attempts three captures when a visitor submits the gate: Netlify Forms, the existing `/api/access-log` endpoint when a server is available, and an optional external webhook configured through `VITE_ACCESS_WEBHOOK_ENDPOINT` or `VITE_ACCESS_FORM_ENDPOINT`.
+This repository includes a Google Apps Script webhook at `scripts/sprk-access-google-sheets-webhook.gs`. The access form attempts three captures whenever a visitor submits the gate: Netlify Forms, the existing `/api/access-log` endpoint when a server is available, and an optional external webhook configured through `VITE_ACCESS_WEBHOOK_ENDPOINT` or `VITE_ACCESS_FORM_ENDPOINT`.
 
 For the Netlify static deployment, the recommended Google Sheets path is to deploy the Apps Script as a web app, then set the resulting web-app URL as the `VITE_ACCESS_WEBHOOK_ENDPOINT` environment variable in Netlify before rebuilding the site. This can be done either before or after the Netlify push, but doing it before the final production replacement is cleaner because the reviewed build will already include the capture endpoint.
 
@@ -14,11 +14,11 @@ For the Netlify static deployment, the recommended Google Sheets path is to depl
 | 4 | User | Save the script and deploy it as a **Web app**. Set execution to run as the script owner, and grant access to the intended submission audience. For a public prototype gate, that is typically **Anyone** or **Anyone with the link**. |
 | 5 | User | Copy the deployed web-app URL. It should end with `/exec`. |
 | 6 | Manus/User | Add that URL to Netlify as `VITE_ACCESS_WEBHOOK_ENDPOINT`, then rebuild/redeploy the site. |
-| 7 | Manus/User | Submit a test access form entry and confirm the row appears in the `SPRK Prototype Access` sheet tab. |
+| 7 | Manus/User | Submit one correct-password test and one incorrect-password test, then confirm both rows appear in the `SPRK Prototype Access` sheet tab. |
 
 ## Fields captured
 
-The script creates a sheet tab named `SPRK Prototype Access` if it does not exist. It writes one row per access-gate submission using the following columns.
+The script creates a sheet tab named `SPRK Prototype Access` if it does not exist. It writes one row per access-gate submission, including successful entries and denied password attempts. The frontend intentionally records whether the password was valid, but it **does not send or store the raw password**.
 
 | Column | Source |
 |---|---|
@@ -27,12 +27,16 @@ The script creates a sheet tab named `SPRK Prototype Access` if it does not exis
 | `firstName` | Access form first-name field. |
 | `lastName` | Access form last-name field. |
 | `email` | Access form email field, normalized to lowercase by the frontend. |
-| `visitId` | Browser-generated unique visit ID. |
+| `visitId` | Browser-generated unique attempt ID. |
 | `entryPath` | URL where the visitor submitted the gate. |
 | `referrer` | Browser referrer or `direct`. |
 | `timezone` | Visitor browser timezone. |
 | `source` | Current source label: `SPRK Prototype Netlify Gate`. |
 | `userAgent` | Visitor browser user-agent string. |
+| `attemptStatus` | `granted` when all validation passes, otherwise `denied`. |
+| `accessGranted` | `TRUE` or `FALSE`, showing whether the prototype session was unlocked. |
+| `passwordValid` | `TRUE` or `FALSE`, showing whether the supplied password matched the active access password. |
+| `validationErrors` | Pipe-separated validation notes for denied attempts. |
 
 ## Netlify environment variable
 

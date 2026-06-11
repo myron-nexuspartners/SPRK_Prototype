@@ -24,6 +24,10 @@ function doPost(e) {
       payload.timezone || '',
       payload.source || '',
       payload.userAgent || '',
+      payload.attemptStatus || '',
+      normalizeBoolean_(payload.accessGranted),
+      normalizeBoolean_(payload.passwordValid),
+      payload.validationErrors || '',
     ]);
 
     return jsonResponse_({ ok: true });
@@ -76,6 +80,10 @@ function ensureHeaderRow_(sheet) {
     'timezone',
     'source',
     'userAgent',
+    'attemptStatus',
+    'accessGranted',
+    'passwordValid',
+    'validationErrors',
   ];
 
   const existingHeader = sheet.getRange(1, 1, 1, headers.length).getValues()[0];
@@ -85,6 +93,12 @@ function ensureHeaderRow_(sheet) {
     sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
     sheet.setFrozenRows(1);
   }
+}
+
+function normalizeBoolean_(value) {
+  if (value === true || value === 'true') return 'TRUE';
+  if (value === false || value === 'false') return 'FALSE';
+  return value || '';
 }
 
 function jsonResponse_(body, statusCode) {

@@ -88,12 +88,25 @@ function ProtectedYoursprk() {
   return <RequireAccess><Yoursprk /></RequireAccess>;
 }
 
+function ScrollToTop() {
+  const [location] = useLocation();
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.location.hash) return;
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location]);
+
+  return null;
+}
+
 function Router() {
   const base = import.meta.env.BASE_URL === "/" ? "" : import.meta.env.BASE_URL.replace(/\/$/, "");
 
   return (
     <WouterRouter base={base}>
       <InactivityRedirect />
+      <ScrollToTop />
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/landing" component={Home} />
