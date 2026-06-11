@@ -14,7 +14,8 @@ type GateForm = {
 };
 
 const base = import.meta.env.BASE_URL === "/" ? "/" : import.meta.env.BASE_URL;
-const webhookEndpoint = ((import.meta.env.VITE_ACCESS_WEBHOOK_ENDPOINT as string | undefined) || (import.meta.env.VITE_ACCESS_FORM_ENDPOINT as string | undefined) || "").trim();
+const DEFAULT_ACCESS_WEBHOOK_ENDPOINT = "https://script.google.com/macros/s/AKfycbym5spKKSSrT5nKLpvMy98VOv54CZG_8jp9AQXUQqJEJl0-_85n-dYRlciwPqsHa07tMg/exec";
+const webhookEndpoint = ((import.meta.env.VITE_ACCESS_WEBHOOK_ENDPOINT as string | undefined) || (import.meta.env.VITE_ACCESS_FORM_ENDPOINT as string | undefined) || DEFAULT_ACCESS_WEBHOOK_ENDPOINT).trim();
 const ACCESS_PASSWORD = "Lg3Nd.1234!";
 const initialForm: GateForm = { firstName: "", lastName: "", email: "", accessPassword: "", botField: "" };
 

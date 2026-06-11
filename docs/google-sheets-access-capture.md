@@ -2,7 +2,7 @@
 
 This repository includes a Google Apps Script webhook at `scripts/sprk-access-google-sheets-webhook.gs`. The access form attempts three captures whenever a visitor submits the gate: Netlify Forms, the existing `/api/access-log` endpoint when a server is available, and an optional external webhook configured through `VITE_ACCESS_WEBHOOK_ENDPOINT` or `VITE_ACCESS_FORM_ENDPOINT`.
 
-For the Netlify static deployment, the recommended Google Sheets path is to deploy the Apps Script as a web app, then set the resulting web-app URL as the `VITE_ACCESS_WEBHOOK_ENDPOINT` environment variable in Netlify before rebuilding the site. This can be done either before or after the Netlify push, but doing it before the final production replacement is cleaner because the reviewed build will already include the capture endpoint.
+For the Netlify static deployment, the recommended Google Sheets path is to deploy the Apps Script as a web app, then connect the resulting web-app URL to the frontend. The approved production endpoint is included as the default app-side webhook so the Netlify build can capture attempts without requiring a dashboard environment-variable update. Netlify can still override it with `VITE_ACCESS_WEBHOOK_ENDPOINT` if the webhook is rotated later.
 
 ## Recommended setup sequence
 
@@ -13,7 +13,7 @@ For the Netlify static deployment, the recommended Google Sheets path is to depl
 | 3 | User | Paste the full contents of `scripts/sprk-access-google-sheets-webhook.gs` into the Apps Script editor. |
 | 4 | User | Save the script and deploy it as a **Web app**. Set execution to run as the script owner, and grant access to the intended submission audience. For a public prototype gate, that is typically **Anyone** or **Anyone with the link**. |
 | 5 | User | Copy the deployed web-app URL. It should end with `/exec`. |
-| 6 | Manus/User | Add that URL to Netlify as `VITE_ACCESS_WEBHOOK_ENDPOINT`, then rebuild/redeploy the site. |
+| 6 | Manus/User | Add the approved URL to the app source as the default webhook, or add it to Netlify as `VITE_ACCESS_WEBHOOK_ENDPOINT` if using an environment override, then rebuild/redeploy the site. |
 | 7 | Manus/User | Submit one correct-password test and one incorrect-password test, then confirm both rows appear in the `SPRK Prototype Access` sheet tab. |
 
 ## Fields captured
@@ -40,7 +40,7 @@ The script creates a sheet tab named `SPRK Prototype Access` if it does not exis
 
 ## Netlify environment variable
 
-Set this in the Netlify site before the final production replacement build:
+The approved production endpoint is configured in the app source as the default webhook. If the Google Apps Script deployment is rotated later, either update the source default or set this override in the Netlify site before rebuilding:
 
 ```text
 VITE_ACCESS_WEBHOOK_ENDPOINT=https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec
