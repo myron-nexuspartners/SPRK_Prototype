@@ -1,0 +1,97 @@
+# SPRK Platform Surface Buildout Skill
+
+This skill provides the framework and implementation details for rapidly building out new platform-specific optimization surfaces within SPRK*Studio.
+
+## Purpose
+When SPRK*Studio users select a target platform (e.g., TikTok, YouTube Shorts, Instagram Reels), the UI should present a platform-specific optimization panel. This skill defines how to scaffold those panels quickly and consistently.
+
+## Component Structure
+
+Every new platform surface should follow this React component structure:
+
+```tsx
+import React, { useState } from 'react';
+import { Check, Info, Settings2 } from 'lucide-react';
+
+interface PlatformSurfaceProps {
+  platformId: string;
+  platformName: string;
+  isActive: boolean;
+  onSettingsChange: (settings: any) => void;
+}
+
+export default function PlatformSurface({ platformId, platformName, isActive, onSettingsChange }: PlatformSurfaceProps) {
+  const [autoOptimize, setAutoOptimize] = useState(true);
+  const [generateHooks, setGenerateHooks] = useState(true);
+  
+  if (!isActive) return null;
+
+  return (
+    <div className="rounded-[var(--r)] border border-[var(--border)] bg-[var(--white)] p-[var(--space-md)] shadow-sm mb-[var(--space-md)]">
+      <div className="flex items-center justify-between mb-[var(--space-sm)]">
+        <h4 className="font-bold text-[var(--ink)] flex items-center gap-2">
+          {platformName} Optimization
+          <span className="text-[10px] bg-[var(--cream)] text-[var(--steel)] px-2 py-0.5 rounded-full uppercase tracking-wider">Beta</span>
+        </h4>
+        <Settings2 className="w-4 h-4 text-[var(--mauve)]" />
+      </div>
+      
+      <div className="space-y-3 mt-4">
+        {/* Toggle 1: Auto-Formatting */}
+        <label className="flex items-start gap-3 cursor-pointer group">
+          <div className="relative flex items-center justify-center w-5 h-5 mt-0.5">
+            <input 
+              type="checkbox" 
+              className="peer sr-only" 
+              checked={autoOptimize}
+              onChange={(e) => setAutoOptimize(e.target.checked)}
+            />
+            <div className="w-5 h-5 border-2 border-[var(--border)] rounded-[4px] peer-checked:bg-[var(--ember)] peer-checked:border-[var(--ember)] transition-colors"></div>
+            <Check className="absolute w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 transition-opacity" />
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-[var(--ink)]">Apply Native Safe Zones</p>
+            <p className="text-xs text-[var(--steel)]">Automatically adjusts text and overlays to avoid UI elements.</p>
+          </div>
+        </label>
+
+        {/* Toggle 2: AI Hooks */}
+        <label className="flex items-start gap-3 cursor-pointer group">
+          <div className="relative flex items-center justify-center w-5 h-5 mt-0.5">
+            <input 
+              type="checkbox" 
+              className="peer sr-only" 
+              checked={generateHooks}
+              onChange={(e) => setGenerateHooks(e.target.checked)}
+            />
+            <div className="w-5 h-5 border-2 border-[var(--border)] rounded-[4px] peer-checked:bg-[var(--ember)] peer-checked:border-[var(--ember)] transition-colors"></div>
+            <Check className="absolute w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 transition-opacity" />
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-[var(--ink)]">Generate AI Hooks & Tags</p>
+            <p className="text-xs text-[var(--steel)]">Creates platform-specific captions optimized for the algorithm.</p>
+          </div>
+        </label>
+      </div>
+      
+      <div className="mt-4 bg-[var(--cream)] rounded p-3 flex gap-2 items-start">
+        <Info className="w-4 h-4 text-[var(--steel)] shrink-0 mt-0.5" />
+        <p className="text-xs text-[var(--steel)] leading-relaxed">
+          <strong>Pro Tip:</strong> {platformName} favors content between 15-30 seconds with high-energy intros.
+        </p>
+      </div>
+    </div>
+  );
+}
+```
+
+## Implementation Workflow
+
+1. **Identify the Platform Requirements**: Research the specific safe zones, duration limits, and algorithm preferences for the target platform.
+2. **Create the Component**: Duplicate the template above and name it `[PlatformName]Surface.tsx`.
+3. **Customize the Toggles**: Replace the generic toggles with platform-specific features (e.g., "Extract Twitch Chat" for Twitch, "Add Link Sticker" for Instagram Stories).
+4. **Update the Pro Tip**: Provide actionable, platform-specific advice in the info box.
+5. **Integrate into Studio**: Import the component into the `Os.tsx` (or `Studio.tsx`) step 3 (Platform Selection) flow and conditionally render it based on the user's selected platforms.
+
+## Current State
+As of July 2026, these surfaces are designed and mocked in the UI but disabled/static pending full backend API integration for each specific platform's rendering engine.

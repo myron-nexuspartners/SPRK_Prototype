@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link } from "wouter";
-import { Bookmark, Heart, MessageCircle, Share2, ShoppingBag, Sparkles, TrendingUp } from "lucide-react";
+import { Bookmark, ChevronLeft, ChevronRight, Heart, MessageCircle, Share2, ShoppingBag, Sparkles, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
 import AdCarousel from "@/components/AdCarousel";
 import ClipsCarousel from "@/components/ClipsCarousel";
@@ -48,16 +48,34 @@ function FeaturedPost() {
   );
 }
 
+const ARTICLE_CTA_LABELS = ["Learn More", "Deep Dive", "View Full Post", "Read On", "Tap In"];
+const articleCtaLabel = ARTICLE_CTA_LABELS[Math.floor(Math.random() * ARTICLE_CTA_LABELS.length)];
+
 function FeedTabs() {
   const [active, setActive] = useState("For You");
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const scroll = (dir: "left" | "right") => {
+    if (scrollRef.current) scrollRef.current.scrollBy({ left: dir === "left" ? -160 : 160, behavior: "smooth" });
+  };
   return (
     <div className="rounded-t-2xl border border-b-0 border-black/5 bg-white p-2 shadow-sm">
-      <div className="flex items-center gap-2 overflow-x-auto">
-        {tabs.map((tab) => (
-          <button key={tab} onClick={() => { setActive(tab); toast(`Showing ${tab} feed.`); }} className={`rounded-full px-5 py-2 text-sm font-bold transition-colors ${active === tab ? "bg-[#0A0A0F] text-white" : "text-[#4A5278] hover:bg-[#F5F0EB] hover:text-[#0A0A0F]"}`}>
-            {tab}
-          </button>
-        ))}
+      <div className="flex items-center gap-1">
+        <button type="button" onClick={() => scroll("left")} aria-label="Scroll tabs left"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-black/8 bg-[#F5F0EB] text-[#4A5278] transition-colors hover:bg-[#0A0A0F] hover:text-white">
+          <ChevronLeft className="h-4 w-4" />
+        </button>
+        <div ref={scrollRef} className="flex flex-1 items-center gap-2 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          {tabs.map((tab) => (
+            <button key={tab} onClick={() => { setActive(tab); toast(`Showing ${tab} feed.`); }}
+              className={`shrink-0 rounded-full px-5 py-2 text-sm font-bold transition-colors ${active === tab ? "bg-[#0A0A0F] text-white" : "text-[#4A5278] hover:bg-[#F5F0EB] hover:text-[#0A0A0F]"}`}>
+              {tab}
+            </button>
+          ))}
+        </div>
+        <button type="button" onClick={() => scroll("right")} aria-label="Scroll tabs right"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-black/8 bg-[#F5F0EB] text-[#4A5278] transition-colors hover:bg-[#0A0A0F] hover:text-white">
+          <ChevronRight className="h-4 w-4" />
+        </button>
       </div>
     </div>
   );
@@ -80,7 +98,7 @@ function PostCard({ post, compact = false }: { post: FeedPost; compact?: boolean
             <div className="mb-3 flex items-center gap-2 text-xs font-semibold text-[#8E7A8A]"><span className="h-8 w-8 overflow-hidden rounded-full bg-[#F5F0EB]"><img src={post.image} alt="" className="h-full w-full object-cover" /></span>{post.community} · {post.time}</div>
             <h2 className={`${compact ? "text-lg" : "text-2xl"} font-extrabold leading-tight tracking-[-0.03em] text-[#0A0A0F]`}>{post.title}</h2>
             <p className="mt-2 line-clamp-2 text-sm font-light leading-relaxed text-[#4A5278]">{post.deck}</p>
-            <div className="mt-4 inline-flex rounded-full bg-[#F5F0EB] px-3 py-1.5 text-xs font-bold text-[#0A0A0F]">Open article template →</div>
+            <div className="mt-4 inline-flex rounded-full bg-[#F5F0EB] px-3 py-1.5 text-xs font-bold text-[#0A0A0F]">{articleCtaLabel} →</div>
           </div>
         </button>
       </Link>
