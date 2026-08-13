@@ -6,6 +6,14 @@
   NODE_VERSION = "22"
   VITE_BASE_PATH = "/"
 
+# Approved narrow exception: migrate only the former Netlify prototype host.
+# Preserve path suffixes while leaving prototype UI, routing, and access controls unchanged.
+[[redirects]]
+  from = "https://sprkprototype222.netlify.app/*"
+  to = "https://prototype.yoursprk.com/:splat"
+  status = 301
+  force = true
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
