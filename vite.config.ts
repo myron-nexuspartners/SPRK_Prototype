@@ -3,7 +3,7 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import fs from "node:fs";
 import path from "node:path";
-import { defineConfig, type Plugin, type ViteDevServer } from "vite";
+import { defineConfig, loadEnv, type Plugin, type ViteDevServer } from "vite";
 import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
 
 // =============================================================================
@@ -203,11 +203,55 @@ function vitePluginStorageProxy(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePluginStorageProxy()];
+// Dev-server-only mirror of netlify/functions/verify-access.ts and the /api/verify-access
+// route in server/index.ts, so `pnpm dev` can validate the access-gate password without
+// requiring Netlify CLI. The password itself is only ever read server-side via `env`,
+// never passed into `define`/`import.meta.env`, so it can't leak into the client bundle.
+function vitePluginVerifyAccess(expectedPassword: string | undefined): Plugin {
+  return {
+    name: "sprk-verify-access-dev",
+    configureServer(server: ViteDevServer) {
+      server.middlewares.use("/api/verify-access", (req, res) => {
+        if (req.method !== "POST") {
+          res.writeHead(405, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ ok: false }));
+          return;
+        }
 
-const buildBase = process.env.VITE_BASE_PATH ?? (process.env.NETLIFY ? "/" : "/SPRK_Prototype/");
+        let body = "";
+        req.on("data", (chunk) => {
+          body += chunk;
+        });
+        req.on("end", () => {
+          let password = "";
+          try {
+            password = JSON.parse(body || "{}")?.password ?? "";
+          } catch {
+            // malformed body — falls through to ok: false below
+          }
+          const ok = Boolean(expectedPassword) && password === expectedPassword;
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ ok }));
+        });
+      });
+    },
+  };
+}
 
-export default defineConfig({
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, import.meta.dirname, "");
+  const plugins = [
+    react(),
+    tailwindcss(),
+    jsxLocPlugin(),
+    vitePluginManusRuntime(),
+    vitePluginManusDebugCollector(),
+    vitePluginStorageProxy(),
+    vitePluginVerifyAccess(env.SPRK_ACCESS_PASSWORD),
+  ];
+  const buildBase = env.VITE_BASE_PATH || (env.NETLIFY ? "/" : "/SPRK_Prototype/");
+
+  return {
   base: buildBase,
   plugins,
   resolve: {
@@ -241,4 +285,5 @@ export default defineConfig({
       deny: ["**/.*"],
     },
   },
+  };
 });

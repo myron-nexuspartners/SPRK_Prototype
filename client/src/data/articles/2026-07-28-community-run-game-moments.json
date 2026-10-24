@@ -1,0 +1,38 @@
+{
+  "id": "community-run-game-moments-2026",
+  "authorSlug": "dez-carter",
+  "community": "✦ /GameRooms",
+  "publishedAt": "2026-07-28",
+  "title": "The best gaming moments of 2026 are group projects.",
+  "deck": "From a week-long speedrun marathon for Doctors Without Borders to chat-routed boss runs, the clips that defined this summer were built by rooms, not soloists.",
+  "image": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80",
+  "imageAlt": "Gamer at a neon-lit desk setup with headphones during a live session",
+  "category": "gaming",
+  "contentType": "article",
+  "isAiAssisted": true,
+  "body": [
+    "Earlier this month, Summer Games Done Quick took over Minneapolis for a week — July 5 through 11 — and streamed runner after runner to a global audience, with every donation going to Doctors Without Borders. It is the most visible example of something that has quietly become the defining shape of gaming content in 2026: the moments that matter are collective.",
+    "## The 2026 calendar makes the case",
+    "The speedrunning slate alone tells the story — these are tentpoles now, not side events, and every one is a community production end to end:",
+    "- **Summer Games Done Quick** — July 5–11, Minneapolis, benefiting Doctors Without Borders.\n- **GDQ at gamescom** — three days of runs in Cologne, August 28–30, the event's first major overseas edition.\n- **Flame Fatales** — September 13–19, benefiting the Malala Fund.\n- **Power Up With Pride** — ran its summer marathon in June, benefiting Point of Pride.",
+    "Runners, commentators, donation readers, tech crews, chat — the production is the community, and the community is the point.",
+    "## The room is the format",
+    "The same structure shows up at the individual streamer level. The runs that break out of their own communities — the blindfolded clears, the chat-voted routes, the marathon attempts — draw their drama from the room as much as the player. Chat votes on the risk. The community builds the strategy documents. The clip that travels carries a crowd inside it.",
+    "That changes what a highlight actually is. A ten-second clip shows the win; it cannot show the fourteen hours, the three broken controllers, or the hundred people who talked the runner off a reset. The creators building durable audiences have learned to package the context with the moment — the preparation, the failed attempts, the collective decision-making that made the spectacle legible.",
+    "There is a commercial lesson buried in this too. Charity marathons consistently out-raise and out-retain conventional esports broadcasts on a fraction of the production budget, because the audience is not watching a product — they are participating in an event they partly own. Sponsors have noticed; the smart ones underwrite the room instead of interrupting it.",
+    "For mid-tier gaming creators, the takeaway is almost mechanical: the community is not the audience for the content. The community is the content. Build the room first — the rituals, the running jokes, the shared stakes — and the clips take care of themselves.",
+    "The best gaming content of 2026 does not just show the win. It shows the room that built the attempt — and increasingly, the room is the reason anyone watches at all."
+  ],
+  "quote": "A ten-second clip shows the win. It cannot show the hundred people who talked the runner off a reset.",
+  "tags": {
+    "topics": ["gaming", "streaming", "community"],
+    "audience": ["creators", "gamers"],
+    "geography": "Global",
+    "activityType": "analysis"
+  },
+  "sources": [
+    { "label": "Pixelkin — Summer Games Done Quick 2026 runs July 5–11, supports Doctors Without Borders", "url": "https://pixelkin.org/2026/07/02/summer-games-done-quick-2026-runs-july-5-11-supports-doctors-without-borders/" },
+    { "label": "Games Done Quick — official site (2026 events calendar)", "url": "https://gamesdonequick.com/" },
+    { "label": "Power Up With Pride — charity speedrunning marathon", "url": "https://powerupwithpride.org/" }
+  ]
+}

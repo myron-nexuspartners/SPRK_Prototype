@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Link } from "wouter";
 import { Bookmark, Heart, MessageCircle, Share2, ShoppingBag, Sparkles, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
@@ -6,9 +6,14 @@ import AdCarousel from "@/components/AdCarousel";
 import ClipsCarousel from "@/components/ClipsCarousel";
 import CreatorCarousel from "@/components/CreatorCarousel";
 import FeedShell from "@/components/FeedShell";
-import { feedPosts, type FeedPost } from "@/data/feedContent";
+import { feedCategories, feedPosts, parseCount, type FeedPost } from "@/data/feedContent";
 
-const tabs = ["For You", "Following", "Beauty", "Open Norm", "Gaming", "Fashion"];
+const contentTypes = ["all", "article", "video", "shorts", "tool"] as const;
+const sortModes = ["Newest", "Top"] as const;
+
+function titleCase(value: string) {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
 
 function EngagementBar({ post }: { post?: FeedPost }) {
   const [liked, setLiked] = useState(false);
@@ -48,16 +53,39 @@ function FeaturedPost() {
   );
 }
 
-function FeedTabs() {
-  const [active, setActive] = useState("For You");
+interface FeedFilterState {
+  category: string;
+  contentType: (typeof contentTypes)[number];
+  sort: (typeof sortModes)[number];
+}
+
+function FeedTabs({ filters, onChange }: { filters: FeedFilterState; onChange: (next: Partial<FeedFilterState>) => void }) {
+  const tabs = ["For You", ...feedCategories.map(titleCase)];
   return (
     <div className="rounded-t-2xl border border-b-0 border-black/5 bg-white p-2 shadow-sm">
       <div className="flex items-center gap-2 overflow-x-auto">
-        {tabs.map((tab) => (
-          <button key={tab} onClick={() => { setActive(tab); toast(`Showing ${tab} feed.`); }} className={`rounded-full px-5 py-2 text-sm font-bold transition-colors ${active === tab ? "bg-[#0A0A0F] text-white" : "text-[#4A5278] hover:bg-[#F5F0EB] hover:text-[#0A0A0F]"}`}>
-            {tab}
+        {tabs.map((tab) => {
+          const isActive = filters.category === tab;
+          return (
+            <button key={tab} onClick={() => onChange({ category: tab })} className={`whitespace-nowrap rounded-full px-5 py-2 text-sm font-bold transition-colors ${isActive ? "bg-[#0A0A0F] text-white" : "text-[#4A5278] hover:bg-[#F5F0EB] hover:text-[#0A0A0F]"}`}>
+              {tab}
+            </button>
+          );
+        })}
+      </div>
+      <div className="mt-2 flex flex-wrap items-center gap-2 border-t border-black/5 px-2 pb-1 pt-2">
+        {contentTypes.map((type) => (
+          <button key={type} onClick={() => onChange({ contentType: type })} className={`rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.08em] transition-colors ${filters.contentType === type ? "bg-[#FF6B35] text-white" : "bg-[#F5F0EB] text-[#4A5278] hover:text-[#0A0A0F]"}`}>
+            {type === "all" ? "All types" : type}
           </button>
         ))}
+        <div className="ml-auto flex rounded-full bg-[#F5F0EB] p-0.5">
+          {sortModes.map((mode) => (
+            <button key={mode} onClick={() => onChange({ sort: mode })} className={`rounded-full px-3 py-1 text-[11px] font-bold ${filters.sort === mode ? "bg-[#0A0A0F] text-white" : "text-[#4A5278]"}`}>
+              {mode}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -98,7 +126,7 @@ function DesignPromo() {
           <h2 className="mt-2 text-4xl font-extrabold leading-none tracking-[-0.05em] text-[#0A0A0F]">Transparency by <span className="bg-gradient-to-r from-[#FF6B35] via-[#E8003D] to-[#CC0055] bg-clip-text text-transparent">design</span>.</h2>
           <p className="mt-3 text-sm font-light leading-relaxed text-[#4A5278]">A premium paper-field interface for creators who want ownership, visibility, and clean collaboration lanes.</p>
           <div className="mt-5 flex flex-wrap gap-2">
-            <Link href="/os"><button className="rounded-full bg-[#0A0A0F] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.1em] text-white hover:bg-[#1E2235]">Open SPRK*OS →</button></Link>
+            <Link href="/os"><button className="rounded-full bg-[#0A0A0F] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.1em] text-white hover:bg-[#1E2235]">Open SPRK*STUDIO →</button></Link>
             <Link href="/pavilion"><button className="rounded-full border border-black/10 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.1em] text-[#0A0A0F] hover:bg-[#F5F0EB]">Pavilion landing →</button></Link>
           </div>
         </div>
@@ -109,13 +137,49 @@ function DesignPromo() {
 }
 
 export default function HomeFeed() {
+  const [filters, setFilters] = useState<FeedFilterState>({ category: "For You", contentType: "all", sort: "Newest" });
+  const isDefaultView = filters.category === "For You" && filters.contentType === "all" && filters.sort === "Newest";
+
+  const filteredPosts = useMemo(() => {
+    let posts = feedPosts;
+    if (filters.category !== "For You") posts = posts.filter((post) => titleCase(post.category) === filters.category);
+    if (filters.contentType !== "all") posts = posts.filter((post) => post.contentType === filters.contentType);
+    if (filters.sort === "Top") {
+      posts = [...posts].sort((a, b) => parseCount(b.likes) - parseCount(a.likes));
+    } else {
+      posts = [...posts].sort((a, b) => (b.publishedAt ?? "").localeCompare(a.publishedAt ?? ""));
+    }
+    return posts;
+  }, [filters]);
+
   const primaryPosts = feedPosts.slice(1, 5);
   const secondaryPosts = feedPosts.slice(5);
+
+  if (!isDefaultView) {
+    return (
+      <FeedShell active="home" railMode="home">
+        <div className="mx-auto max-w-[720px] space-y-4">
+          <FeedTabs filters={filters} onChange={(next) => setFilters((prev) => ({ ...prev, ...next }))} />
+          <div className="flex items-center justify-between px-1 text-xs font-semibold text-[#8E7A8A]">
+            <span>{filteredPosts.length} {filteredPosts.length === 1 ? "post" : "posts"}</span>
+            <button onClick={() => setFilters({ category: "For You", contentType: "all", sort: "Newest" })} className="rounded-full bg-[#F5F0EB] px-3 py-1.5 font-bold text-[#0A0A0F] hover:bg-[#0A0A0F] hover:text-white">Reset filters</button>
+          </div>
+          {filteredPosts.length === 0 ? (
+            <div className="rounded-2xl border border-black/5 bg-white p-10 text-center text-sm font-light text-[#4A5278] shadow-sm">No posts match these filters yet.</div>
+          ) : (
+            <div className="grid gap-4 md:grid-cols-2">
+              {filteredPosts.map((post) => <PostCard key={post.id} post={post} compact />)}
+            </div>
+          )}
+        </div>
+      </FeedShell>
+    );
+  }
 
   return (
     <FeedShell active="home" railMode="home">
       <div className="mx-auto max-w-[720px] space-y-4">
-        <FeedTabs />
+        <FeedTabs filters={filters} onChange={(next) => setFilters((prev) => ({ ...prev, ...next }))} />
         <FeaturedPost />
         <CreatorCarousel />
         <AdCarousel label="Sponsored Ad" />

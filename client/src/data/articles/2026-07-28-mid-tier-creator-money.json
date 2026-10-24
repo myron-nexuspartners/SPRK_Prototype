@@ -1,0 +1,37 @@
+{
+  "id": "mid-tier-creator-money-2026",
+  "authorSlug": "theo-marsh",
+  "community": "✦ /CreatorEconomy",
+  "publishedAt": "2026-07-28",
+  "title": "The mid-tier squeeze: where creator money is actually coming from in 2026.",
+  "deck": "Brands say they prefer creators in the 10K–500K range. The earnings data says those creators stopped waiting on brand deals anyway.",
+  "image": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1600&q=80",
+  "imageAlt": "Creators working together on laptops at a shared table",
+  "category": "creators",
+  "contentType": "article",
+  "isAiAssisted": true,
+  "body": [
+    "There is a strange gap in the creator economy right now. Industry trackers put the global market above $250 billion this year, and surveys keep finding that roughly three quarters of brands would rather work with micro and mid-tier creators than with celebrities. On paper, the 10K-to-500K-follower creator has never been more in demand.",
+    "The paycheck tells a different story. Campaign rates for mid-tier creators still swing wildly — anywhere from four figures to low five figures depending on platform, format, and who is doing the asking. A creator with 200K followers can field a $10,000 campaign one month and three $1,200 offers the next. Demand went up; predictability did not.",
+    "## Where durable income actually comes from",
+    "The creators building lasting businesses have quietly changed the mix. Earnings reports across the industry keep converging on the same shape:",
+    "- **Five to seven income streams** is the standard portfolio among creators clearing six figures — not one big platform check.\n- **Brand deals contribute only about a third** of total income for those creators; the deals are real, but they are a slice, not the pie.\n- **The rest compounds** — owned products, subscriptions, affiliate commerce, and platform payouts recur and stack, instead of resetting to zero after every campaign.",
+    "That shift matters more for the middle class of the creator economy than for anyone else. Mega-creators can absorb a bad quarter. Smaller creators are often still pre-revenue. The mid-tier is where the stakes are highest: big enough that content is a job, not yet big enough that any single revenue stream is safe to depend on.",
+    "## Engagement is the product now",
+    "This also explains why engagement, not reach, has become the number brands actually buy. Mid-tier audiences engage at rates several times higher than mega-creator audiences, and brands have learned to price that. The creators winning right now are the ones who can show a real community — and who own enough of the relationship to sell to it directly when the campaign calendar goes quiet.",
+    "The uncomfortable part: most platforms are not built to help creators see any of this. Earnings live in five dashboards, audience data lives in three more, and the one number that matters — what a creator's attention is actually worth across everything they make — usually lives nowhere at all.",
+    "That is the gap this generation of creator tools is racing to close. The middle of the creator economy has stopped being a waiting room for stardom. It is a business segment now, and it is starting to demand business infrastructure."
+  ],
+  "quote": "Demand for mid-tier creators went up. Predictability did not. The creators who noticed first are the ones building the durable businesses.",
+  "tags": {
+    "topics": ["creator economy", "monetization", "brand deals"],
+    "audience": ["creators", "brands"],
+    "geography": "Global",
+    "activityType": "analysis"
+  },
+  "sources": [
+    { "label": "ThoughtLeaders — Creator Economy Trends and Predictions for 2026", "url": "https://www.thoughtleaders.io/blog/creator-economy-trends-2026" },
+    { "label": "Influencer Marketing Factory — Creator Economy Market Size, Trends and Statistics 2026", "url": "https://theinfluencermarketingfactory.com/creator-economy/" },
+    { "label": "Circle — Creator Economy Statistics for 2026", "url": "https://circle.so/blog/creator-economy-statistics" }
+  ]
+}

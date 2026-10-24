@@ -1,0 +1,38 @@
+{
+  "id": "short-form-song-release-playbook-2026",
+  "authorSlug": "lena-osei",
+  "community": "✦ /NewMusicRoom",
+  "publishedAt": "2026-07-28",
+  "title": "The fragment is the new radio: how songs actually get released in 2026.",
+  "deck": "Nearly half of listeners now hear a song on short-form video before they ever open a streaming app. The artists winning this year treat that as a system, not a lottery ticket.",
+  "image": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=1600&q=80",
+  "imageAlt": "Crowd at a live music performance with stage lights washing over raised hands",
+  "category": "music",
+  "contentType": "article",
+  "isAiAssisted": true,
+  "body": [
+    "Ask an A&R how a song breaks in 2026 and the honest answer starts with a fragment. Industry surveys now put short-form video — TikTok, Reels, Shorts — ahead of streaming apps as the first place close to half of listeners encounter a new song, and the number climbs higher for listeners under 35. The full track has become the second impression.",
+    "## The 35-day campaign, step by step",
+    "That has quietly rewritten the release calendar. The playbook circulating among independent artists this year is strikingly workmanlike:",
+    "1. **Shoot a real vertical music video** for the song — not repurposed landscape footage.\n2. **Slice eight to twelve short cuts** around the hook moments, each able to stand alone.\n3. **Post consistently through a four-to-six-week window** around the release, rather than betting everything on premiere day.\n4. **Put paid spend behind whichever organic cut earns it** — the audience votes first, the budget follows.",
+    "One widely shared framing calls it a 35-day campaign, not a viral lottery — and the phrase matters, because it moves the work from luck to labor.",
+    "## Seed the sound before the song",
+    "The pre-release phase may be the biggest shift. Instead of guarding a single premiere date, artists are seeding loopable fifteen-second hooks as usable sounds before the song exists on streaming services at all. Some of the notable breakouts of the past two years started as a pre-release sound that had already logged tens of thousands of creator videos before the track hit Spotify.",
+    "There is a craft cost to all this, and artists feel it. When the hook has to work in isolation, songs risk being engineered backward from the clip. The 16-bar verse gives ground to structures that front-load the chorus. Whether that is decay or evolution depends on who you ask — but it is unambiguously changing what gets written.",
+    "What separates the artists who survive the system from the ones consumed by it seems to be ownership of context. A fragment can travel without its author; the artists building durable audiences make sure the trail leads somewhere — a fuller story, a body of work, a community that knows the conditions the song came from.",
+    "The uncomfortable math is that distribution now demands twenty or thirty pieces of content per release, and most artists are a one-person media operation. That workload, more than any algorithm, is the real story of music marketing in 2026: the artists who can document, cut, caption, and publish without losing the thread of why they wrote the song are the ones the system rewards.",
+    "The verse is not dead, and neither is the album. But the release is no longer a moment. It is a window — and the artists treating that window as craft, not chore, are the ones turning fragments back into fans."
+  ],
+  "quote": "The full track has become the second impression. The fragment makes the first one.",
+  "tags": {
+    "topics": ["music marketing", "short-form video", "release strategy"],
+    "audience": ["creators", "musicians"],
+    "geography": "Global",
+    "activityType": "analysis"
+  },
+  "sources": [
+    { "label": "Echonos — How to Promote a Song on TikTok in 2026: The Visual-First Release Playbook", "url": "https://echonos.ai/blog/how-to-promote-a-song-on-tiktok" },
+    { "label": "Chartlex — TikTok Music Promotion for Artists: What Works (2026)", "url": "https://www.chartlex.com/blog/marketing/how-to-use-tiktok-for-music-promotion-2026" },
+    { "label": "MusicPromoToday — Music Marketing in 2026: The Complete Strategy for Artists", "url": "https://musicpromotoday.com/music-marketing-in-2026-the-complete-strategy-for-artists/" }
+  ]
+}

@@ -37,6 +37,13 @@ async function startServer() {
     }
   });
 
+  app.post(["/api/verify-access", "/SPRK_Prototype/api/verify-access"], (req, res) => {
+    const password = typeof req.body?.password === "string" ? req.body.password : "";
+    const expected = process.env.SPRK_ACCESS_PASSWORD;
+    const ok = Boolean(expected) && password === expected;
+    res.status(200).json({ ok });
+  });
+
   // Serve static files from dist/public in production
   const staticPath =
     process.env.NODE_ENV === "production"

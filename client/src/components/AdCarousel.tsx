@@ -49,7 +49,7 @@ const ads: AdItem[] = [
     eyebrow: "SPRK*Academy",
     title: "Learn from the best. Surpass the rest.",
     body: "3,000+ tips, tricks, deal structures, and creator-business resources on demand.",
-    cta: "Open SPRK*OS tools",
+    cta: "Open SPRK*STUDIO tools",
     tone: "academy",
     image: wireframeAsset("clip_citymotion_distinct.png"),
     imageAlt: "Creative team planning content on a wall",

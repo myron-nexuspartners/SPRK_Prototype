@@ -7,11 +7,14 @@ import { Route, Router as WouterRouter, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
+import ComingSoon from "./pages/ComingSoon";
+import JoinCreator from "./pages/JoinCreator";
 import Os from "./pages/Os";
 import Pavilion from "./pages/Pavilion";
 import Yoursprk from "./pages/Yoursprk";
 import HomeFeed from "./pages/HomeFeed";
 import ArticleDetail from "./pages/ArticleDetail";
+import AuthorPage from "./pages/AuthorPage";
 import { clearPrototypeAccess, hasPrototypeAccess } from "./lib/accessGate";
 
 function RequireAccess({ children }: { children: ReactNode }) {
@@ -35,7 +38,7 @@ function RequireAccess({ children }: { children: ReactNode }) {
 
 
 const INACTIVITY_LIMIT_MS = 30 * 60 * 1000;
-const protectedPathPrefixes = ["/home", "/article", "/os", "/pavilion", "/yoursprk"];
+const protectedPathPrefixes = ["/home", "/article", "/author", "/os", "/pavilion", "/yoursprk"];
 const activityEvents = ["mousedown", "mousemove", "keydown", "scroll", "touchstart", "click", "wheel"] as const;
 
 function InactivityRedirect() {
@@ -76,6 +79,10 @@ function ProtectedArticleDetail() {
   return <RequireAccess><ArticleDetail /></RequireAccess>;
 }
 
+function ProtectedAuthorPage() {
+  return <RequireAccess><AuthorPage /></RequireAccess>;
+}
+
 function ProtectedOs() {
   return <RequireAccess><Os /></RequireAccess>;
 }
@@ -110,8 +117,11 @@ function Router() {
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/landing" component={Home} />
+        <Route path="/coming-soon" component={ComingSoon} />
+        <Route path="/join" component={JoinCreator} />
         <Route path="/home" component={ProtectedHomeFeed} />
         <Route path="/article/:id" component={ProtectedArticleDetail} />
+        <Route path="/author/:slug" component={ProtectedAuthorPage} />
         <Route path="/os" component={ProtectedOs} />
         <Route path="/pavilion" component={ProtectedPavilion} />
         <Route path="/yoursprk" component={ProtectedYoursprk} />

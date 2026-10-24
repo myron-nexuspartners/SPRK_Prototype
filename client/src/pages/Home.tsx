@@ -16,8 +16,22 @@ type GateForm = {
 const base = import.meta.env.BASE_URL === "/" ? "/" : import.meta.env.BASE_URL;
 const DEFAULT_ACCESS_WEBHOOK_ENDPOINT = "https://script.google.com/macros/s/AKfycbym5spKKSSrT5nKLpvMy98VOv54CZG_8jp9AQXUQqJEJl0-_85n-dYRlciwPqsHa07tMg/exec";
 const webhookEndpoint = ((import.meta.env.VITE_ACCESS_WEBHOOK_ENDPOINT as string | undefined) || (import.meta.env.VITE_ACCESS_FORM_ENDPOINT as string | undefined) || DEFAULT_ACCESS_WEBHOOK_ENDPOINT).trim();
-const ACCESS_PASSWORD = "Lg3Nd.1234!";
 const initialForm: GateForm = { firstName: "", lastName: "", email: "", accessPassword: "", botField: "" };
+
+async function verifyAccessPassword(password: string): Promise<boolean> {
+  try {
+    const response = await fetch(`${base.replace(/\/$/, "")}/api/verify-access`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password }),
+    });
+    if (!response.ok) return false;
+    const data = (await response.json()) as { ok?: boolean };
+    return Boolean(data.ok);
+  } catch {
+    return false;
+  }
+}
 
 function encodeNetlifyForm(data: Record<string, string>) {
   return new URLSearchParams(data).toString();
@@ -100,63 +114,58 @@ export default function Home() {
     setErrors((current) => ({ ...current, [key]: "" }));
   };
 
-  const validate = () => {
+  const validateFields = () => {
     const nextErrors: Partial<Record<keyof GateForm, string>> = {};
     if (form.firstName.trim().length < 2) nextErrors.firstName = "Please enter your first name.";
     if (form.lastName.trim().length < 2) nextErrors.lastName = "Please enter your last name.";
     if (!isValidEmail(form.email)) nextErrors.email = "Please enter a valid email address.";
-    if (form.accessPassword !== ACCESS_PASSWORD) nextErrors.accessPassword = "Incorrect access password. Please try again.";
-    setErrors(nextErrors);
-    return Object.keys(nextErrors).length === 0;
+    return nextErrors;
   };
 
   const submitAccess = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (form.botField) return;
 
-    const submittedAt = new Date().toISOString();
-    const isPasswordValid = form.accessPassword === ACCESS_PASSWORD;
-    const isFormValid = validate();
-    const currentErrors: Partial<Record<keyof GateForm, string>> = {};
-    if (form.firstName.trim().length < 2) currentErrors.firstName = "Please enter your first name.";
-    if (form.lastName.trim().length < 2) currentErrors.lastName = "Please enter your last name.";
-    if (!isValidEmail(form.email)) currentErrors.email = "Please enter a valid email address.";
-    if (!isPasswordValid) currentErrors.accessPassword = "Incorrect access password. Please try again.";
-
-    const payload: AccessAttemptPayload = {
-      firstName: form.firstName.trim(),
-      lastName: form.lastName.trim(),
-      email: form.email.trim().toLowerCase(),
-      submittedAt,
-      visitId: crypto.randomUUID(),
-      entryPath: window.location.href,
-      referrer: document.referrer || "direct",
-      userAgent: navigator.userAgent,
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      source: "SPRK Prototype Netlify Gate",
-      attemptStatus: isFormValid ? "granted" : "denied",
-      accessGranted: isFormValid,
-      passwordValid: isPasswordValid,
-      validationErrors: Object.entries(currentErrors).map(([field, message]) => `${field}: ${message}`).join(" | "),
-    };
+    const currentErrors = validateFields();
+    if (Object.keys(currentErrors).length > 0) {
+      setErrors(currentErrors);
+      return;
+    }
 
     setSubmitting(true);
     try {
-      await captureAccessAttempt(payload);
+      const isPasswordValid = await verifyAccessPassword(form.accessPassword);
+      if (!isPasswordValid) {
+        currentErrors.accessPassword = "Incorrect access password. Please try again.";
+      }
+      setErrors(currentErrors);
 
-      if (!isFormValid) {
-        toast.error(isPasswordValid ? "Please correct the highlighted fields." : "Incorrect access password. Please try again.");
-        return;
+      const isFormValid = isPasswordValid;
+      const payload: AccessAttemptPayload = {
+        firstName: form.firstName.trim(),
+        lastName: form.lastName.trim(),
+        email: form.email.trim().toLowerCase(),
+        submittedAt: new Date().toISOString(),
+        visitId: crypto.randomUUID(),
+        entryPath: window.location.href,
+        referrer: document.referrer || "direct",
+        userAgent: navigator.userAgent,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        source: "SPRK Prototype Netlify Gate",
+        attemptStatus: isFormValid ? "granted" : "denied",
+        accessGranted: isFormValid,
+        passwordValid: isPasswordValid,
+        validationErrors: Object.entries(currentErrors).map(([field, message]) => `${field}: ${message}`).join(" | "),
+      };
+
+      try {
+        await captureAccessAttempt(payload);
+      } catch (error) {
+        console.warn("Access capture encountered an error.", error);
       }
 
-      savePrototypeAccess(payload);
-      toast.success("Access received. Entering the SPRK prototype…");
-      window.setTimeout(() => setLocation("/home"), 350);
-    } catch (error) {
-      console.warn("Access capture encountered an error.", error);
-
       if (!isFormValid) {
-        toast.error(isPasswordValid ? "Please correct the highlighted fields." : "Incorrect access password. Please try again.");
+        toast.error("Incorrect access password. Please try again.");
         return;
       }
 

@@ -1,0 +1,35 @@
+{
+  "id": "subscriptions-vs-sponsorships-2026",
+  "authorSlug": "theo-marsh",
+  "community": "✦ /CreatorEconomy",
+  "publishedAt": "2026-07-28",
+  "title": "Creator middle-class economics: subscriptions vs. sponsorships, by the numbers.",
+  "deck": "Sponsorships still write the biggest single checks. Memberships write the ones you can plan a life around. The 2026 data says stop choosing.",
+  "image": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1600&q=80",
+  "imageAlt": "Hands working through finances with a calculator and paperwork at a desk",
+  "category": "creators",
+  "contentType": "article",
+  "isAiAssisted": true,
+  "body": [
+    "Every working creator eventually runs the same comparison: chase the next brand deal, or build the membership base? The 2026 numbers give a clearer answer than the discourse does — and it is not the answer either camp wants.",
+    "Start with scale. Patreon paid creators roughly $24 million in January alone, essentially flat year over year — a slight decline of under one percent from the same month in 2025. Direct subscription money is not the growth rocket it was pitched as a few years ago, but it has settled into something arguably more valuable: a stable, recurring layer that does not care what the ad market did this quarter.",
+    "## The three streams, side by side",
+    "- **Patreon-style subscriptions** take 5–12 percent depending on plan tier. Slower to convert, but the revenue is yours-first and recurs on your terms.\n- **YouTube Memberships** takes a heavier 30 percent cut — but industry comparisons keep finding it converts existing viewers into paying members at several times Patreon's rate, because the join button lives where the audience already is. Ownership costs conversion; convenience costs margin.\n- **Sponsorships** remain the biggest single-deal payouts in the business — analyses this year put branded work at multiples of what equivalent ad-revenue impressions pay, with no platform cut at all. The catch: the least predictability of any stream, and the post-2022 brand-deal contraction is still fresh institutional memory.",
+    "Which is why the healthiest creator P&Ls in 2026 look boringly diversified. The pattern among six-figure creators has held for several years now: five to seven income streams, with brand deals around a third of the total and no single source positioned to sink the ship. Sponsorships fund the spikes; memberships fund the payroll.",
+    "## The sequencing, in practice",
+    "1. **Build the floor you own first.** Memberships compound — every month of retained subscribers raises the baseline the rest of the business stands on.\n2. **Then sell access to the room you built.** Creators who can show a paying community command better sponsorship terms, not worse; the membership base is proof of exactly the audience relationship brands are trying to rent.\n3. **Let the floor fund your leverage.** A stable recurring base is what makes \"no\" affordable — and \"no\" is the strongest negotiating position a mid-tier creator has.",
+    "The middle class of the creator economy is not choosing between subscriptions and sponsorships. It is sequencing them: build the floor you own, then sell access to the room you built — on your terms, because you can finally afford to say no."
+  ],
+  "quote": "Sponsorships fund the spikes. Memberships fund the payroll.",
+  "tags": {
+    "topics": ["monetization", "subscriptions", "sponsorships"],
+    "audience": ["creators"],
+    "geography": "Global",
+    "activityType": "analysis"
+  },
+  "sources": [
+    { "label": "Backlinko — Patreon: Subscriber and Creator Statistics for 2026", "url": "https://backlinko.com/patreon-users" },
+    { "label": "Miraflow — YouTube Memberships vs. Patreon vs. Sponsorships: Which Pays More in 2026?", "url": "https://miraflow.ai/blog/youtube-memberships-vs-patreon-vs-sponsorships-which-pays-more-2026" },
+    { "label": "Everything PR — Patreon: Creator-Direct Subscription Economy in 2026", "url": "https://everything-pr.com/patreon-the-creator-direct-subscription-economy" }
+  ]
+}

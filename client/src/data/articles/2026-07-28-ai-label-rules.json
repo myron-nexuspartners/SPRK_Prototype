@@ -1,0 +1,34 @@
+{
+  "id": "ai-label-rules-2026",
+  "authorSlug": "priya-anand",
+  "community": "✦ /CreatorTools",
+  "publishedAt": "2026-07-28",
+  "title": "The \"Made with AI\" label: what each platform actually requires in 2026.",
+  "deck": "TikTok, YouTube, and Meta now enforce three different disclosure regimes for AI content — and the penalties for guessing wrong landed this year. Here is the map.",
+  "image": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1600&q=80",
+  "imageAlt": "Close-up of a humanoid robot face representing artificial intelligence",
+  "category": "technology",
+  "contentType": "article",
+  "isAiAssisted": true,
+  "body": [
+    "If you publish the same video to TikTok, YouTube, and Instagram in 2026, you may be required to label it as AI-generated on one platform, encouraged to on another, and not asked at all on the third. Disclosure has become platform-specific — and the cost of getting it wrong stopped being theoretical this year.",
+    "## Platform by platform",
+    "- **TikTok — strictest.** Any AI-generated or significantly altered realistic depiction of people, places, or events needs a visible label: voice clones, AI avatars that put words in someone's mouth, simulated events. Automated detection backs the policy, and reporting this year describes a costly stick — videos caught unlabeled can forfeit Creator Fund earnings for two weeks, even after the label is added retroactively.\n- **YouTube — self-declared.** The policy (introduced March 2024, enforced since early 2025) targets \"realistic altered or synthetic content\" that could mislead viewers. Creators flag it at upload; clearly stylized or obviously creative AI work is exempt, and AI-assisted content remains monetizable within originality rules.\n- **Meta — unified this February.** Instagram and Facebook now surface an in-post \"Made with AI\" tag above the content, like a paid-partnership label, applied via advanced settings — and Meta auto-applies it when provenance metadata is detected, whether you asked or not.",
+    "The meaningful carve-out on all three: AI used for text, planning, or post-production that does not alter how people or scenes appear is exempt. Using an assistant to draft your script does not trigger a label. Cloning a voice does.",
+    "## The working playbook",
+    "1. **Inventory your pipeline** — flag which steps touch the pixels and the audio, not just the words. That is the line every platform draws.\n2. **Label realistic synthetic media everywhere, unprompted** — retroactive fixes no longer undo penalties on TikTok.\n3. **Treat provenance metadata as a decision, not an accident** — mainstream AI tools embed it, and it can trigger automatic labeling downstream.",
+    "The disclosure era has a quieter implication, too: audiences are learning to read the labels. Creators who are matter-of-fact about their process — what was AI-assisted, what was handmade — are finding the tag costs them less than the appearance of hiding it would."
+  ],
+  "quote": "Inventory which pipeline steps touch the pixels and the audio, not just the words. That is the line every platform is drawing.",
+  "tags": {
+    "topics": ["AI disclosure", "platform policy", "creator tools"],
+    "audience": ["creators"],
+    "geography": "US",
+    "activityType": "explainer"
+  },
+  "sources": [
+    { "label": "Influencer Marketing Hub — AI Disclosure Rules by Platform: YouTube, Instagram/Facebook, and TikTok", "url": "https://influencermarketinghub.com/ai-disclosure-rules/" },
+    { "label": "AuditSocials — AI Content Label Rules 2026: Meta, Google, TikTok, YouTube", "url": "https://www.auditsocials.com/blog/cross-platform-ai-content-labeling-requirements-2026-meta-google-tiktok-youtube-comparison" },
+    { "label": "Storrito — TikTok's 2026 AI Labeling Rules and What They Signal for Platform Governance", "url": "https://storrito.com/resources/tiktoks-2026-ai-labeling-rules-and-what-they-signal-for-platform-governance/" }
+  ]
+}

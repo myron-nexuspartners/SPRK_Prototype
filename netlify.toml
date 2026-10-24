@@ -1,6 +1,7 @@
 [build]
   command = "VITE_BASE_PATH=/ pnpm build"
   publish = "dist/public"
+  functions = "netlify/functions"
 
 [build.environment]
   NODE_VERSION = "22"

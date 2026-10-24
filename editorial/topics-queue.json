@@ -1,0 +1,15 @@
+{
+  "$schema_note": "SPRK editorial topic queue. Statuses: suggested → approved → in_progress → published | rejected. The weekly agent only writes articles for topics with status 'approved'. Myron (or the agent, at Myron's request) adds topics; only Myron approves.",
+  "topics": [
+    {
+      "id": "topic-0001",
+      "title": "The mid-tier creator squeeze: where the money actually is in 2026",
+      "angle": "Data-grounded look at monetization for creators in the 10K-500K range — the exact audience SPRK serves.",
+      "suggestedAuthor": "theo-marsh",
+      "category": "creators",
+      "status": "in_progress",
+      "requestedBy": "agent-demo",
+      "notes": "Pipeline demonstration piece built on the editorial-engine branch. Approve, edit, or delete."
+    }
+  ]
+}

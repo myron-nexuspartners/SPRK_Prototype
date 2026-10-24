@@ -78,7 +78,7 @@ insert = '''
     contentType: "article",
     isAiAssisted: true,
     body: [
-      "Imani starts every look with a listening pass before the palette opens. The client wanted softness, but not invisibility; color, but not costume. SPRK*OS translated the brief into lighting notes, undertone references, and a shot list that kept the artist's hand at the center.",
+      "Imani starts every look with a listening pass before the palette opens. The client wanted softness, but not invisibility; color, but not costume. SPRK*STUDIO translated the brief into lighting notes, undertone references, and a shot list that kept the artist's hand at the center.",
       "The article template turns a fifteen-second transformation clip into a fuller record of decisions: skin prep, shade matching, accessibility notes, and the emotional reason the final shimmer mattered.",
       "That is the high-empathy use case for AI assistance on SPRK. It does not flatten beauty into a trend; it helps a creator explain why one face, one room, and one story needed a specific kind of glow."
     ],
@@ -102,7 +102,7 @@ insert = '''
     isAiAssisted: true,
     body: [
       "Sol's breakout post is not a microphone glamour shot. It is a person in process: a notebook full of auntie phrases, a cracked guitar pick, and harmonies learned from cousins singing over a kitchen fan.",
-      "SPRK*OS helped organize the release without replacing the vulnerability. The system pulled out chorus options, caption drafts, and community tags, but the creator chose the final emotional route: a small room, a real story, and a hook that sounds lived-in.",
+      "SPRK*STUDIO helped organize the release without replacing the vulnerability. The system pulled out chorus options, caption drafts, and community tags, but the creator chose the final emotional route: a small room, a real story, and a hook that sounds lived-in.",
       "For emerging musicians, empathy means the platform can hold context before virality arrives. Fans are not just hearing a song; they are meeting the conditions that made it possible."
     ],
     quote: "A debut does not need to look expensive to feel inevitable. It needs to feel like somebody real is arriving.",

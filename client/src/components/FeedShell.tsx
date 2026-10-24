@@ -53,7 +53,7 @@ const mainNav = [
 ];
 
 const toolNav = [
-  { label: "SPRK*OS", icon: Settings2, href: "/os", badge: "Editor" },
+  { label: "SPRK*STUDIO", icon: Settings2, href: "/os", badge: "Editor" },
   { label: "SPRK*Pavilion", icon: Store, href: "/pavilion", badge: "Market" },
   { label: "yourSPRK Hub", icon: Users, href: "/yoursprk", badge: "Hub" },
   { label: "SPRK*AI", icon: WandSparkles, href: "/os", badge: "Beta" },
@@ -330,7 +330,7 @@ function Header({ onMenu, onToggleRail, railCollapsed }: { onMenu: () => void; o
         <Link href="/pavilion" className="hidden rounded-full border border-black/10 px-4 py-2 text-xs font-bold text-[#0A0A0F] hover:bg-[#F5F0EB] sm:inline-flex"><Store className="mr-1.5 h-3.5 w-3.5" /> Pavilion</Link>
         <button onClick={() => setLocation("/yoursprk")} className="inline-flex items-center gap-1.5 rounded-full bg-[#C4A09A] px-4 py-2 text-xs font-bold text-white hover:bg-[#8E7A8A]"><Plus className="h-3 w-3" /> Hub</button>
         <button onClick={() => toast("Notification center opened.")} className="rounded-full p-2 text-[#4A5278] hover:bg-[#F5F0EB]"><Bell className="h-5 w-5" /></button>
-        <button onClick={() => setLocation("/os")} className="hidden rounded-full bg-[#0A0A0F] px-4 py-2 text-xs font-bold text-white hover:bg-[#1E2235] sm:inline-flex"><Settings2 className="mr-1.5 h-3.5 w-3.5" /> SPRK*OS</button>
+        <button onClick={() => setLocation("/os")} className="hidden rounded-full bg-[#0A0A0F] px-4 py-2 text-xs font-bold text-white hover:bg-[#1E2235] sm:inline-flex"><Settings2 className="mr-1.5 h-3.5 w-3.5" /> SPRK*STUDIO</button>
       </div>
     </header>
   );

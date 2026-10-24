@@ -8,3 +8,6 @@ dist/
 terminal_full_output/
 
 access-submissions/
+
+# local Netlify CLI state (contains absolute paths)
+.netlify/

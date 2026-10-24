@@ -1,0 +1,36 @@
+{
+  "id": "neighborhood-tv-renaissance-2026",
+  "authorSlug": "marcus-webb",
+  "community": "✦ /TVCulture",
+  "publishedAt": "2026-07-28",
+  "title": "Television keeps coming home: why 2026's most anticipated dramas live on one block.",
+  "deck": "From Netflix's tight-knit immigrant community drama to Apple's uneasy small-town revival story, the year's ensemble slate bets that belonging is the last unfranchisable premise.",
+  "image": "https://images.unsplash.com/photo-1593784991095-a205069470b6?auto=format&fit=crop&w=1600&q=80",
+  "imageAlt": "Living room television glowing in a dim, warmly lit home",
+  "category": "television",
+  "contentType": "article",
+  "isAiAssisted": true,
+  "body": [
+    "Scan the most-anticipated lists for 2026 television and a pattern emerges that has nothing to do with dragons or franchises: the year's big swings are neighborhood-sized. Netflix's Unaccustomed Earth builds its drama inside a tight-knit Indian American community negotiating love, desire, and belonging. Apple's Widow's Bay hands Matthew Rhys a remote New England town whose revival plans collide with superstition and unease. The premise doing the heaviest lifting this year is proximity.",
+    "It arrives just as network television says goodbye to one of the format's warmest recent successes. The Neighborhood closes out this year after eight seasons and 156 episodes — a comedy that mined nearly a decade of story from a single street corner premise: new neighbors, old assumptions, and the slow work of actually knowing the people next door.",
+    "## Why the block keeps working",
+    "Because place is the cheapest special effect in television and the most expensive one to fake. A neighborhood show carries its own memory — rent history, school history, migration history, the corner store that outlasted three landlords. Every argument arrives pre-loaded with stakes that a premise-of-the-week series has to manufacture from scratch.",
+    "Ensemble casts are the other half of the bet. When the community is the protagonist, no single star carries the show, and the writing has to distribute humanity across a dozen characters. Done honestly, that is where these series earn their loyalty: viewers recognize the seating chart of their own lives in the ensemble.",
+    "## The scale trap",
+    "There is a risk worth naming, and prestige lighting does not solve it. When streaming platforms package neighborhood intimacy for global scale, the texture that made the premise valuable is the first thing flattened. The shows that endure trust ordinary people to be cinematic without upgrading their kitchens beyond recognition.",
+    "For the creator economy, this trend is not a coincidence — it is convergent evolution. Audiences exhausted by algorithmic sprawl are choosing rooms with memory, on television and on their feeds alike. The same instinct that fills a comment section with regulars fills a writers' room with neighbors.",
+    "Belonging, it turns out, is the last premise that cannot be franchised. You can only cast it, write it patiently, and let the block keep its receipts."
+  ],
+  "quote": "Place is the cheapest special effect in television and the most expensive one to fake.",
+  "tags": {
+    "topics": ["television", "ensemble drama", "streaming"],
+    "audience": ["fans", "creators"],
+    "geography": "US",
+    "activityType": "essay"
+  },
+  "sources": [
+    { "label": "Variety — The 53 Most Anticipated New and Returning TV Shows Coming in 2026", "url": "https://variety.com/lists/most-anticipated-tv-shows-2026/" },
+    { "label": "TVLine — New TV Shows 2026: Full List of Scripted Series Premiering This Year", "url": "https://www.tvline.com/2056194/2026-new-tv-shows/" },
+    { "label": "Deadline — 2026 TV Premiere Dates: New & Returning Series", "url": "https://deadline.com/feature/2026-tv-premiere-dates-1236391902/" }
+  ]
+}

@@ -1,3 +1,17 @@
+import { getStaffAuthor, type StaffAuthor } from "./authors";
+
+export interface ArticleTags {
+  topics: string[];
+  audience: string[];
+  geography: string;
+  activityType: string;
+}
+
+export interface ArticleSource {
+  label: string;
+  url: string;
+}
+
 export interface FeedPost {
   id: string;
   author: string;
@@ -17,6 +31,12 @@ export interface FeedPost {
   cta?: string;
   body: string[];
   quote?: string;
+  /** ISO date for generated articles; drives ordering and display. */
+  publishedAt?: string;
+  /** Slug into the SPRK Studio contributor roster (authors.ts). */
+  authorSlug?: string;
+  tags?: ArticleTags;
+  sources?: ArticleSource[];
   creatorBio: {
     name: string;
     handle: string;
@@ -29,9 +49,33 @@ export interface FeedPost {
   };
 }
 
+/** JSON shape for pipeline-generated articles in ./articles/*.json. */
+export interface GeneratedArticleJson {
+  id: string;
+  authorSlug: string;
+  community: string;
+  publishedAt: string;
+  title: string;
+  deck: string;
+  image: string;
+  imageAlt: string;
+  category: string;
+  contentType: FeedPost["contentType"];
+  isAiAssisted?: boolean;
+  sponsored?: boolean;
+  cta?: string;
+  body: string[];
+  quote?: string;
+  tags: ArticleTags;
+  sources: ArticleSource[];
+  comments?: string;
+  shares?: string;
+  likes?: string;
+}
+
 const wireframeAsset = (filename: string) => `${import.meta.env.BASE_URL}assets/wireframe/${filename}`;
 
-export const feedPosts: FeedPost[] = [
+const curatedPosts: FeedPost[] = [
 {
     id: "sprk-0025",
     author: "Generra_Sprrkles",
@@ -77,7 +121,7 @@ export const feedPosts: FeedPost[] = [
     contentType: "article",
     isAiAssisted: true,
     body: [
-      "Imani starts every look with a listening pass before the palette opens. The client wanted softness, but not invisibility; color, but not costume. SPRK*OS translated the brief into lighting notes, undertone references, and a shot list that kept the artist's hand at the center.",
+      "Imani starts every look with a listening pass before the palette opens. The client wanted softness, but not invisibility; color, but not costume. SPRK*STUDIO translated the brief into lighting notes, undertone references, and a shot list that kept the artist's hand at the center.",
       "The article template turns a fifteen-second transformation clip into a fuller record of decisions: skin prep, shade matching, accessibility notes, and the emotional reason the final shimmer mattered.",
       "That is the high-empathy use case for AI assistance on SPRK. It does not flatten beauty into a trend; it helps a creator explain why one face, one room, and one story needed a specific kind of glow."
     ],
@@ -148,7 +192,7 @@ export const feedPosts: FeedPost[] = [
     body: [
       "It took 14 hours, three broken controllers, and an absolute miracle, but the blindfolded Crimson Dawn boss clear is officially complete. The community voted live on boss routes, recovery windows, and one dangerously ambitious no-hit detour.",
       "The run became a showcase for why SPRK clips need context. A single highlight carried the spectacle, but the article template lets the creator document preparation, risk, and the collaborative mechanics that made the moment legible.",
-      "SPRK*OS now packages the run into short hooks, long-form recap notes, and sponsor-safe overlays without removing the original creator voice."
+      "SPRK*STUDIO now packages the run into short hooks, long-form recap notes, and sponsor-safe overlays without removing the original creator voice."
     ],
     quote: "The best gaming content does not just show the win. It shows the room that helped build the attempt.",
     creatorBio: { name: "Myron 'KingMyron' Sterling", handle: "@kingmyron", metric: "1.2M Reach", survey: { culture: "Crimson Dawn Runs", vibe: "High-Octane", focus: "Action RPGs" } }
@@ -272,7 +316,7 @@ export const feedPosts: FeedPost[] = [
     community: "✦ /SciFiAnticipation",
     time: "8 days ago",
     title: "Neo-Tokyo 2099 skylines: a comprehensive matte painting study using custom neural shaders.",
-    deck: "A visual workflow article about rain reflections, neon atmosphere, and concept art systems inside SPRK*OS.",
+    deck: "A visual workflow article about rain reflections, neon atmosphere, and concept art systems inside SPRK*STUDIO.",
     image: wireframeAsset("clip_neon_city.png"),
     imageAlt: "Person playing a video game in a neon-lit room",
     comments: "72",
@@ -282,7 +326,7 @@ export const feedPosts: FeedPost[] = [
     contentType: "tool",
     isAiAssisted: true,
     body: [
-      "The matte painting began as a single skyline plate and expanded through layered rain maps, volumetric light passes, and neural shader experiments inside SPRK*OS.",
+      "The matte painting began as a single skyline plate and expanded through layered rain maps, volumetric light passes, and neural shader experiments inside SPRK*STUDIO.",
       "This walkthrough shows how creators can keep authorship visible even when AI tools accelerate iteration. The prompt stack is documented alongside manual paintovers and final grading choices.",
       "The result is a workflow that treats AI as studio infrastructure rather than a substitute for taste."
     ],
@@ -294,7 +338,7 @@ export const feedPosts: FeedPost[] = [
     author: "dev_struggles",
     community: "✦ /Humor",
     time: "10 days ago",
-    title: "I asked SPRK*OS to optimize my code pipeline and it sent me a notification to touch grass.",
+    title: "I asked SPRK*STUDIO to optimize my code pipeline and it sent me a notification to touch grass.",
     deck: "A developer lifestyle post about burnout, automation, and the unexpected value of humane tooling.",
     image: wireframeAsset("dark_cyberpunk_video.png"),
     imageAlt: "Developer workstation with code on monitors",
@@ -304,7 +348,7 @@ export const feedPosts: FeedPost[] = [
     category: "technology",
     contentType: "article",
     body: [
-      "I spent six hours trying to refactor my rendering loops. I finally ran the SPRK*OS diagnostic agent, and the very first recommendation was: your screen time is fourteen hours today. Touch grass and sleep. The loop is fine.",
+      "I spent six hours trying to refactor my rendering loops. I finally ran the SPRK*STUDIO diagnostic agent, and the very first recommendation was: your screen time is fourteen hours today. Touch grass and sleep. The loop is fine.",
       "The post went viral because the joke contains a product truth. Tools that understand creators should optimize the system around the human, not just the output artifact.",
       "The best content editor is not another dashboard demanding attention. It is a workspace that can protect creative energy while still shipping polished work."
     ],
@@ -328,7 +372,7 @@ export const feedPosts: FeedPost[] = [
     isAiAssisted: true,
     body: [
       "Sol's breakout post is not a microphone glamour shot. It is a person in process: a notebook full of auntie phrases, a cracked guitar pick, and harmonies learned from cousins singing over a kitchen fan.",
-      "SPRK*OS helped organize the release without replacing the vulnerability. The system pulled out chorus options, caption drafts, and community tags, but the creator chose the final emotional route: a small room, a real story, and a hook that sounds lived-in.",
+      "SPRK*STUDIO helped organize the release without replacing the vulnerability. The system pulled out chorus options, caption drafts, and community tags, but the creator chose the final emotional route: a small room, a real story, and a hook that sounds lived-in.",
       "For emerging musicians, empathy means the platform can hold context before virality arrives. Fans are not just hearing a song; they are meeting the conditions that made it possible."
     ],
     quote: "A debut does not need to look expensive to feel inevitable. It needs to feel like somebody real is arriving.",
@@ -383,6 +427,83 @@ export const feedPosts: FeedPost[] = [
 
 ];
 
+function formatPublishedAt(iso: string) {
+  const [year, month, day] = iso.split("-").map(Number);
+  if (!year || !month || !day) return iso;
+  const date = new Date(year, month - 1, day);
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
+function toFeedPost(article: GeneratedArticleJson, author: StaffAuthor): FeedPost {
+  return {
+    id: article.id,
+    author: author.handle.replace(/^@/, ""),
+    community: article.community,
+    time: formatPublishedAt(article.publishedAt),
+    title: article.title,
+    deck: article.deck,
+    image: article.image.startsWith("http") ? article.image : wireframeAsset(article.image),
+    imageAlt: article.imageAlt,
+    comments: article.comments ?? "0",
+    shares: article.shares ?? "0",
+    likes: article.likes ?? "0",
+    category: article.category,
+    contentType: article.contentType,
+    isAiAssisted: article.isAiAssisted ?? true,
+    sponsored: article.sponsored ?? false,
+    cta: article.cta,
+    body: article.body,
+    quote: article.quote,
+    publishedAt: article.publishedAt,
+    authorSlug: author.slug,
+    tags: article.tags,
+    sources: article.sources,
+    creatorBio: {
+      name: author.name,
+      handle: author.handle,
+      metric: author.metric,
+      survey: author.chips,
+    },
+  };
+}
+
+const articleModules = import.meta.glob("./articles/*.json", { eager: true }) as Record<
+  string,
+  { default: GeneratedArticleJson }
+>;
+
+const generatedPosts: FeedPost[] = Object.values(articleModules)
+  .map((module) => {
+    const article = module.default;
+    const author = getStaffAuthor(article.authorSlug);
+    if (!author) {
+      console.warn(`[feedContent] Unknown authorSlug "${article.authorSlug}" on article "${article.id}" — skipping.`);
+      return null;
+    }
+    return toFeedPost(article, author);
+  })
+  .filter((post): post is FeedPost => post !== null)
+  .sort((a, b) => (b.publishedAt ?? "").localeCompare(a.publishedAt ?? ""));
+
+/**
+ * Merged feed: the designed SPRK 0025 hero stays pinned first, pipeline
+ * articles follow newest-first, then the curated prototype posts.
+ */
+export const feedPosts: FeedPost[] = [curatedPosts[0], ...generatedPosts, ...curatedPosts.slice(1)];
+
 export function getFeedPost(id?: string) {
   return feedPosts.find((post) => post.id === id) ?? feedPosts[0];
 }
+
+export function getPostsByAuthor(authorSlug: string) {
+  return feedPosts.filter((post) => post.authorSlug === authorSlug);
+}
+
+export function parseCount(value: string) {
+  const trimmed = value.trim().toUpperCase();
+  const multiplier = trimmed.endsWith("K") ? 1_000 : trimmed.endsWith("M") ? 1_000_000 : 1;
+  const numeric = Number.parseFloat(trimmed.replace(/[KM]$/, ""));
+  return Number.isNaN(numeric) ? 0 : Math.round(numeric * multiplier);
+}
+
+export const feedCategories: string[] = Array.from(new Set(feedPosts.map((post) => post.category)));
